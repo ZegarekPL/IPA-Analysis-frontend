@@ -1,0 +1,18 @@
+services:
+  frontend:
+    image: ipa_analysis_frontend
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: localhost:8080
+      NEXT_PUBLIC_ERROR_HOLD_TIME_IN_MS: 5000
+    networks:
+      - ipa_analysis
+
+networks:
+  ipa_analysis:
+    driver: bridge
