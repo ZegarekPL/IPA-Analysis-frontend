@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { Locale, routing } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
+import { ThemeProvider } from '@/components/theme-provider';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -34,14 +35,16 @@ export default async function RootLayout({
 		notFound();
 	}
 	return (
-		<html lang={locale}>
+		<html lang={locale} suppressHydrationWarning>
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 				<NextIntlClientProvider>
-					<div className="min-h-screen flex flex-col">
-						<Navbar />
-						<div className="flex flex-1">{children}</div>
-					</div>
-					<Footer />
+					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+						<div className="min-h-screen flex flex-col">
+							<Navbar />
+							<div className="flex flex-1">{children}</div>
+						</div>
+						<Footer />
+					</ThemeProvider>
 				</NextIntlClientProvider>
 			</body>
 		</html>

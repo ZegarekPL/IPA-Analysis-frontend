@@ -1,31 +1,15 @@
 'use client';
 
-import { useState, useTransition } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
-import { routing } from '@/i18n/routing';
+import LocaleSelector from '@/components/LocaleSelector';
+import { ModeToggle } from '@/components/ModeToggle';
 
 export default function Navbar() {
 	const t = useTranslations('Navbar');
-	const pathname = usePathname();
-	const router = useRouter();
 	const [isOpen, setIsOpen] = useState(false);
-	const [isPending, startTransition] = useTransition();
-
-	const currentLocale = pathname.split('/')[1] || routing.defaultLocale;
-
-	const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		const newLocale = e.target.value;
-		const segments = pathname.split('/');
-		segments[1] = newLocale;
-		const newPath = segments.join('/');
-
-		startTransition(() => {
-			router.push(newPath);
-		});
-	};
 
 	function toggleMenu() {
 		setIsOpen((prev) => {
@@ -38,30 +22,22 @@ export default function Navbar() {
 			return newState;
 		});
 	}
+
 	return (
 		<header className="w-full px-4 sm:px-8 py-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-800 z-50 fixed top-0 left-0 right-0">
-			<Link href={`/${currentLocale}`}>
+			<Link href={`/`}>
 				<Image src="/next.svg" alt="Logo" width={100} height={24} className="dark:invert" />
 			</Link>
 
 			<nav className="hidden sm:flex gap-6 text-sm font-medium items-center">
-				<Link href={`/${currentLocale}`} className="hover:underline underline-offset-4">
+				<Link href={`/`} className="hover:underline underline-offset-4">
 					{t('home')}
 				</Link>
-				<Link href={`/${currentLocale}/login`} className="hover:underline underline-offset-4">
+				<Link href={`/login`} className="hover:underline underline-offset-4">
 					{t('login')}
 				</Link>
-				<select
-					value={currentLocale}
-					onChange={handleLanguageChange}
-					className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-transparent focus:outline-none"
-				>
-					{routing.locales.map((locale) => (
-						<option key={locale} value={locale}>
-							{locale.toUpperCase()}
-						</option>
-					))}
-				</select>
+				<LocaleSelector />
+				<ModeToggle />
 			</nav>
 
 			{/* Mobile toggle */}
@@ -82,23 +58,14 @@ export default function Navbar() {
 			{/* Mobile menu */}
 			{isOpen && (
 				<div className="fixed top-[4rem] left-0 w-full bottom-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 sm:hidden flex flex-col items-center py-4 gap-4 z-40 overflow-auto">
-					<Link href={`/${currentLocale}`} onClick={() => setIsOpen(false)}>
+					<Link href={`/`} onClick={() => setIsOpen(false)}>
 						{t('home')}
 					</Link>
-					<Link href={`/${currentLocale}/login`} onClick={() => setIsOpen(false)}>
+					<Link href={`/login`} onClick={() => setIsOpen(false)}>
 						{t('login')}
 					</Link>
-					<select
-						value={currentLocale}
-						onChange={handleLanguageChange}
-						className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-transparent"
-					>
-						{routing.locales.map((locale) => (
-							<option key={locale} value={locale}>
-								{locale.toUpperCase()}
-							</option>
-						))}
-					</select>
+					<LocaleSelector></LocaleSelector>
+					<ModeToggle />
 				</div>
 			)}
 		</header>
