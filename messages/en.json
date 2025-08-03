@@ -3,20 +3,31 @@
     "home": "Home",
     "login": "Sign in"
   },
+  "LocaleSelector": {
+    "change_language": "Change language"
+  },
   "HomePage": {
-    "title": "Welcome to",
-    "title_desc": "This is a modern Next.js + Tailwind CSS starter template. Clean, fast and ready for your next project.",
+    "title": "Create, Test, Analyze – All in One Place",
+    "title_desc": "Design customizable survey templates, generate targeted tests, and perform IPA (Importance-Performance Analysis) to gain\n\tclear insights. Perfect for researchers, educators, and businesses looking to turn feedback into actionable strategies.",
     "left_button": "Sign in",
     "right_button": "Templates"
   },
   "LoginPage": {
     "title": "Sign in to your account",
-    "title_desc": "Don’t have an account?",
-    "sign_up": "Sign up",
-    "email_address": "Email address",
+    "email": "Email",
     "password": "Password",
-    "forgot_password_button": "Forgot password?",
     "sign_in_button": "Sign In",
-    "remember_me": "Remember me"
+    "forgot_password": "Forgot your password?",
+    "no_account": "Don't have an account?",
+    "register_button": "Sign up"
+  },
+  "RegisterPage": {
+    "title": "Sign up to your account",
+    "email": "Email",
+    "password": "Password",
+    "second_password": "Repeat password",
+    "sign_up_button": "Sign Up",
+    "has_account": "Already have an account?",
+    "login_button": "Sign in"
   }
 }

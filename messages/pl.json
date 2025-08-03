@@ -3,20 +3,31 @@
     "home": "Strona główna",
     "login": "Zaloguj się"
   },
+  "LocaleSelector": {
+    "change_language": "Zmień język"
+  },
   "HomePage": {
-    "title": "Witamy w",
-    "title_desc": "To jest nowoczesny szablon startowy Next.js + Tailwind CSS. Czysty, szybki i gotowy na Twój kolejny projekt.",
+    "title": "Twórz szablony, generuj testy, analizuj wyniki",
+    "title_desc": "Intuicyjna aplikacja do tworzenia testów na podstawie szablonów z wbudowaną analizą IPA. Doskonała dla nauczycieli,\n\tbadaczy i firm, które chcą szybko przekształcać dane w praktyczne wnioski.",
     "left_button": "Zaloguj się",
     "right_button": "Szablony"
   },
   "LoginPage": {
     "title": "Zaloguj się na twoje konto",
-    "title_desc": "Nie masz konta?",
-    "sign_up": "Zarejestruj się",
-    "email_address": "Adres Email",
+    "email": "Email",
     "password": "Hasło",
-    "forgot_password_button": "Zapomniałeś hasła?",
     "sign_in_button": "Zaloguj się",
-    "remember_me": "Zapamiętaj mnie"
+    "forgot_password": "Zapomniałeś hasła?",
+    "no_account": "Nie masz konta?",
+    "register_button": "Zarejestruj się"
+  },
+  "RegisterPage": {
+    "title": "Zarejestruj się na twoje konto",
+    "email": "Email",
+    "password": "Hasło",
+    "second_password": "Powtórz hasło",
+    "sign_up_button": "Zarejestruj się",
+    "has_account": "Masz konto?",
+    "login_button": "Zaloguj się"
   }
 }
