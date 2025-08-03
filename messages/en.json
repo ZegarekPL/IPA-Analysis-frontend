@@ -1,0 +1,22 @@
+{
+  "Navbar": {
+    "home": "Home",
+    "login": "Sign in"
+  },
+  "HomePage": {
+    "title": "Welcome to",
+    "title_desc": "This is a modern Next.js + Tailwind CSS starter template. Clean, fast and ready for your next project.",
+    "left_button": "Sign in",
+    "right_button": "Templates"
+  },
+  "LoginPage": {
+    "title": "Sign in to your account",
+    "title_desc": "Don’t have an account?",
+    "sign_up": "Sign up",
+    "email_address": "Email address",
+    "password": "Password",
+    "forgot_password_button": "Forgot password?",
+    "sign_in_button": "Sign In",
+    "remember_me": "Remember me"
+  }
+}

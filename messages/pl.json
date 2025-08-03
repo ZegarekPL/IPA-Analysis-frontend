@@ -1,0 +1,22 @@
+{
+  "Navbar": {
+    "home": "Strona główna",
+    "login": "Zaloguj się"
+  },
+  "HomePage": {
+    "title": "Witamy w",
+    "title_desc": "To jest nowoczesny szablon startowy Next.js + Tailwind CSS. Czysty, szybki i gotowy na Twój kolejny projekt.",
+    "left_button": "Zaloguj się",
+    "right_button": "Szablony"
+  },
+  "LoginPage": {
+    "title": "Zaloguj się na twoje konto",
+    "title_desc": "Nie masz konta?",
+    "sign_up": "Zarejestruj się",
+    "email_address": "Adres Email",
+    "password": "Hasło",
+    "forgot_password_button": "Zapomniałeś hasła?",
+    "sign_in_button": "Zaloguj się",
+    "remember_me": "Zapamiętaj mnie"
+  }
+}
