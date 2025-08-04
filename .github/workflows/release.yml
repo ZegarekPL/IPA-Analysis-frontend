@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set Git Config
         run: |
@@ -81,13 +83,13 @@ jobs:
           if [ "$is_first" = "true" ]; then
             range=""
           else
-            range="$latest..HEAD"
+            range="$latest..$current"
           fi
 
           commits=$(git log $range --pretty=format:"%s (%h) - @%an")
 
-          features=$(echo "$commits" | grep -E "^feat:" || true)
-          fixes=$(echo "$commits" | grep -E "^fix:" || true)
+          features=$(echo "$commits" | grep -E "feat:" || true)
+          fixes=$(echo "$commits" | grep -E "fix:" || true)
 
           echo "## What's Changed" > notes.txt
 
