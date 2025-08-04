@@ -1,0 +1,123 @@
+name: Release Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Type of release'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set Git Config
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+
+      - name: Determine Version
+        id: get_tag
+        run: |
+          git fetch --tags
+
+          # Get all tags, sort them, take the latest one
+          all_tags=$(git tag --sort=-v:refname)
+
+          if [ -z "$all_tags" ]; then
+            echo "No tags found. Using v0.0.0 as base."
+            latest_tag="v0.0.0"
+            is_first_release=true
+          else
+            latest_tag=$(echo "$all_tags" | head -n 1)
+            is_first_release=false
+          fi
+
+          version="${latest_tag#v}"
+          IFS='.' read -r major minor patch <<< "${version:-0.0.0}"
+
+          release_type="${{ github.event.inputs.release_type }}"
+          case "$release_type" in
+            major)
+              major=$((major + 1)); minor=0; patch=0 ;;
+            minor)
+              minor=$((minor + 1)); patch=0 ;;
+            patch)
+              patch=$((patch + 1)) ;;
+            *)
+              echo "Invalid release type"; exit 1 ;;
+          esac
+
+          new_tag="v$major.$minor.$patch"
+
+          echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
+          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
+          echo "is_first_release=$is_first_release" >> $GITHUB_OUTPUT
+
+      - name: Create Git Tag
+        run: |
+          git tag -a "${{ steps.get_tag.outputs.new_tag }}" -m "Release ${{ steps.get_tag.outputs.new_tag }}"
+          git push origin "${{ steps.get_tag.outputs.new_tag }}"
+
+      - name: Generate Release Notes
+        id: generate_notes
+        run: |
+          latest="${{ steps.get_tag.outputs.latest_tag }}"
+          current="${{ steps.get_tag.outputs.new_tag }}"
+          is_first="${{ steps.get_tag.outputs.is_first_release }}"
+
+          if [ "$is_first" = "true" ]; then
+            range=""
+          else
+            range="$latest..HEAD"
+          fi
+
+          commits=$(git log $range --pretty=format:"%s (%h) - @%an")
+
+          features=$(echo "$commits" | grep -E "^feat:" || true)
+          fixes=$(echo "$commits" | grep -E "^fix:" || true)
+
+          echo "## What's Changed" > notes.txt
+
+          if [ -n "$features" ]; then
+            echo -e "\n### 🚀 Features" >> notes.txt
+            echo "$features" | sed -E 's/^feat: /- /' >> notes.txt
+          fi
+
+          if [ -n "$fixes" ]; then
+            echo -e "\n### 🐛 Bug Fixes" >> notes.txt
+            echo "$fixes" | sed -E 's/^fix: /- /' >> notes.txt
+          fi
+
+          if [ "$is_first" = "true" ]; then
+            echo -e "\n---\n\n📜 [Full Changelog](https://github.com/${{ github.repository }}/commits/${current})" >> notes.txt
+          else
+            echo -e "\n---\n\n📜 [Full Changelog](https://github.com/${{ github.repository }}/compare/${latest}...${current})" >> notes.txt
+          fi
+
+          {
+            echo "release_body<<EOF"
+            cat notes.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        with:
+          tag_name: ${{ steps.get_tag.outputs.new_tag }}
+          release_name: Release ${{ steps.get_tag.outputs.new_tag }}
+          body: ${{ steps.generate_notes.outputs.release_body }}
