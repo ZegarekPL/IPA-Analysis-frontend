@@ -6,26 +6,26 @@ import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { useTranslations } from 'next-intl';
-
-const formSchema = z.object({
-	mail: z.string().email(),
-	password: z.string().min(8, 'Password must be at least 8 characters long'),
-});
+import { login, SigninBody, signinSchema } from '@/features/auth/Login';
 
 const LoginPage = () => {
 	const t = useTranslations('LoginPage');
-	const form = useForm<z.infer<typeof formSchema>>({
+	const form = useForm<SigninBody>({
 		defaultValues: {
 			mail: '',
 			password: '',
 		},
-		resolver: zodResolver(formSchema),
+		resolver: zodResolver(signinSchema),
 	});
 
-	const onSubmit = (data: z.infer<typeof formSchema>) => {
-		console.log(data);
+	const onSubmit = async (data: SigninBody) => {
+		try {
+			const response = await login(data);
+			console.log('Sukces:', response);
+		} catch (e) {
+			console.error('Błąd przy logowaniu:', e);
+		}
 	};
 
 	return (

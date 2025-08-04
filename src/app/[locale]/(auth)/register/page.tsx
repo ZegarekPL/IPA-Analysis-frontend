@@ -6,28 +6,27 @@ import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { useTranslations } from 'next-intl';
-
-const formSchema = z.object({
-	email: z.string().email(),
-	password: z.string().min(8, 'Password must be at least 8 characters long'),
-	repeatPassword: z.string().min(8, 'Password must be at least 8 characters long'),
-});
+import { signup, SignupBody, signupSchema } from '@/features/auth/SignUp';
 
 const RegisterPage = () => {
 	const t = useTranslations('RegisterPage');
-	const form = useForm<z.infer<typeof formSchema>>({
+	const form = useForm<SignupBody>({
 		defaultValues: {
-			email: '',
+			mail: '',
 			password: '',
 			repeatPassword: '',
 		},
-		resolver: zodResolver(formSchema),
+		resolver: zodResolver(signupSchema),
 	});
 
-	const onSubmit = (data: z.infer<typeof formSchema>) => {
-		console.log(data);
+	const onSubmit = async (data: SignupBody) => {
+		try {
+			const response = await signup(data);
+			console.log('Sukces:', response);
+		} catch (e) {
+			console.error('Błąd przy rejestracji:', e);
+		}
 	};
 
 	return (
@@ -39,7 +38,7 @@ const RegisterPage = () => {
 					<form className="w-full space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
 						<FormField
 							control={form.control}
-							name="email"
+							name="mail"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>{t('email')}</FormLabel>
