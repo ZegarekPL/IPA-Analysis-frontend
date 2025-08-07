@@ -45,7 +45,7 @@ const LoginPage = () => {
 
 	return (
 		<div className="w-full flex items-center justify-center">
-			<div className="max-w-xs w-full flex flex-col items-center">
+			<div className="max-w-sm w-full flex flex-col items-center border rounded-lg p-6 shadow-sm">
 				<p className="mt-4 text-xl font-bold tracking-tight py-8">{t('title')}</p>
 
 				<Form {...form}>
