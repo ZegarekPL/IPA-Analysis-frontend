@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { signup, SignupBody, signupSchema } from '@/features/auth/SignUp';
+import { useMutation } from '@tanstack/react-query';
 
 const RegisterPage = () => {
 	const t = useTranslations('RegisterPage');
@@ -20,13 +21,18 @@ const RegisterPage = () => {
 		resolver: zodResolver(signupSchema),
 	});
 
-	const onSubmit = async (data: SignupBody) => {
-		try {
-			const response = await signup(data);
-			console.log('Sukces:', response);
-		} catch (e) {
-			console.error('Błąd przy rejestracji:', e);
-		}
+	const mutation = useMutation({
+		mutationFn: signup,
+		onSuccess: (response) => {
+			console.log('SUCCESS', response.message);
+		},
+		onError: (error: any) => {
+			console.log('ERROR', error?.response?.data?.message || 'Unexpected error');
+		},
+	});
+
+	const onSubmit = (data: SignupBody) => {
+		mutation.mutate(data);
 	};
 
 	return (
@@ -75,8 +81,8 @@ const RegisterPage = () => {
 								</FormItem>
 							)}
 						/>
-						<Button type="submit" className="mt-4 w-full">
-							{t('sign_up_button')}
+						<Button type="submit" className="mt-4 w-full" disabled={mutation.isPending}>
+							{mutation.isPending ? t('loading') : t('sign_up_button')}
 						</Button>
 					</form>
 				</Form>

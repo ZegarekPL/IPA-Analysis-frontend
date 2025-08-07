@@ -22,6 +22,7 @@
     "register_button": "Sign up"
   },
   "RegisterPage": {
+    "loading": "Loading",
     "title": "Sign up to your account",
     "email": "Email",
     "password": "Password",

@@ -22,6 +22,7 @@
     "register_button": "Zarejestruj się"
   },
   "RegisterPage": {
+    "loading": "Ładowanie",
     "title": "Zarejestruj się na twoje konto",
     "email": "Email",
     "password": "Hasło",

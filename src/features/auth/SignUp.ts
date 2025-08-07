@@ -1,6 +1,4 @@
 import { appAPI } from '@/utils/appAPI';
-import { AxiosResponse } from 'axios';
-
 import { z } from 'zod';
 
 export const signupSchema = z
@@ -27,12 +25,8 @@ export const signupSchema = z
 export type SignupBody = z.infer<typeof signupSchema>;
 
 export async function signup(data: SignupBody): Promise<any> {
-	try {
-		const response: AxiosResponse<any> = await appAPI.post(`/api/v1/signup`, data, {
-			withCredentials: true,
-		});
-		return response.data;
-	} catch (error: any) {
-		console.error(error);
-	}
+	const response = await appAPI.post<any>(`/api/v1/signup`, data, {
+		withCredentials: true,
+	});
+	return response.data;
 }
