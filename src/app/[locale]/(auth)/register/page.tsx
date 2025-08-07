@@ -9,9 +9,12 @@ import { useForm } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { signup, SignupBody, signupSchema } from '@/features/auth/SignUp';
 import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const RegisterPage = () => {
 	const t = useTranslations('RegisterPage');
+	const router = useRouter();
 	const form = useForm<SignupBody>({
 		defaultValues: {
 			mail: '',
@@ -24,10 +27,16 @@ const RegisterPage = () => {
 	const mutation = useMutation({
 		mutationFn: signup,
 		onSuccess: (response) => {
-			console.log('SUCCESS', response.message);
+			toast.success('SUCCESS', {
+				description: response.status,
+			});
+			router.push('/login');
 		},
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		onError: (error: any) => {
-			console.log('ERROR', error?.response?.data?.message || 'Unexpected error');
+			toast.error('ERROR', {
+				description: error?.response?.data?.message || 'Unexpected error',
+			});
 		},
 	});
 

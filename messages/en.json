@@ -13,13 +13,15 @@
     "right_button": "Templates"
   },
   "LoginPage": {
+    "loading": "Loading",
     "title": "Sign in to your account",
     "email": "Email",
     "password": "Password",
     "sign_in_button": "Sign In",
     "forgot_password": "Forgot your password?",
     "no_account": "Don't have an account?",
-    "register_button": "Sign up"
+    "register_button": "Sign up",
+    "success": "User is logged in"
   },
   "RegisterPage": {
     "loading": "Loading",

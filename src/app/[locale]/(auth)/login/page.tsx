@@ -8,9 +8,13 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { login, SigninBody, signinSchema } from '@/features/auth/Login';
+import { toast } from 'sonner';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {
 	const t = useTranslations('LoginPage');
+	const router = useRouter();
 	const form = useForm<SigninBody>({
 		defaultValues: {
 			mail: '',
@@ -19,13 +23,24 @@ const LoginPage = () => {
 		resolver: zodResolver(signinSchema),
 	});
 
-	const onSubmit = async (data: SigninBody) => {
-		try {
-			const response = await login(data);
-			console.log('Sukces:', response);
-		} catch (e) {
-			console.error('Błąd przy logowaniu:', e);
-		}
+	const mutation = useMutation({
+		mutationFn: login,
+		onSuccess: () => {
+			toast.success('SUCCESS', {
+				description: t('success'),
+			});
+			router.push('/user');
+		},
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		onError: (error: any) => {
+			toast.error('ERROR', {
+				description: error?.response?.data?.message || 'Unexpected error',
+			});
+		},
+	});
+
+	const onSubmit = (data: SigninBody) => {
+		mutation.mutate(data);
 	};
 
 	return (
@@ -61,8 +76,8 @@ const LoginPage = () => {
 								</FormItem>
 							)}
 						/>
-						<Button type="submit" className="mt-4 w-full">
-							{t('sign_in_button')}
+						<Button type="submit" className="mt-4 w-full" disabled={mutation.isPending}>
+							{mutation.isPending ? t('loading') : t('sign_in_button')}
 						</Button>
 					</form>
 				</Form>

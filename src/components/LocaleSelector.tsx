@@ -17,6 +17,7 @@ export default function LocaleSelector() {
 	const t = useTranslations('LocaleSelector');
 	const pathname = usePathname();
 	const router = useRouter();
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [isPending, startTransition] = useTransition();
 
 	const currentLocale = pathname.split('/')[1] || routing.defaultLocale;

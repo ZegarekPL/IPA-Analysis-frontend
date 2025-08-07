@@ -13,13 +13,15 @@
     "right_button": "Szablony"
   },
   "LoginPage": {
+    "loading": "Ładowanie",
     "title": "Zaloguj się na twoje konto",
     "email": "Email",
     "password": "Hasło",
     "sign_in_button": "Zaloguj się",
     "forgot_password": "Zapomniałeś hasła?",
     "no_account": "Nie masz konta?",
-    "register_button": "Zarejestruj się"
+    "register_button": "Zarejestruj się",
+    "success": "Zalogowano się"
   },
   "RegisterPage": {
     "loading": "Ładowanie",

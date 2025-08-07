@@ -1,5 +1,7 @@
 import { appAPI } from '@/utils/appAPI';
 import { z } from 'zod';
+import { AxiosResponse } from 'axios';
+import { FailedResponse } from '@/utils/FailedResponse';
 
 export const signupSchema = z
 	.object({
@@ -23,10 +25,27 @@ export const signupSchema = z
 	});
 
 export type SignupBody = z.infer<typeof signupSchema>;
+export type SignupResponse = {
+	status: 'success';
+	data: {
+		index: string;
+		mail: string;
+		authentication: {
+			password: string;
+			repeatPassword: string;
+			salt: string;
+		};
+		_id: string;
+		__v: number;
+	};
+};
 
-export async function signup(data: SignupBody): Promise<any> {
-	const response = await appAPI.post<any>(`/api/v1/signup`, data, {
+export type SigninResponse = SignupResponse | FailedResponse;
+
+export async function signup(data: SignupBody): Promise<SigninResponse> {
+	const response: AxiosResponse<SigninResponse> = await appAPI.post(`/api/v1/signup`, data, {
 		withCredentials: true,
 	});
+	console.log(response);
 	return response.data;
 }

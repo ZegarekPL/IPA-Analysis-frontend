@@ -8,6 +8,7 @@ import { Locale, routing } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
 import { ThemeProvider } from '@/components/theme-provider';
 import ReactQueryProvider from '@/lib/reactQueryProvider';
+import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -44,6 +45,7 @@ export default async function RootLayout({
 							<div className="min-h-screen flex flex-col">
 								<Navbar />
 								<div className="flex flex-1">{children}</div>
+								<Toaster />
 							</div>
 							<Footer />
 						</ThemeProvider>
@@ -52,4 +54,8 @@ export default async function RootLayout({
 			</body>
 		</html>
 	);
+}
+
+export async function generateStaticParams() {
+	return routing.locales.map((locale) => ({ locale }));
 }
