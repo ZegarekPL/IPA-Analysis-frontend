@@ -1,19 +1,16 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowUpRight, CirclePlay } from 'lucide-react';
 import React from 'react';
+import ReleaseBadge from '@/app/[locale]/ReleaseBadge';
 
 const HeroPage = () => {
 	const t = useTranslations('HomePage');
-	//TODO Just released v1.0.0
 	return (
 		<div className="w-full flex items-center justify-center px-6">
 			<div className="text-center max-w-2xl">
-				<Badge className="bg-gradient-to-br via-70% from-primary via-muted/30 to-primary rounded-full py-1 border-none">
-					Just released v1.0.0
-				</Badge>
+				<ReleaseBadge />
 				<h1 className="mt-6 text-3xl sm:text-4xl md:text-5xl md:leading-[1.2] font-bold">{t('title')}</h1>
 				<p className="mt-6 text-[17px] md:text-lg">{t('title_desc')}</p>
 				<div className="mt-12 flex items-center justify-center gap-4">
