@@ -1,12 +1,8 @@
-import { appAPI } from '@/utils/appAPI';
+import { ApiResponse, appAPI } from '@/utils/appAPI';
 import { AxiosResponse } from 'axios';
 
-interface ApiResponse<T> {
-	status: number;
-	data: T;
-}
-
 export interface Templates {
+	_id: string;
 	name: string;
 	description: string;
 	closedQuestions: ClosedQuestion[];
@@ -34,7 +30,7 @@ export async function getTemplates() {
 		} else if (response.status === 401) {
 			window.location.replace('/login');
 		} else {
-			console.error('Wystąpił błąd podczas usuwania innego meczu');
+			console.error('Wystąpił błąd podczas pobierania templates');
 		}
 	} catch (error: any) {
 		if (error.response.status === 401) {
@@ -59,13 +55,13 @@ export async function createTemplates(templates: CreateTemplates) {
 		const response: any = await appAPI.post(`/api/v1/templates`, templates, {
 			withCredentials: true,
 		});
-		if (response.status === 200) {
+		if (response.status === 201) {
 			console.log('response', response);
 			return response.data.data;
 		} else if (response.status === 401) {
 			window.location.replace('/login');
 		} else {
-			console.error('Wystąpił błąd podczas usuwania innego meczu');
+			console.error('Wystąpił błąd podczas dodawania templates');
 		}
 	} catch (error: any) {
 		if (error.response.status === 401) {
@@ -76,28 +72,3 @@ export async function createTemplates(templates: CreateTemplates) {
 	}
 }
 
-export async function createTemplate(data: any) {
-	const res = await fetch(`${appAPI}/templates`, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(data),
-	});
-	if (!res.ok) throw new Error('Failed to create template');
-	return res.json();
-}
-
-export async function updateTemplate(id: string, data: any) {
-	const res = await fetch(`${appAPI}/templates/${id}`, {
-		method: 'PUT',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(data),
-	});
-	if (!res.ok) throw new Error('Failed to update template');
-	return res.json();
-}
-
-export async function deleteTemplate(id: string) {
-	const res = await fetch(`${appAPI}/templates/${id}`, { method: 'DELETE' });
-	if (!res.ok) throw new Error('Failed to delete template');
-	return res.json();
-}

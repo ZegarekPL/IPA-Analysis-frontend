@@ -1,7 +1,7 @@
-export default function Dashboard() {
+export default function Settings() {
 	return (
 		<div className="p-6 relative">
-			Dashboard
+			Settings
 		</div>
 	);
 }
