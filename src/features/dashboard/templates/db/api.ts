@@ -21,7 +21,7 @@ export interface ClosedQuestion {
 
 export async function getTemplates() {
 	try {
-		const response: AxiosResponse<ApiResponse<Templates[]>> = await appAPI.get(`/api/v1/templates`, {
+		const response: AxiosResponse<ApiResponse<Templates[]>> = await appAPI.get(`/api/v1/admin/templates`, {
 			withCredentials: true,
 		});
 		if (response.status === 200) {

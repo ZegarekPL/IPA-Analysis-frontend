@@ -9,6 +9,24 @@ import { notFound } from 'next/navigation';
 import { ThemeProvider } from '@/components/theme-provider';
 import ReactQueryProvider from '@/lib/reactQueryProvider';
 import { Toaster } from '@/components/ui/sonner';
+import { ModeToggle } from '@/components/ModeToggle';
+import LocaleSelector from '@/components/LocaleSelector';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/app-sidebar';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import { Separator } from "@/components/ui/separator"
+import {
+  SidebarInset,
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
+import DynamicBreadcrumb from '@/components/DynamicBreadcrumb';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -40,16 +58,36 @@ export default async function RootLayout({
 		<html lang={locale} suppressHydrationWarning>
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 				<ReactQueryProvider>
-					<NextIntlClientProvider>
-						<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-							<div className="min-h-screen flex flex-col">
-								<Navbar />
-								<div className="mt-16">{children}</div>
-								<Toaster />
-							</div>
-							<Footer />
-						</ThemeProvider>
-					</NextIntlClientProvider>
+						<NextIntlClientProvider>
+							<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+								<SidebarProvider defaultOpen={true}>
+									<AppSidebar />
+									<SidebarInset>
+										<div className="min-h-screen flex flex-col relative">
+											<header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+												<div className="flex items-center gap-2 px-4">
+													<SidebarTrigger className="-ml-1" />
+													<Separator
+													orientation="vertical"
+													className="mr-2 data-[orientation=vertical]:h-4"
+													/>
+													<DynamicBreadcrumb />
+												</div>
+												<div className="z-90 absolute top-4 right-4 flex items-center gap-4">
+													<LocaleSelector />
+													<ModeToggle />
+												</div>
+											</header>
+											<div className='h-full'>
+												{children}
+											</div>
+											<Toaster />
+										</div>
+										<Footer />
+									</SidebarInset>
+								</SidebarProvider>
+							</ThemeProvider>
+						</NextIntlClientProvider>
 				</ReactQueryProvider>
 			</body>
 		</html>

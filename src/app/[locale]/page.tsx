@@ -8,7 +8,7 @@ import ReleaseBadge from '@/app/[locale]/ReleaseBadge';
 const HeroPage = () => {
 	const t = useTranslations('HomePage');
 	return (
-		<div className="w-full flex items-center justify-center px-6">
+		<div className="w-full h-full flex items-center justify-center px-6">
 			<div className="text-center max-w-2xl">
 				<ReleaseBadge />
 				<h1 className="mt-6 text-3xl sm:text-4xl md:text-5xl md:leading-[1.2] font-bold">{t('title')}</h1>
