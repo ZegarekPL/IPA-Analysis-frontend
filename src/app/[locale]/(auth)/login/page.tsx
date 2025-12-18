@@ -1,16 +1,17 @@
 'use client';
 
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import { useTranslations } from 'next-intl';
 import { login, SigninBody, signinSchema } from '@/features/auth/Login';
-import { toast } from 'sonner';
-import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {
 	const t = useTranslations('LoginPage');
@@ -31,7 +32,7 @@ const LoginPage = () => {
 			});
 			router.push('/user');
 		},
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 		onError: (error: any) => {
 			toast.error('ERROR', {
 				description: error?.response?.data?.message || 'Unexpected error',
@@ -44,7 +45,7 @@ const LoginPage = () => {
 	};
 
 	return (
-		<div className="w-full flex items-center justify-center">
+		<div className="w-full h-full flex items-center justify-center">
 			<div className="max-w-sm w-full flex flex-col items-center border rounded-lg p-6 shadow-sm">
 				<p className="mt-4 text-xl font-bold tracking-tight py-8">{t('title')}</p>
 

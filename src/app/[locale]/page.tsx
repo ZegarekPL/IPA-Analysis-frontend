@@ -1,14 +1,15 @@
-import { useTranslations } from 'next-intl';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { ArrowUpRight, CirclePlay } from 'lucide-react';
 import React from 'react';
+import { ArrowUpRight, CirclePlay } from 'lucide-react';
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+
 import ReleaseBadge from '@/app/[locale]/ReleaseBadge';
+import { Button } from '@/components/ui/button';
 
 const HeroPage = () => {
 	const t = useTranslations('HomePage');
 	return (
-		<div className="w-full flex items-center justify-center px-6">
+		<div className="w-full h-full flex items-center justify-center px-6">
 			<div className="text-center max-w-2xl">
 				<ReleaseBadge />
 				<h1 className="mt-6 text-3xl sm:text-4xl md:text-5xl md:leading-[1.2] font-bold">{t('title')}</h1>

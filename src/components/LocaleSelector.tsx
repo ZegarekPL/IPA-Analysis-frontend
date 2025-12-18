@@ -1,5 +1,10 @@
 'use client';
 
+import { useTransition } from 'react';
+import { Globe } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@/components/ui/button';
 import {
 	DropdownMenu,
@@ -7,11 +12,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useTranslations } from 'next-intl';
-import { usePathname, useRouter } from 'next/navigation';
-import { useTransition } from 'react';
 import { routing } from '@/i18n/routing';
-import { Globe } from 'lucide-react';
 
 export default function LocaleSelector() {
 	const t = useTranslations('LocaleSelector');

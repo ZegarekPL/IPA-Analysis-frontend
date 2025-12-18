@@ -1,36 +1,36 @@
 {
-  "Navbar": {
-    "home": "Strona główna",
-    "login": "Zaloguj się"
-  },
-  "LocaleSelector": {
-    "change_language": "Zmień język"
-  },
-  "HomePage": {
-    "title": "Twórz szablony, generuj testy, analizuj wyniki",
-    "title_desc": "Intuicyjna aplikacja do tworzenia testów na podstawie szablonów z wbudowaną analizą IPA. Doskonała dla nauczycieli,\n\tbadaczy i firm, które chcą szybko przekształcać dane w praktyczne wnioski.",
-    "left_button": "Zaloguj się",
-    "right_button": "Szablony"
-  },
-  "LoginPage": {
-    "loading": "Ładowanie",
-    "title": "Zaloguj się na twoje konto",
-    "email": "Email",
-    "password": "Hasło",
-    "sign_in_button": "Zaloguj się",
-    "forgot_password": "Zapomniałeś hasła?",
-    "no_account": "Nie masz konta?",
-    "register_button": "Zarejestruj się",
-    "success": "Zalogowano się"
-  },
-  "RegisterPage": {
-    "loading": "Ładowanie",
-    "title": "Zarejestruj się na twoje konto",
-    "email": "Email",
-    "password": "Hasło",
-    "second_password": "Powtórz hasło",
-    "sign_up_button": "Zarejestruj się",
-    "has_account": "Masz konto?",
-    "login_button": "Zaloguj się"
-  }
+	"Navbar": {
+		"home": "Strona główna",
+		"login": "Zaloguj się"
+	},
+	"LocaleSelector": {
+		"change_language": "Zmień język"
+	},
+	"HomePage": {
+		"title": "Twórz szablony, generuj testy, analizuj wyniki",
+		"title_desc": "Intuicyjna aplikacja do tworzenia testów na podstawie szablonów z wbudowaną analizą IPA. Doskonała dla nauczycieli,\n\tbadaczy i firm, które chcą szybko przekształcać dane w praktyczne wnioski.",
+		"left_button": "Zaloguj się",
+		"right_button": "Szablony"
+	},
+	"LoginPage": {
+		"loading": "Ładowanie",
+		"title": "Zaloguj się na twoje konto",
+		"email": "Email",
+		"password": "Hasło",
+		"sign_in_button": "Zaloguj się",
+		"forgot_password": "Zapomniałeś hasła?",
+		"no_account": "Nie masz konta?",
+		"register_button": "Zarejestruj się",
+		"success": "Zalogowano się"
+	},
+	"RegisterPage": {
+		"loading": "Ładowanie",
+		"title": "Zarejestruj się na twoje konto",
+		"email": "Email",
+		"password": "Hasło",
+		"second_password": "Powtórz hasło",
+		"sign_up_button": "Zarejestruj się",
+		"has_account": "Masz konto?",
+		"login_button": "Zaloguj się"
+	}
 }

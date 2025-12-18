@@ -1,14 +1,22 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import '../globals.css';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import { NextIntlClientProvider, hasLocale } from 'next-intl';
-import { Locale, routing } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
+import { hasLocale, NextIntlClientProvider } from 'next-intl';
+
+import '../globals.css';
+
+import { AppSidebar } from '@/components/app-sidebar';
+import DynamicBreadcrumb from '@/components/DynamicBreadcrumb';
+import Footer from '@/components/Footer';
+import LocaleSelector from '@/components/LocaleSelector';
+import { ModeToggle } from '@/components/ModeToggle';
 import { ThemeProvider } from '@/components/theme-provider';
-import ReactQueryProvider from '@/lib/reactQueryProvider';
+import { Separator } from '@/components/ui/separator';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/sonner';
+import { routing } from '@/i18n/routing';
+import ReactQueryProvider from '@/lib/reactQueryProvider';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -30,7 +38,7 @@ export default async function RootLayout({
 	params,
 }: Readonly<{
 	children: React.ReactNode;
-	params: Promise<{ locale: Locale }>;
+	params: Promise<{ locale: string }>;
 }>) {
 	const { locale } = await params;
 	if (!hasLocale(routing.locales, locale)) {
@@ -42,12 +50,27 @@ export default async function RootLayout({
 				<ReactQueryProvider>
 					<NextIntlClientProvider>
 						<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-							<div className="min-h-screen flex flex-col">
-								<Navbar />
-								<div className="flex flex-1">{children}</div>
-								<Toaster />
-							</div>
-							<Footer />
+							<SidebarProvider defaultOpen={true}>
+								<AppSidebar />
+								<SidebarInset>
+									<div className="min-h-screen flex flex-col relative">
+										<header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+											<div className="flex items-center gap-2 px-4">
+												<SidebarTrigger className="-ml-1" />
+												<Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
+												<DynamicBreadcrumb />
+											</div>
+											<div className="z-90 absolute top-4 right-4 flex items-center gap-4">
+												<LocaleSelector />
+												<ModeToggle />
+											</div>
+										</header>
+										<div className="h-full">{children}</div>
+										<Toaster />
+									</div>
+									<Footer />
+								</SidebarInset>
+							</SidebarProvider>
 						</ThemeProvider>
 					</NextIntlClientProvider>
 				</ReactQueryProvider>

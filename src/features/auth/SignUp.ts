@@ -1,6 +1,7 @@
-import { appAPI } from '@/utils/appAPI';
-import { z } from 'zod';
 import { AxiosResponse } from 'axios';
+import { z } from 'zod';
+
+import { appAPI } from '@/utils/appAPI';
 import { FailedResponse } from '@/utils/FailedResponse';
 
 export const signupSchema = z

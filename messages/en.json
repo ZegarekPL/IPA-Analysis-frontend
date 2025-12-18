@@ -1,36 +1,36 @@
 {
-  "Navbar": {
-    "home": "Home",
-    "login": "Sign in"
-  },
-  "LocaleSelector": {
-    "change_language": "Change language"
-  },
-  "HomePage": {
-    "title": "Create, Test, Analyze – All in One Place",
-    "title_desc": "Design customizable survey templates, generate targeted tests, and perform IPA (Importance-Performance Analysis) to gain\n\tclear insights. Perfect for researchers, educators, and businesses looking to turn feedback into actionable strategies.",
-    "left_button": "Sign in",
-    "right_button": "Templates"
-  },
-  "LoginPage": {
-    "loading": "Loading",
-    "title": "Sign in to your account",
-    "email": "Email",
-    "password": "Password",
-    "sign_in_button": "Sign In",
-    "forgot_password": "Forgot your password?",
-    "no_account": "Don't have an account?",
-    "register_button": "Sign up",
-    "success": "User is logged in"
-  },
-  "RegisterPage": {
-    "loading": "Loading",
-    "title": "Sign up to your account",
-    "email": "Email",
-    "password": "Password",
-    "second_password": "Repeat password",
-    "sign_up_button": "Sign Up",
-    "has_account": "Already have an account?",
-    "login_button": "Sign in"
-  }
+	"Navbar": {
+		"home": "Home",
+		"login": "Sign in"
+	},
+	"LocaleSelector": {
+		"change_language": "Change language"
+	},
+	"HomePage": {
+		"title": "Create, Test, Analyze – All in One Place",
+		"title_desc": "Design customizable survey templates, generate targeted tests, and perform IPA (Importance-Performance Analysis) to gain\n\tclear insights. Perfect for researchers, educators, and businesses looking to turn feedback into actionable strategies.",
+		"left_button": "Sign in",
+		"right_button": "Templates"
+	},
+	"LoginPage": {
+		"loading": "Loading",
+		"title": "Sign in to your account",
+		"email": "Email",
+		"password": "Password",
+		"sign_in_button": "Sign In",
+		"forgot_password": "Forgot your password?",
+		"no_account": "Don't have an account?",
+		"register_button": "Sign up",
+		"success": "User is logged in"
+	},
+	"RegisterPage": {
+		"loading": "Loading",
+		"title": "Sign up to your account",
+		"email": "Email",
+		"password": "Password",
+		"second_password": "Repeat password",
+		"sign_up_button": "Sign Up",
+		"has_account": "Already have an account?",
+		"login_button": "Sign in"
+	}
 }

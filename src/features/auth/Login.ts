@@ -1,7 +1,7 @@
-import { appAPI } from '@/utils/appAPI';
 import { AxiosResponse } from 'axios';
-
 import { z } from 'zod';
+
+import { appAPI } from '@/utils/appAPI';
 import { FailedResponse } from '@/utils/FailedResponse';
 
 export const signinSchema = z.object({
@@ -41,16 +41,32 @@ export async function login(data: SigninBody): Promise<SigninResponse> {
 	return response.data;
 }
 
-export const getUserSchema = z.object({
-	token: z.string(),
-});
+export type GetUserSuccessResponse = {
+	status: 'success';
+	data: {
+		user: {
+			_id: string;
+			index: string;
+			mail: string;
+			role: string;
+			createdAt: Date;
+			updatedAt: Date;
+		};
+	};
+};
 
-export type GetUserBody = z.infer<typeof getUserSchema>;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getUser(data: GetUserBody): Promise<any> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const response: AxiosResponse<any> = await appAPI.post(`/api/v1/getUser`, data, {
-		withCredentials: true,
-	});
-	return response.data;
+export type GetUserResponse = GetUserSuccessResponse | FailedResponse;
+
+export async function getUser(): Promise<GetUserResponse> {
+	const response: AxiosResponse<GetUserResponse> = await appAPI.post(
+		`/api/v1/login/getUser`,
+		{},
+		{
+			withCredentials: true,
+		},
+	);
+	if (response.data.status === 'success') {
+		return response.data;
+	}
+	throw new Error('Failed to fetch user data');
 }

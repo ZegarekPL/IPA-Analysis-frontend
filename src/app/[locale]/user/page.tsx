@@ -1,74 +1,97 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useQuery } from '@tanstack/react-query';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
+import { getUser } from '@/features/auth/Login';
 
 export default function UserPage() {
-	const user = {
-		name: 'Jan Kowalski',
-		email: 'jan@example.com',
-		role: 'admin',
-		avatarUrl: 'https://i.pravatar.cc/150?img=52',
-	};
+	const { data, isLoading, isError } = useQuery({
+		queryKey: ['getUser'],
+		queryFn: getUser,
+	});
+
+	if (isLoading) {
+		return <p className="text-center mt-10">Ładowanie...</p>;
+	}
+
+	if (isError || !data || data.status !== 'success') {
+		return <p className="text-center mt-10 text-destructive">Nie udało się załadować profilu</p>;
+	}
+
+	const user = data.data.user;
+
+	const initials = user.index
+		? user.index
+				.split(' ')
+				.map((n) => n[0])
+				.join('')
+				.toUpperCase()
+		: 'U';
 
 	return (
-		<div className="w-full flex items-center justify-center px-6">
-			<Card>
+		<div className="w-full flex items-center justify-center px-6 py-10">
+			<Card className="w-full max-w-2xl">
 				<CardHeader className="flex flex-col items-center gap-4">
 					<Avatar className="h-24 w-24">
-						<AvatarImage src={user.avatarUrl} alt={user.name} />
-						<AvatarFallback>
-							{user.name
-								.split(' ')
-								.map((n) => n[0])
-								.join('')}
-						</AvatarFallback>
+						<AvatarImage src={''} alt={user.index} />
+						<AvatarFallback>{initials}</AvatarFallback>
 					</Avatar>
+
 					<div className="text-center">
-						<CardTitle>{user.name}</CardTitle>
-						<p className="text-sm text-muted-foreground">{user.email}</p>
-						<Badge variant="outline" className="mt-1 capitalize">
+						<CardTitle className="text-2xl">{user.index}</CardTitle>
+						<p className="text-sm text-muted-foreground">{user.mail}</p>
+						<Badge variant="outline" className="mt-2 capitalize">
 							{user.role}
 						</Badge>
 					</div>
 				</CardHeader>
+
 				<Separator />
+
 				<CardContent className="space-y-6 mt-6">
 					<section>
-						<h3 className="text-lg font-semibold mb-2">Profile Information</h3>
+						<h3 className="text-lg font-semibold mb-3">Profile Information</h3>
 						<div className="grid gap-4 md:grid-cols-2">
-							<div>
-								<Label htmlFor="name" className="py-2">
-									Full Name
-								</Label>
-								<Input id="name" value={user.name} readOnly />
+							<div className="space-y-1">
+								<Label htmlFor="name">Username</Label>
+								<Input id="name" value={user.index} readOnly />
 							</div>
-							<div>
-								<Label htmlFor="email" className="py-2">
-									Email
-								</Label>
-								<Input id="email" value={user.email} readOnly />
+							<div className="space-y-1">
+								<Label htmlFor="email">Email</Label>
+								<Input id="email" value={user.mail} readOnly />
 							</div>
 						</div>
 					</section>
 
 					<section>
-						<h3 className="text-lg font-semibold mb-2">Settings</h3>
+						<h3 className="text-lg font-semibold mb-3">Account Details</h3>
 						<div className="grid gap-4 md:grid-cols-2">
-							<div>
-								<Label htmlFor="language" className="py-2">
-									Preferred language
-								</Label>
+							<div className="space-y-1">
+								<Label htmlFor="created">Created at</Label>
+								<Input id="created" value={new Date(user.createdAt).toLocaleString()} readOnly />
+							</div>
+							<div className="space-y-1">
+								<Label htmlFor="updated">Last updated</Label>
+								<Input id="updated" value={new Date(user.updatedAt).toLocaleString()} readOnly />
+							</div>
+						</div>
+					</section>
+
+					<section>
+						<h3 className="text-lg font-semibold mb-3">Settings</h3>
+						<div className="grid gap-4 md:grid-cols-2">
+							<div className="space-y-1">
+								<Label htmlFor="language">Preferred language</Label>
 								<Input id="language" value="English" readOnly />
 							</div>
-							<div>
-								<Label htmlFor="theme" className="py-2">
-									Preferred theme
-								</Label>
+							<div className="space-y-1">
+								<Label htmlFor="theme">Preferred theme</Label>
 								<Input id="theme" value="System" readOnly />
 							</div>
 						</div>
