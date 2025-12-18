@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Frame, Map, PieChart, SquareTerminal } from 'lucide-react';
+import { BookCheck, LayoutTemplate, SquareTerminal, User, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -13,11 +13,6 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar';
 
 const data = {
-	user: {
-		name: 'shadcn',
-		email: 'm@example.com',
-		avatar: 'https://i.pravatar.cc/150?img=52',
-	},
 	navMain: [
 		{
 			title: 'Playground',
@@ -42,24 +37,24 @@ const data = {
 	],
 	projects: [
 		{
-			name: 'Templates',
-			url: '/dashboard/templates',
-			icon: Frame,
+			name: 'Users',
+			url: '/dashboard/users',
+			icon: User,
 		},
 		{
 			name: 'Groups',
 			url: '/dashboard/groups',
-			icon: PieChart,
+			icon: Users,
+		},
+		{
+			name: 'Templates',
+			url: '/dashboard/templates',
+			icon: LayoutTemplate,
 		},
 		{
 			name: 'Tests',
 			url: '/dashboard/tests',
-			icon: Map,
-		},
-		{
-			name: 'Users',
-			url: '/dashboard/users',
-			icon: Map,
+			icon: BookCheck,
 		},
 	],
 };

@@ -106,8 +106,8 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		enableHiding: false,
 	},
 	{
-		accessorKey: 'header',
-		header: 'Header',
+		accessorKey: 'name',
+		header: 'Name',
 		cell: ({ row }) => {
 			return row.original.header;
 		},
@@ -115,27 +115,27 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
 	},
 	{
 		accessorKey: 'description',
-		header: 'description',
+		header: 'Description',
 		cell: ({ row }) => {
 			return row.original.description;
 		},
 	},
 	{
-		accessorKey: 'membersCount',
-		header: 'Members Count',
+		accessorKey: 'members',
+		header: 'Members',
 		cell: ({ row }) => {
 			return row.original.membersCount;
 		},
 	},
 	{
-		accessorKey: 'createdAt',
+		accessorKey: 'created At',
 		header: 'Created At',
 		cell: ({ row }) => {
 			return row.original.createdAt;
 		},
 	},
 	{
-		accessorKey: 'updatedAt',
+		accessorKey: 'updated At',
 		header: 'Updated At',
 		cell: ({ row }) => {
 			return row.original.updatedAt;

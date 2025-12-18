@@ -1,19 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import {
-	closestCenter,
-	DndContext,
-	type DragEndEvent,
-	KeyboardSensor,
-	MouseSensor,
-	TouchSensor,
-	type UniqueIdentifier,
-	useSensor,
-	useSensors,
-} from '@dnd-kit/core';
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { type UniqueIdentifier } from '@dnd-kit/core';
+import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import {
 	IconChevronDown,
@@ -21,10 +10,11 @@ import {
 	IconChevronRight,
 	IconChevronsLeft,
 	IconChevronsRight,
+	IconCircleCheckFilled,
 	IconDotsVertical,
 	IconGripVertical,
 	IconLayoutColumns,
-	IconPlus,
+	IconLoader,
 } from '@tabler/icons-react';
 import {
 	ColumnDef,
@@ -43,6 +33,8 @@ import {
 } from '@tanstack/react-table';
 import { z } from 'zod';
 
+import DeleteUsersForm from './Form/DeleteUsersForm';
+
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -56,18 +48,20 @@ import {
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { User, UserStar } from 'lucide-react';
+import { changeUserRole } from '../db/api';
 
 export const schema = z.object({
-	id: z.number(),
-	header: z.string(),
-	description: z.string(),
-	membersCount: z.string(),
+	id: z.string(),
+	index: z.string(),
+	mail: z.string(),
+	role: z.string(),
 	createdAt: z.string(),
 	updatedAt: z.string(),
 });
 
-function DragHandle({ id }: { id: number }) {
+function DragHandle({ id }: { id: string }) {
 	const { attributes, listeners } = useSortable({
 		id,
 	});
@@ -117,41 +111,51 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
 	},
 	{
 		accessorKey: 'header',
-		header: 'Header',
+		header: 'Index',
 		cell: ({ row }) => {
-			return row.original.header;
+			return row.original.index;
 		},
 		enableHiding: false,
 	},
 	{
-		accessorKey: 'description',
-		header: 'description',
+		accessorKey: 'email',
+		header: 'Email',
 		cell: ({ row }) => {
-			return row.original.description;
+			return row.original.mail;
 		},
 	},
 	{
-		accessorKey: 'membersCount',
-		header: 'membersCount',
-		cell: ({ row }) => <div className="flex justify-center">{row.original.membersCount}</div>,
+		accessorKey: 'role',
+		header: 'Role',
+		cell: ({ row }) => (
+			<Select defaultValue={row.original.role} onValueChange={() => changeUserRole(row.original.id)}>
+				<SelectTrigger className="w-28 h-7">
+					<SelectValue />
+				</SelectTrigger>
+				<SelectContent>
+					<SelectItem value="admin">Admin</SelectItem>
+					<SelectItem value="user">User</SelectItem>
+				</SelectContent>
+			</Select>
+		),
 	},
 	{
-		accessorKey: 'createdAt',
-		header: () => <div className="w-full text-right">createdAt</div>,
+		accessorKey: 'created At',
+		header: 'Created At',
 		cell: ({ row }) => {
 			return row.original.createdAt;
 		},
 	},
 	{
-		accessorKey: 'updatedAt',
-		header: 'updatedAt',
+		accessorKey: 'updated At',
+		header: 'Updated At',
 		cell: ({ row }) => {
 			return row.original.updatedAt;
 		},
 	},
 	{
 		id: 'actions',
-		cell: () => (
+		cell: ({ row }) => (
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
 					<Button variant="ghost" className="data-[state=open]:bg-muted text-muted-foreground flex size-8" size="icon">
@@ -160,42 +164,20 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end" className="w-32">
-					<DropdownMenuItem>Edit</DropdownMenuItem>
-					<DropdownMenuItem>Make a copy</DropdownMenuItem>
-					<DropdownMenuItem>Favorite</DropdownMenuItem>
-					<DropdownMenuSeparator />
-					<DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+					<DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
+						<DeleteUsersForm
+							user={{
+								id: row.original.id,
+							}}
+						/>
+					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
 		),
 	},
 ];
 
-function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
-	const { transform, transition, setNodeRef, isDragging } = useSortable({
-		id: row.original.id,
-	});
-
-	return (
-		<TableRow
-			data-state={row.getIsSelected() && 'selected'}
-			data-dragging={isDragging}
-			ref={setNodeRef}
-			className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-			style={{
-				transform: CSS.Transform.toString(transform),
-				transition: transition,
-			}}
-		>
-			{row.getVisibleCells().map((cell) => (
-				<TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-			))}
-		</TableRow>
-	);
-}
-
-export function UserDataTable({ data: initialData }: { data: z.infer<typeof schema>[] }) {
-	const [data, setData] = React.useState(() => initialData);
+export function UsersDataTable({ data }: { data: z.infer<typeof schema>[] }) {
 	const [rowSelection, setRowSelection] = React.useState({});
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -204,8 +186,6 @@ export function UserDataTable({ data: initialData }: { data: z.infer<typeof sche
 		pageIndex: 0,
 		pageSize: 10,
 	});
-	const sortableId = React.useId();
-	const sensors = useSensors(useSensor(MouseSensor, {}), useSensor(TouchSensor, {}), useSensor(KeyboardSensor, {}));
 
 	const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
 
@@ -234,33 +214,10 @@ export function UserDataTable({ data: initialData }: { data: z.infer<typeof sche
 		getFacetedUniqueValues: getFacetedUniqueValues(),
 	});
 
-	function handleDragEnd(event: DragEndEvent) {
-		const { active, over } = event;
-		if (active && over && active.id !== over.id) {
-			setData((data) => {
-				const oldIndex = dataIds.indexOf(active.id);
-				const newIndex = dataIds.indexOf(over.id);
-				return arrayMove(data, oldIndex, newIndex);
-			});
-		}
-	}
-
 	return (
-		<Tabs defaultValue="all" className="w-full flex-col justify-start gap-6">
+		<>
 			<div className="flex items-center justify-between px-4 lg:px-6">
-				<Select defaultValue="all">
-					<SelectTrigger className="flex w-fit @4xl/main:hidden" size="sm" id="view-selector">
-						<SelectValue placeholder="Select a view" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="all">All</SelectItem>
-						<SelectItem value="my">My</SelectItem>
-					</SelectContent>
-				</Select>
-				<TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
-					<TabsTrigger value="all"> All </TabsTrigger>
-					<TabsTrigger value="my"> My </TabsTrigger>
-				</TabsList>
+				<div></div>
 				<div className="flex items-center gap-2">
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
@@ -289,54 +246,40 @@ export function UserDataTable({ data: initialData }: { data: z.infer<typeof sche
 								})}
 						</DropdownMenuContent>
 					</DropdownMenu>
-					<Button variant="outline" size="sm">
-						<IconPlus />
-						<span className="hidden lg:inline">Add Groups</span>
-					</Button>
 				</div>
 			</div>
-			<TabsContent value="all" className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
+			<div className="flex flex-col gap-4 px-4 lg:px-6 pt-4">
 				<div className="overflow-hidden rounded-lg border">
-					<DndContext
-						collisionDetection={closestCenter}
-						modifiers={[restrictToVerticalAxis]}
-						onDragEnd={handleDragEnd}
-						sensors={sensors}
-						id={sortableId}
-					>
-						<Table>
-							<TableHeader className="bg-muted sticky top-0 z-10">
-								{table.getHeaderGroups().map((headerGroup) => (
-									<TableRow key={headerGroup.id}>
-										{headerGroup.headers.map((header) => {
-											return (
-												<TableHead key={header.id} colSpan={header.colSpan}>
-													{header.isPlaceholder
-														? null
-														: flexRender(header.column.columnDef.header, header.getContext())}
-												</TableHead>
-											);
-										})}
-									</TableRow>
-								))}
-							</TableHeader>
-							<TableBody className="**:data-[slot=table-cell]:first:w-8">
-								{table.getRowModel().rows?.length ? (
-									<SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
-										{table.getRowModel().rows.map((row) => (
-											<DraggableRow key={row.id} row={row} />
-										))}
-									</SortableContext>
-								) : (
-									<TableRow>
-										<TableCell colSpan={columns.length} className="h-24 text-center">
-											No results.
-										</TableCell>
-									</TableRow>
-								)}
-							</TableBody>
-						</Table>
-					</DndContext>
+					<Table>
+						<TableHeader className="bg-muted sticky top-0 z-10">
+							{table.getHeaderGroups().map((headerGroup) => (
+								<TableRow key={headerGroup.id}>
+									{headerGroup.headers.map((header) => {
+										return (
+											<TableHead key={header.id} colSpan={header.colSpan}>
+												{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+											</TableHead>
+										);
+									})}
+								</TableRow>
+							))}
+						</TableHeader>
+						<TableBody className="**:data-[slot=table-cell]:first:w-8">
+							{table.getRowModel().rows?.length ? (
+								<SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
+									{table.getRowModel().rows.map((row) => (
+										<DraggableRow key={row.id} row={row} />
+									))}
+								</SortableContext>
+							) : (
+								<TableRow>
+									<TableCell colSpan={columns.length} className="h-24 text-center">
+										No results.
+									</TableCell>
+								</TableRow>
+							)}
+						</TableBody>
+					</Table>
 				</div>
 				<div className="flex items-center justify-between px-4">
 					<div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
@@ -412,10 +355,30 @@ export function UserDataTable({ data: initialData }: { data: z.infer<typeof sche
 						</div>
 					</div>
 				</div>
-			</TabsContent>
-			<TabsContent value="my" className="flex flex-col px-4 lg:px-6">
-				<div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-			</TabsContent>
-		</Tabs>
+			</div>
+		</>
+	);
+}
+
+function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
+	const { transform, transition, setNodeRef, isDragging } = useSortable({
+		id: row.original.id,
+	});
+
+	return (
+		<TableRow
+			data-state={row.getIsSelected() && 'selected'}
+			data-dragging={isDragging}
+			ref={setNodeRef}
+			className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
+			style={{
+				transform: CSS.Transform.toString(transform),
+				transition: transition,
+			}}
+		>
+			{row.getVisibleCells().map((cell) => (
+				<TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+			))}
+		</TableRow>
 	);
 }
