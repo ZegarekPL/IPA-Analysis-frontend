@@ -1,9 +1,10 @@
-import { useTranslations } from 'next-intl';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { ArrowUpRight, CirclePlay } from 'lucide-react';
 import React from 'react';
+import { ArrowUpRight, CirclePlay } from 'lucide-react';
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+
 import ReleaseBadge from '@/app/[locale]/ReleaseBadge';
+import { Button } from '@/components/ui/button';
 
 const HeroPage = () => {
 	const t = useTranslations('HomePage');

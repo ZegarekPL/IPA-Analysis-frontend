@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Templates, CreateTemplates, ClosedQuestion } from '@/features/dashboard/templates/db/api';
-import { Button } from '@/components/ui/button';
 import { AlertDialogCancel } from '@radix-ui/react-alert-dialog';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { AlertDialogFooter } from '../../../../components/ui/alert-dialog';
+
+import { Button } from '@/components/ui/button';
+import { ClosedQuestion, CreateTemplates, Templates } from '@/features/dashboard/templates/db/api';
 import { createTemplates } from '@/features/dashboard/templates/db/api';
 
 interface TemplateFormProps {
@@ -14,7 +16,7 @@ interface TemplateFormProps {
 	onSuccess: () => void;
 }
 
-export default function TemplatesFormContent({ initialData, onCancel, onSuccess}: TemplateFormProps) {
+export default function TemplatesFormContent({ initialData, onCancel, onSuccess }: TemplateFormProps) {
 	const [name, setName] = useState(initialData?.name || '');
 	const [description, setDescription] = useState(initialData?.description || '');
 	const [openQuestion, setOpenQuestion] = useState(initialData?.openQuestion.text || '');
@@ -35,8 +37,7 @@ export default function TemplatesFormContent({ initialData, onCancel, onSuccess}
 		},
 	});
 
-	const handleAddClosedQuestion = () =>
-		setClosedQuestions([...closedQuestions, { text: '', type: 'importance' }]);
+	const handleAddClosedQuestion = () => setClosedQuestions([...closedQuestions, { text: '', type: 'importance' }]);
 
 	const handleChangeClosedQuestion = (index: number, field: keyof ClosedQuestion, value: string) => {
 		const updated = [...closedQuestions];

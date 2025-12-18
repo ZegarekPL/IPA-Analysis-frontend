@@ -2,6 +2,7 @@ node_modules/
 .next/
 
 .git/
+.github/
 docker-compose.yml
 Dockerfile
 README.md

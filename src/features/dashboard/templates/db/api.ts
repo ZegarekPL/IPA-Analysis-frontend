@@ -1,5 +1,6 @@
-import { ApiResponse, appAPI } from '@/utils/appAPI';
 import { AxiosResponse } from 'axios';
+
+import { ApiResponse, appAPI } from '@/utils/appAPI';
 
 export interface Templates {
 	_id: string;
@@ -71,4 +72,3 @@ export async function createTemplates(templates: CreateTemplates) {
 		}
 	}
 }
-

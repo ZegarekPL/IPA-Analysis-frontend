@@ -1,8 +1,9 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { getTemplates, Templates } from '@/features/dashboard/templates/db/api';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getTemplates, Templates } from '@/features/dashboard/templates/db/api';
 
 export default function TemplatesDashboard() {
 	const { data, isLoading } = useQuery({
@@ -17,10 +18,7 @@ export default function TemplatesDashboard() {
 			<div>
 				<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
 					{data?.map((template: Templates) => (
-						<Card
-							key={template._id}
-							className="cursor-pointer hover:shadow-lg transition"
-						>
+						<Card key={template._id} className="cursor-pointer hover:shadow-lg transition">
 							<CardHeader>
 								<CardTitle>{template.name}</CardTitle>
 							</CardHeader>

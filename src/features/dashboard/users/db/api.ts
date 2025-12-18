@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+
 import { ApiResponse, appAPI } from '@/utils/appAPI';
 
 export interface User {
@@ -35,7 +36,8 @@ export async function getUsers(): Promise<User[]> {
 }
 
 export async function getUser(id: string): Promise<User[]> {
-	try {``
+	try {
+		``;
 		const response: AxiosResponse<ApiResponse<{ users: User[] }>> = await appAPI.get(`/api/v1/admin/users/${id}`, {
 			withCredentials: true,
 		});
@@ -59,7 +61,8 @@ export async function getUser(id: string): Promise<User[]> {
 }
 
 export async function deleteUser(id: string): Promise<User[]> {
-	try {``
+	try {
+		``;
 		const response: AxiosResponse<ApiResponse<{ users: User[] }>> = await appAPI.delete(`/api/v1/admin/users/${id}`, {
 			withCredentials: true,
 		});
@@ -83,10 +86,14 @@ export async function deleteUser(id: string): Promise<User[]> {
 }
 
 export async function changeUserRole(id: string): Promise<User[]> {
-	try {``
-		const response: AxiosResponse<ApiResponse<{ users: User[] }>> = await appAPI.patch(`/api/v1/admin/users/${id}/role`, {
-			withCredentials: true,
-		});
+	try {
+		``;
+		const response: AxiosResponse<ApiResponse<{ users: User[] }>> = await appAPI.patch(
+			`/api/v1/admin/users/${id}/role`,
+			{
+				withCredentials: true,
+			},
+		);
 
 		if (response.status === 200 && response.data?.data?.users) {
 			console.log('Users fetched:', response.data.data.users);

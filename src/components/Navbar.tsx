@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+
 import LocaleSelector from '@/components/LocaleSelector';
 import { ModeToggle } from '@/components/ModeToggle';
 

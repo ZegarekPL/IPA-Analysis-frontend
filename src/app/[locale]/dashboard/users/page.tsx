@@ -1,9 +1,10 @@
 'use client';
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { Button } from '@/components/ui/button';
-import { getUsers, changeUserRole, User } from '@/features/dashboard/users/db/api';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { changeUserRole, getUsers, User } from '@/features/dashboard/users/db/api';
 
 export default function UsersDashboard() {
 	const queryClient = useQueryClient();
@@ -28,10 +29,7 @@ export default function UsersDashboard() {
 
 			<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{users?.map((user: User) => (
-					<Card
-						key={user._id}
-						className="cursor-pointer hover:shadow-lg transition"
-					>
+					<Card key={user._id} className="cursor-pointer hover:shadow-lg transition">
 						<CardHeader>
 							<CardTitle>{user.mail}</CardTitle>
 						</CardHeader>
@@ -39,11 +37,7 @@ export default function UsersDashboard() {
 							<p>
 								<span className="font-semibold">Rola:</span>{' '}
 								<span
-									className={`px-2 py-1 rounded text-white ${
-										user.role === 'admin'
-											? 'bg-blue-600'
-											: 'bg-gray-500'
-									}`}
+									className={`px-2 py-1 rounded text-white ${user.role === 'admin' ? 'bg-blue-600' : 'bg-gray-500'}`}
 								>
 									{user.role}
 								</span>
