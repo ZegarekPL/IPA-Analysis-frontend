@@ -1,10 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
-
-import TemplatesFormContent from './TemplatesFormContent';
 
 import {
 	AlertDialog,
@@ -14,8 +11,11 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import AddTemplatesFormContent from './AddTemplatesFormContent';
+import { Button } from '@/components/ui/button';
+import { IconPlus } from '@tabler/icons-react';
 
-export default function TemplateForm() {
+export default function AddTemplatesForm() {
 	const [open, setOpen] = useState(false);
 
 	const handleSuccess = () => {
@@ -27,9 +27,10 @@ export default function TemplateForm() {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
-				<button className="p-1 hover:bg-accent rounded-md transition" title="Dodaj templatkę">
-					<Plus className="h-4 w-4" />
-				</button>
+				<Button variant="outline" size="sm">
+					<IconPlus />
+					<span className="hidden lg:inline">Add Groups</span>
+				</Button>
 			</AlertDialogTrigger>
 
 			<AlertDialogContent className="max-w-2xl">
@@ -38,7 +39,7 @@ export default function TemplateForm() {
 					<AlertDialogDescription>Wypełnij poniższy formularz, aby utworzyć nowy szablon.</AlertDialogDescription>
 				</AlertDialogHeader>
 
-				<TemplatesFormContent onCancel={() => setOpen(false)} onSuccess={() => handleSuccess()} />
+				<AddTemplatesFormContent onCancel={() => setOpen(false)} onSuccess={() => handleSuccess()} />
 			</AlertDialogContent>
 		</AlertDialog>
 	);

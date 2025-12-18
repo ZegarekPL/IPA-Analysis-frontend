@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { AlertDialogCancel } from '@radix-ui/react-alert-dialog';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { AlertDialogFooter } from '../../../../components/ui/alert-dialog';
 
 import { Button } from '@/components/ui/button';
 import { ClosedQuestion, CreateTemplates, Templates } from '@/features/dashboard/templates/db/api';
 import { createTemplates } from '@/features/dashboard/templates/db/api';
+import { AlertDialogFooter } from '@/components/ui/alert-dialog';
 
 interface TemplateFormProps {
 	initialData?: Templates;
@@ -16,7 +16,7 @@ interface TemplateFormProps {
 	onSuccess: () => void;
 }
 
-export default function TemplatesFormContent({ initialData, onCancel, onSuccess }: TemplateFormProps) {
+export default function AddTemplatesFormContent({ initialData, onCancel, onSuccess }: TemplateFormProps) {
 	const [name, setName] = useState(initialData?.name || '');
 	const [description, setDescription] = useState(initialData?.description || '');
 	const [openQuestion, setOpenQuestion] = useState(initialData?.openQuestion.text || '');
