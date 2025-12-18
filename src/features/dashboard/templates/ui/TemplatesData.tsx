@@ -38,7 +38,7 @@ export function TemplatesData() {
 				<div></div>
 				<AddTemplatesForm />
 			</div>
-				<TemplatesDataTable data={tableData} />
+			<TemplatesDataTable data={tableData} />
 		</Tabs>
 	);
 }

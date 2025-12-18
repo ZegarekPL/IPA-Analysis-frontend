@@ -164,7 +164,7 @@ const columns: ColumnDef<TemplateTableRow>[] = [
 									text: row.original.openQuestion,
 								},
 							}}
-						/> 
+						/>
 					</DropdownMenuItem>
 					<DropdownMenuItem>Create a Test</DropdownMenuItem>
 					<DropdownMenuSeparator />

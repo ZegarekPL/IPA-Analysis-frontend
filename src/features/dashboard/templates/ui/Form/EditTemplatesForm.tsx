@@ -15,7 +15,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { EditTemplatesFormProps } from '../../db/api';
 
-
 export default function EditTemplatesForm({ template }: EditTemplatesFormProps) {
 	const [open, setOpen] = useState(false);
 
@@ -40,7 +39,11 @@ export default function EditTemplatesForm({ template }: EditTemplatesFormProps) 
 					<AlertDialogDescription>{'Wypełnij poniższy formularz, aby edytować grupę.'}</AlertDialogDescription>
 				</AlertDialogHeader>
 
-				<EditTemplatesFormContent initialData={{ template }} onCancel={() => setOpen(false)} onSuccess={handleSuccess} />
+				<EditTemplatesFormContent
+					initialData={{ template }}
+					onCancel={() => setOpen(false)}
+					onSuccess={handleSuccess}
+				/>
 			</AlertDialogContent>
 		</AlertDialog>
 	);

@@ -99,7 +99,7 @@ export interface EditTemplatesFormProps {
 			text: string;
 		};
 	};
-};
+}
 
 export async function editTemplates(templateId: string, template: CreateTemplates) {
 	try {
