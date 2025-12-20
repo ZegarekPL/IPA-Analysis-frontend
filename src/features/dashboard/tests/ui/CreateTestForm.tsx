@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import EditTemplatesFormContent from './EditTemplatesFormContent';
+import CreateTestFormContent from './CreateTestFormContent';
 
 import {
 	AlertDialog,
@@ -13,9 +13,9 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { EditTemplatesFormProps } from '../../db/api';
+import { CreateTest } from '../db/api';
 
-export default function EditTemplatesForm({ template }: EditTemplatesFormProps) {
+export default function CreateTestForm({ templateId }: { templateId: string }) {
 	const [open, setOpen] = useState(false);
 
 	const handleSuccess = () => {
@@ -29,7 +29,7 @@ export default function EditTemplatesForm({ template }: EditTemplatesFormProps) 
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<span className="cursor-pointer text-sm hover:bg-accent hover:text-accent-foreground rounded-sm px-2 py-1.5 w-full block">
-					Edit Template
+					Create a Test
 				</span>
 			</AlertDialogTrigger>
 
@@ -39,11 +39,7 @@ export default function EditTemplatesForm({ template }: EditTemplatesFormProps) 
 					<AlertDialogDescription>{'Wypełnij poniższy formularz, aby edytować grupę.'}</AlertDialogDescription>
 				</AlertDialogHeader>
 
-				<EditTemplatesFormContent
-					initialData={{ template }}
-					onCancel={() => setOpen(false)}
-					onSuccess={handleSuccess}
-				/>
+				<CreateTestFormContent templateId={templateId} onCancel={() => setOpen(false)} onSuccess={handleSuccess} />
 			</AlertDialogContent>
 		</AlertDialog>
 	);

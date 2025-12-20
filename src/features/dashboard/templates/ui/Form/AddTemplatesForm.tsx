@@ -29,7 +29,7 @@ export default function AddTemplatesForm() {
 			<AlertDialogTrigger asChild>
 				<Button variant="outline" size="sm">
 					<IconPlus />
-					<span className="hidden lg:inline">Add Groups</span>
+					<span className="hidden lg:inline">Create Templates</span>
 				</Button>
 			</AlertDialogTrigger>
 

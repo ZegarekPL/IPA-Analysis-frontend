@@ -1,0 +1,102 @@
+'use client';
+
+import { useState } from 'react';
+import { AlertDialogCancel } from '@radix-ui/react-alert-dialog';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { AlertDialogFooter } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { CreateTest, createTest } from '../db/api';
+import { getAllGroups, Groups } from '../../groups/db/api';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+interface CreateTestFormContentProps {
+	templateId: string;
+	onCancel: () => void;
+	onSuccess: () => void;
+}
+
+export default function CreateTestFormContent({ templateId, onCancel, onSuccess }: CreateTestFormContentProps) {
+	const [name, setName] = useState('');
+	const [description, setDescription] = useState('');
+	const [selectedGroup, setSelectedGroup] = useState<string>('');
+
+	const queryClient = useQueryClient();
+
+	const { data: groups = [], isLoading } = useQuery<Groups[]>({
+		queryKey: ['all', 'groups'],
+		queryFn: getAllGroups,
+	});
+
+	const createMutation = useMutation({
+		mutationFn: (data: CreateTest) => createTest(data),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['tests'] });
+			onSuccess();
+		},
+		onError: (error) => {
+			console.error('Błąd podczas tworzenia testu:', error);
+		},
+	});
+
+	const handleSubmit = () => {
+		if (!selectedGroup) return alert('Wybierz grupę!');
+		const data: CreateTest = {
+			templateId,
+			groupId: selectedGroup,
+			name,
+			description,
+		};
+		createMutation.mutate(data);
+	};
+	return (
+		<div>
+			<div className="mb-4">
+				<label className="block mb-1 font-semibold">Nazwa testu</label>
+				<input
+					type="text"
+					value={name}
+					onChange={(e) => setName(e.target.value)}
+					className="w-full border p-2 rounded"
+				/>
+			</div>
+
+			<div className="mb-4">
+				<label className="block mb-1 font-semibold">Opis testu</label>
+				<textarea
+					value={description}
+					onChange={(e) => setDescription(e.target.value)}
+					className="w-full border p-2 rounded"
+				/>
+			</div>
+
+			<div className="mb-4">
+				<Label className="block mb-1 font-semibold">Wybierz grupę</Label>
+				{isLoading ? (
+					<p className="text-muted-foreground">Ładowanie grup...</p>
+				) : (
+					<Select value={selectedGroup} onValueChange={setSelectedGroup}>
+						<SelectTrigger>
+							<SelectValue placeholder="-- Wybierz grupę --" />
+						</SelectTrigger>
+						<SelectContent>
+							{groups.map((group) => (
+								<SelectItem key={group._id} value={group._id}>
+									{group.name} ({group.membersCount} członków)
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+				)}
+			</div>
+
+			<AlertDialogFooter>
+				<Button onClick={handleSubmit} disabled={createMutation.isPending}>
+					{createMutation.isPending ? 'Tworzenie...' : 'Utwórz test'}
+				</Button>
+				<AlertDialogCancel onClick={onCancel}>Anuluj</AlertDialogCancel>
+			</AlertDialogFooter>
+		</div>
+	);
+}

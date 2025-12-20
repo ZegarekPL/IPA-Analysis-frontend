@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 
 import { ApiResponse, appAPI } from '@/utils/appAPI';
+import { is } from 'zod/v4/locales';
 
 export interface CreateGroups {
 	name: string;
@@ -131,5 +132,99 @@ export async function getMyGroups(): Promise<Groups[]> {
 		if (error.response?.status === 401) {
 		}
 		throw new Error('Error500');
+	}
+}
+
+export interface GroupDetails {
+	_id: string;
+	name: string;
+	description: string;
+	membersCount: number;
+	isMember: boolean;
+	tests: Tests[];
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+export interface Tests {
+	test: string;
+	assignedAt: Date;
+	dueAt: Date;
+}
+
+export async function getGroupDetails(groupId: string): Promise<GroupDetails> {
+	try {
+		const response: AxiosResponse<ApiResponse<{ group: GroupDetails }>> = await appAPI.get(
+			`/api/v1/groups/${groupId}`,
+			{
+				withCredentials: true,
+			},
+		);
+		console.log('response', response);
+		if (response.data?.data?.group) {
+			console.log('Groups fetched:', response.data.data.group);
+			return response.data.data.group;
+		} else if (response.status === 401) {
+			return {} as GroupDetails;
+		} else {
+			console.error('Wystąpił błąd podczas pobierania grup');
+			return {} as GroupDetails;
+		}
+	} catch (error: any) {
+		if (error.response?.status === 401) {
+		}
+		throw new Error('Error500');
+	}
+}
+
+export async function joinGroup(groupId: string) {
+	try {
+		const response: any = await appAPI.post(
+			`/api/v1/admin/groups/${groupId}/join`,
+			{},
+			{
+				withCredentials: true,
+			},
+		);
+		if (response.status === 201) {
+			console.log('response', response);
+			return response.data.data;
+		} else if (response.status === 401) {
+			window.location.replace('/login');
+		} else {
+			console.error('Wystąpił błąd podczas dodawania grupy');
+		}
+	} catch (error: any) {
+		if (error.response.status === 401) {
+			window.location.replace('/login');
+		} else {
+			throw new Error('Error500');
+		}
+	}
+}
+
+export async function leaveGroup(groupId: string) {
+	try {
+		const response: any = await appAPI.post(
+			`/api/v1/admin/groups/${groupId}/leave`,
+			{},
+			{
+				withCredentials: true,
+			},
+		);
+		if (response.status === 201) {
+			console.log('response', response);
+			return response.data.data;
+		} else if (response.status === 401) {
+			window.location.replace('/login');
+		} else {
+			console.error('Wystąpił błąd podczas dodawania grupy');
+		}
+	} catch (error: any) {
+		if (error.response.status === 401) {
+			window.location.replace('/login');
+		} else {
+			throw new Error('Error500');
+		}
 	}
 }

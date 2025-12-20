@@ -31,7 +31,7 @@ export default function AddGroupForm() {
 			<AlertDialogTrigger asChild>
 				<Button variant="outline" size="sm">
 					<IconPlus />
-					<span className="hidden lg:inline">Add Groups</span>
+					<span className="hidden lg:inline">Create Group</span>
 				</Button>
 			</AlertDialogTrigger>
 

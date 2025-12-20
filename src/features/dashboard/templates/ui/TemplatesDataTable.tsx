@@ -47,6 +47,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { templatesSchema, TemplateTableRow } from '../db/api';
 import EditTemplatesForm from './Form/EditTemplatesForm';
 import DeleteTemplatesForm from './Form/DeleteTemplatesForm';
+import CreateTestForm from '../../tests/ui/CreateTestForm';
 
 function DragHandle({ id }: { id: string }) {
 	const { attributes, listeners } = useSortable({
@@ -166,7 +167,9 @@ const columns: ColumnDef<TemplateTableRow>[] = [
 							}}
 						/>
 					</DropdownMenuItem>
-					<DropdownMenuItem>Create a Test</DropdownMenuItem>
+					<DropdownMenuItem asChild>
+						<CreateTestForm templateId={row.original.id} />
+					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
 						<DeleteTemplatesForm

@@ -47,6 +47,8 @@ import {
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import Link from 'next/link';
+import { slugify } from '@/utils/slugify';
 
 export const schema = z.object({
 	id: z.string(),
@@ -109,7 +111,16 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		accessorKey: 'name',
 		header: 'Name',
 		cell: ({ row }) => {
-			return row.original.header;
+			const groupName = row.original.header;
+			const groupId = row.original.id;
+
+			const slug = slugify(groupName);
+
+			return (
+				<Link href={`/dashboard/groups/${slug}-${groupId}`} className="text-primary hover:underline font-medium">
+					{groupName}
+				</Link>
+			);
 		},
 		enableHiding: false,
 	},
