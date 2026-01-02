@@ -51,11 +51,13 @@ import Link from 'next/link';
 import { slugify } from '@/utils/slugify';
 import { Input } from '@/components/ui/input';
 import { LucideSearch } from 'lucide-react';
+import { joinGroup, leaveGroup } from '../db/api';
 
 export const schema = z.object({
 	id: z.string(),
 	header: z.string(),
 	description: z.string(),
+	isMember: z.boolean(),
 	membersCount: z.string(),
 	createdAt: z.string(),
 	updatedAt: z.string(),
@@ -174,7 +176,18 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
 							}}
 						/>
 					</DropdownMenuItem>
-					<DropdownMenuItem>Join/Leave</DropdownMenuItem>
+					<DropdownMenuItem
+						onSelect={(e) => {
+							e.preventDefault();
+							if (row.original.isMember) {
+							leaveGroup(row.original.id);
+							} else {
+							joinGroup(row.original.id);
+							}
+						}}
+						>
+						{row.original.isMember ? 'Leave' : 'Join'}
+					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
 						<DeleteGroupForm

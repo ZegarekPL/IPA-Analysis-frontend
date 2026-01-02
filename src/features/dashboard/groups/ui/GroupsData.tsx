@@ -38,6 +38,7 @@ export function GroupsTabs() {
 				id: g._id,
 				header: g.name,
 				description: g.description,
+				isMember: g.isMember,
 				membersCount: g.membersCount.toString(),
 				createdAt: formatDate(g.createdAt),
 				updatedAt: formatDate(g.updatedAt),

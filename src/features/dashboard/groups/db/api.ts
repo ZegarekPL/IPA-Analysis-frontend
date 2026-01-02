@@ -91,6 +91,7 @@ export interface Groups {
 	_id: string;
 	name: string;
 	description: string;
+	isMember: boolean;
 	membersCount: number;
 	createdAt: Date;
 	updatedAt: Date;
@@ -201,54 +202,49 @@ export async function getGroupDetails(groupId: string): Promise<GroupDetails> {
 	}
 }
 
+export interface GetSMResponse {
+	status: string;
+	message: string;
+}
+
 export async function joinGroup(groupId: string) {
 	try {
-		const response: any = await appAPI.post(
-			`/api/v1/admin/groups/${groupId}/join`,
+		const response: AxiosResponse<GetSMResponse> = await appAPI.post(
+			`/api/v1/groups/${groupId}/join`,
 			{},
 			{
 				withCredentials: true,
 			},
 		);
-		if (response.status === 201) {
-			console.log('response', response);
-			return response.data.data;
-		} else if (response.status === 401) {
-			window.location.replace('/login');
-		} else {
-			console.error('Wystąpił błąd podczas dodawania grupy');
-		}
+		return response.data;
 	} catch (error: any) {
-		if (error.response.status === 401) {
+		const errorCode = mapApiError(error);
+
+		if (errorCode === 'UNAUTHORIZED') {
 			window.location.replace('/login');
-		} else {
-			throw new Error('Error500');
+			throw new AppError('UNAUTHORIZED', 401);
 		}
+		throw new AppError(errorCode, error.response?.status);
 	}
 }
 
 export async function leaveGroup(groupId: string) {
 	try {
-		const response: any = await appAPI.post(
-			`/api/v1/admin/groups/${groupId}/leave`,
+		const response: AxiosResponse<GetSMResponse> = await appAPI.post(
+			`/api/v1/groups/${groupId}/leave`,
 			{},
 			{
 				withCredentials: true,
 			},
 		);
-		if (response.status === 201) {
-			console.log('response', response);
-			return response.data.data;
-		} else if (response.status === 401) {
-			window.location.replace('/login');
-		} else {
-			console.error('Wystąpił błąd podczas dodawania grupy');
-		}
+		return response.data;
 	} catch (error: any) {
-		if (error.response.status === 401) {
+		const errorCode = mapApiError(error);
+
+		if (errorCode === 'UNAUTHORIZED') {
 			window.location.replace('/login');
-		} else {
-			throw new Error('Error500');
+			throw new AppError('UNAUTHORIZED', 401);
 		}
+		throw new AppError(errorCode, error.response?.status);
 	}
 }
