@@ -1,7 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import { ApiResponse, appAPI } from '@/utils/appAPI';
-import { is } from 'zod/v4/locales';
+import { appAPI } from '@/utils/appAPI';
 
 export interface CreateGroups {
 	name: string;
@@ -93,13 +92,13 @@ export interface Groups {
 
 export async function getAllGroups(): Promise<Groups[]> {
 	try {
-		const response: AxiosResponse<ApiResponse<{ groups: Groups[] }>> = await appAPI.get(`/api/v1/groups`, {
+		const response: AxiosResponse<{ groups: Groups[] }> = await appAPI.get(`/api/v1/groups`, {
 			withCredentials: true,
 		});
 
-		if (response.status === 200 && response.data?.data?.groups) {
-			console.log('Groups fetched:', response.data.data.groups);
-			return response.data.data.groups;
+		if (response.status === 200 && response.data?.groups) {
+			console.log('Groups fetched:', response.data.groups);
+			return response.data.groups;
 		} else if (response.status === 401) {
 			return [];
 		} else {
@@ -115,13 +114,13 @@ export async function getAllGroups(): Promise<Groups[]> {
 
 export async function getMyGroups(): Promise<Groups[]> {
 	try {
-		const response: AxiosResponse<ApiResponse<{ groups: Groups[] }>> = await appAPI.get(`/api/v1/groups/me`, {
+		const response: AxiosResponse<{ groups: Groups[] }> = await appAPI.get(`/api/v1/groups/me`, {
 			withCredentials: true,
 		});
 
-		if (response.status === 200 && response.data?.data?.groups) {
-			console.log('Groups fetched:', response.data.data.groups);
-			return response.data.data.groups;
+		if (response.status === 200 && response.data?.groups) {
+			console.log('Groups fetched:', response.data.groups);
+			return response.data.groups;
 		} else if (response.status === 401) {
 			return [];
 		} else {
@@ -154,16 +153,13 @@ export interface Tests {
 
 export async function getGroupDetails(groupId: string): Promise<GroupDetails> {
 	try {
-		const response: AxiosResponse<ApiResponse<{ group: GroupDetails }>> = await appAPI.get(
-			`/api/v1/groups/${groupId}`,
-			{
-				withCredentials: true,
-			},
-		);
+		const response: AxiosResponse<{ group: GroupDetails }> = await appAPI.get(`/api/v1/groups/${groupId}`, {
+			withCredentials: true,
+		});
 		console.log('response', response);
-		if (response.data?.data?.group) {
-			console.log('Groups fetched:', response.data.data.group);
-			return response.data.data.group;
+		if (response.data?.group) {
+			console.log('Groups fetched:', response.data.group);
+			return response.data.group;
 		} else if (response.status === 401) {
 			return {} as GroupDetails;
 		} else {

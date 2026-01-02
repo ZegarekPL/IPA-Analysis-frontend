@@ -31,20 +31,13 @@ export default function UserPage() {
 
 	const user = data.data.user;
 
-	const initials = user.index
-		? user.index.split('@')[0].toUpperCase()
-		: 'U';
+	const initials = user.index ? user.index.split('@')[0].toUpperCase() : 'U';
 
 	const locale = pathname.split('/')[1] || routing.defaultLocale;
 	const languageLabel = locale.toUpperCase();
-	
-	const themeLabel =
-		theme === 'system'
-			? 'System'
-			: theme === 'dark'
-			? 'Dark'
-			: 'Light';
-		
+
+	const themeLabel = theme === 'system' ? 'System' : theme === 'dark' ? 'Dark' : 'Light';
+
 	return (
 		<div className="w-full flex items-center justify-center px-6 py-10">
 			<Card className="w-full max-w-2xl">

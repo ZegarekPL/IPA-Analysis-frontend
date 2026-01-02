@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import { ApiResponse, appAPI } from '@/utils/appAPI';
+import { appAPI } from '@/utils/appAPI';
 import { z } from 'zod';
 
 export type ClosedQuestion = z.infer<typeof closedQuestionSchema>;
@@ -38,12 +38,12 @@ export type TemplateTableRow = {
 
 export async function getTemplates() {
 	try {
-		const response: AxiosResponse<ApiResponse<Templates[]>> = await appAPI.get(`/api/v1/admin/templates`, {
+		const response: AxiosResponse<Templates[]> = await appAPI.get(`/api/v1/admin/templates`, {
 			withCredentials: true,
 		});
 		if (response.status === 200) {
 			console.log('response', response);
-			return response.data.data;
+			return response.data;
 		} else if (response.status === 401) {
 			window.location.replace('/login');
 		} else {
