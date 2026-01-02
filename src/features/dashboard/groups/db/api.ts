@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 
 import { appAPI } from '@/utils/appAPI';
+import { AppError, mapApiError } from '@/utils/getErrorMessage';
 
 export interface CreateGroups {
 	name: string;
@@ -81,6 +82,11 @@ export async function deleteGroup(groupId: string) {
 	}
 }
 
+export interface GetGroupsResponse {
+	total: number;
+	data: Groups[];
+}
+
 export interface Groups {
 	_id: string;
 	name: string;
@@ -90,47 +96,69 @@ export interface Groups {
 	updatedAt: Date;
 }
 
-export async function getAllGroups(): Promise<Groups[]> {
+export async function getAllGroups({
+	page,
+	rowsPerPage,
+	search,
+}: {
+	page: number;
+	rowsPerPage: number;
+	search: string;
+}): Promise<GetGroupsResponse> {
 	try {
-		const response: AxiosResponse<{ groups: Groups[] }> = await appAPI.get(`/api/v1/groups`, {
-			withCredentials: true,
-		});
-
-		if (response.status === 200 && response.data?.groups) {
-			console.log('Groups fetched:', response.data.groups);
-			return response.data.groups;
-		} else if (response.status === 401) {
-			return [];
-		} else {
-			console.error('Wystąpił błąd podczas pobierania grup');
-			return [];
-		}
+		const response: AxiosResponse<GetGroupsResponse> = await appAPI.post(
+			`/api/v1/groups`,
+			{
+				Page: page,
+				rowsPerPage,
+				search,
+			},
+			{
+				withCredentials: true,
+			},
+		);
+		return response.data ?? { total: 0, data: [] };
 	} catch (error: any) {
-		if (error.response?.status === 401) {
+		const errorCode = mapApiError(error);
+
+		if (errorCode === 'UNAUTHORIZED') {
+			window.location.replace('/login');
+			throw new AppError('UNAUTHORIZED', 401);
 		}
-		throw new Error('Error500');
+		throw new AppError(errorCode, error.response?.status);
 	}
 }
 
-export async function getMyGroups(): Promise<Groups[]> {
+export async function getMyGroups({
+	page,
+	rowsPerPage,
+	search,
+}: {
+	page: number;
+	rowsPerPage: number;
+	search: string;
+}): Promise<GetGroupsResponse> {
 	try {
-		const response: AxiosResponse<{ groups: Groups[] }> = await appAPI.get(`/api/v1/groups/me`, {
-			withCredentials: true,
-		});
-
-		if (response.status === 200 && response.data?.groups) {
-			console.log('Groups fetched:', response.data.groups);
-			return response.data.groups;
-		} else if (response.status === 401) {
-			return [];
-		} else {
-			console.error('Wystąpił błąd podczas pobierania grup');
-			return [];
-		}
+		const response: AxiosResponse<GetGroupsResponse> = await appAPI.post(
+			`/api/v1/groups/me`,
+			{
+				page,
+				rowsPerPage,
+				search,
+			},
+			{
+				withCredentials: true,
+			},
+		);
+		return response.data ?? { total: 0, data: [] };
 	} catch (error: any) {
-		if (error.response?.status === 401) {
+		const errorCode = mapApiError(error);
+
+		if (errorCode === 'UNAUTHORIZED') {
+			window.location.replace('/login');
+			throw new AppError('UNAUTHORIZED', 401);
 		}
-		throw new Error('Error500');
+		throw new AppError(errorCode, error.response?.status);
 	}
 }
 

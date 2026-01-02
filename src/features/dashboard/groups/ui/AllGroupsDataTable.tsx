@@ -49,6 +49,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Link from 'next/link';
 import { slugify } from '@/utils/slugify';
+import { Input } from '@/components/ui/input';
+import { LucideSearch } from 'lucide-react';
 
 export const schema = z.object({
 	id: z.string(),
@@ -188,16 +190,32 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		),
 	},
 ];
+interface AllGroupsDataTableProps {
+	data: z.infer<typeof schema>[];
+	page: number;
+	setPage: (p: number) => void;
+	rowsPerPage: number;
+	setRowsPerPage: (r: number) => void;
+	total: number;
+	search: string;
+	setSearch: (s: string) => void;
+}
 
-export function AllGroupsDataTable({ data }: { data: z.infer<typeof schema>[] }) {
+export function AllGroupsDataTable({
+	data,
+	page,
+	setPage,
+	rowsPerPage,
+	setRowsPerPage,
+	total,
+	search,
+	setSearch,
+}: AllGroupsDataTableProps) {
 	const [rowSelection, setRowSelection] = React.useState({});
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 	const [sorting, setSorting] = React.useState<SortingState>([]);
-	const [pagination, setPagination] = React.useState({
-		pageIndex: 0,
-		pageSize: 10,
-	});
+	const [inputValue, setInputValue] = React.useState(search || '');
 
 	const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
 
@@ -209,7 +227,10 @@ export function AllGroupsDataTable({ data }: { data: z.infer<typeof schema>[] })
 			columnVisibility,
 			rowSelection,
 			columnFilters,
-			pagination,
+			pagination: {
+				pageIndex: page - 1,
+				pageSize: rowsPerPage,
+			},
 		},
 		getRowId: (row) => row.id.toString(),
 		enableRowSelection: true,
@@ -217,19 +238,38 @@ export function AllGroupsDataTable({ data }: { data: z.infer<typeof schema>[] })
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		onColumnVisibilityChange: setColumnVisibility,
-		onPaginationChange: setPagination,
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
-		getFacetedRowModel: getFacetedRowModel(),
-		getFacetedUniqueValues: getFacetedUniqueValues(),
 	});
 
 	return (
 		<>
 			<div className="flex items-center justify-between px-4 lg:px-6">
-				<div></div>
+				<div className="flex items-center gap-2">
+					<Input
+						type="text"
+						placeholder="Search..."
+						value={inputValue}
+						onChange={(e) => setInputValue(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+								setSearch(inputValue);
+								setPage(1);
+							}
+						}}
+						className="flex-1"
+					/>
+					<Button
+						size="sm"
+						onClick={() => {
+							setSearch(inputValue);
+							setPage(1);
+						}}
+					>
+						<LucideSearch className="w-4 h-4" />
+					</Button>
+				</div>
 				<div className="flex items-center gap-2">
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
@@ -295,41 +335,46 @@ export function AllGroupsDataTable({ data }: { data: z.infer<typeof schema>[] })
 				</div>
 				<div className="flex items-center justify-between px-4">
 					<div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-						{table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-						selected.
+						{table.getFilteredSelectedRowModel().rows.length} of {total} row(s) selected.
 					</div>
 					<div className="flex w-full items-center gap-8 lg:w-fit">
+						{/* Rows per page */}
 						<div className="hidden items-center gap-2 lg:flex">
 							<Label htmlFor="rows-per-page" className="text-sm font-medium">
 								Rows per page
 							</Label>
 							<Select
-								value={`${table.getState().pagination.pageSize}`}
+								value={rowsPerPage.toString()}
 								onValueChange={(value) => {
-									table.setPageSize(Number(value));
+									setRowsPerPage(Number(value)); // zmienia backendowy rowsPerPage
+									setPage(1); // reset strony przy zmianie page size
 								}}
 							>
 								<SelectTrigger size="sm" className="w-20" id="rows-per-page">
-									<SelectValue placeholder={table.getState().pagination.pageSize} />
+									<SelectValue placeholder={rowsPerPage.toString()} />
 								</SelectTrigger>
 								<SelectContent side="top">
-									{[10, 20, 30, 40, 50].map((pageSize) => (
-										<SelectItem key={pageSize} value={`${pageSize}`}>
-											{pageSize}
+									{[10, 20, 30, 40, 50].map((n) => (
+										<SelectItem key={n} value={n.toString()}>
+											{n}
 										</SelectItem>
 									))}
 								</SelectContent>
 							</Select>
 						</div>
+
+						{/* Page info */}
 						<div className="flex w-fit items-center justify-center text-sm font-medium">
-							Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+							Page {page} of {Math.ceil(total / rowsPerPage)}
 						</div>
+
+						{/* Pagination buttons */}
 						<div className="ml-auto flex items-center gap-2 lg:ml-0">
 							<Button
 								variant="outline"
 								className="hidden h-8 w-8 p-0 lg:flex"
-								onClick={() => table.setPageIndex(0)}
-								disabled={!table.getCanPreviousPage()}
+								onClick={() => setPage(1)}
+								disabled={page === 1}
 							>
 								<span className="sr-only">Go to first page</span>
 								<IconChevronsLeft />
@@ -338,8 +383,8 @@ export function AllGroupsDataTable({ data }: { data: z.infer<typeof schema>[] })
 								variant="outline"
 								className="size-8"
 								size="icon"
-								onClick={() => table.previousPage()}
-								disabled={!table.getCanPreviousPage()}
+								onClick={() => setPage(page - 1)}
+								disabled={page === 1}
 							>
 								<span className="sr-only">Go to previous page</span>
 								<IconChevronLeft />
@@ -348,8 +393,8 @@ export function AllGroupsDataTable({ data }: { data: z.infer<typeof schema>[] })
 								variant="outline"
 								className="size-8"
 								size="icon"
-								onClick={() => table.nextPage()}
-								disabled={!table.getCanNextPage()}
+								onClick={() => setPage(page + 1)}
+								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
 								<span className="sr-only">Go to next page</span>
 								<IconChevronRight />
@@ -358,8 +403,8 @@ export function AllGroupsDataTable({ data }: { data: z.infer<typeof schema>[] })
 								variant="outline"
 								className="hidden size-8 lg:flex"
 								size="icon"
-								onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-								disabled={!table.getCanNextPage()}
+								onClick={() => setPage(Math.ceil(total / rowsPerPage))}
+								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
 								<span className="sr-only">Go to last page</span>
 								<IconChevronsRight />

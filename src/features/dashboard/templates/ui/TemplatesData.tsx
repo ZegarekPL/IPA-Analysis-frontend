@@ -20,7 +20,7 @@ export function TemplatesData() {
 
 	const { data, isLoading, isError, error, refetch } = useQuery({
 		queryKey: ['templates', page, rowsPerPage, search],
-		queryFn: () => getTemplates({ Page: page, rowPePage: rowsPerPage, search }),
+		queryFn: () => getTemplates({ page, rowsPerPage, search }),
 		gcTime: 0,
 	});
 
@@ -62,7 +62,7 @@ export function TemplatesData() {
 				<div></div>
 				<AddTemplatesForm />
 			</div>
-			<TemplatesDataTable 			
+			<TemplatesDataTable
 				data={tableData}
 				page={page}
 				setPage={setPage}

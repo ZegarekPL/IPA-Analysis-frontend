@@ -46,20 +46,20 @@ export type TemplateTableRow = {
 };
 
 export async function getTemplates({
-	Page,
-	rowPePage,
+	page,
+	rowsPerPage,
 	search,
 }: {
-	Page: number;
-	rowPePage: number;
+	page: number;
+	rowsPerPage: number;
 	search: string;
 }): Promise<GetTemplatesResponse> {
 	try {
 		const response: AxiosResponse<GetTemplatesResponse> = await appAPI.post(
-			`/api/v1/admin/templates/list`, 
+			`/api/v1/admin/templates/list`,
 			{
-				rowPePage,
-				Page,
+				Page: page,
+				rowPePage: rowsPerPage,
 				search,
 			},
 			{
