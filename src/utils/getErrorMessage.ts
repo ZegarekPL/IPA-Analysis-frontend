@@ -5,7 +5,9 @@ export function mapApiError(error: any): string {
 	}
 
 	const { status, data } = error.response;
-
+	if (status === 400) {
+		return data?.message || 'BAD_REQUEST';
+	}
 	if (status === 401) return 'UNAUTHORIZED';
 	if (status === 403) return 'FORBIDDEN';
 	if (status === 404) {

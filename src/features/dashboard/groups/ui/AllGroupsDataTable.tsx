@@ -180,12 +180,12 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
 						onSelect={(e) => {
 							e.preventDefault();
 							if (row.original.isMember) {
-							leaveGroup(row.original.id);
+								leaveGroup(row.original.id);
 							} else {
-							joinGroup(row.original.id);
+								joinGroup(row.original.id);
 							}
 						}}
-						>
+					>
 						{row.original.isMember ? 'Leave' : 'Join'}
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />

@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import { AlertDialogCancel } from '@radix-ui/react-alert-dialog';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { AlertDialogFooter } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { CreateTest, createTest } from '../db/api';
-import { getAllGroups, Groups } from '../../groups/db/api';
+import { getAllGroups, GetGroupsResponse, Groups } from '../../groups/db/api';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -24,9 +24,13 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 
 	const queryClient = useQueryClient();
 
-	const { data: groups = [], isLoading } = useQuery<Groups[]>({
-		queryKey: ['all', 'groups'],
-		queryFn: getAllGroups,
+	const rowsPerPage = 5;
+
+	const infinite = useInfiniteQuery<GetGroupsResponse, Error, InfiniteData<GetGroupsResponse>, string[], number>({
+		queryKey: ['groups'],
+		queryFn: ({ pageParam }) => getAllGroups({ page: pageParam, rowsPerPage, search: '' }),
+		initialPageParam: 1,
+		getNextPageParam: (lastPage, pages) => (pages.length * rowsPerPage < lastPage.total ? pages.length + 1 : undefined),
 	});
 
 	const createMutation = useMutation({
@@ -73,7 +77,7 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 
 			<div className="mb-4">
 				<Label className="block mb-1 font-semibold">Wybierz grupę</Label>
-				{isLoading ? (
+				{infinite.isLoading ? (
 					<p className="text-muted-foreground">Ładowanie grup...</p>
 				) : (
 					<Select value={selectedGroup} onValueChange={setSelectedGroup}>
@@ -81,11 +85,13 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 							<SelectValue placeholder="-- Wybierz grupę --" />
 						</SelectTrigger>
 						<SelectContent>
-							{groups.map((group) => (
-								<SelectItem key={group._id} value={group._id}>
-									{group.name} ({group.membersCount} członków)
-								</SelectItem>
-							))}
+							{infinite.data?.pages
+								.flatMap((p) => p.data)
+								.map((group) => (
+									<SelectItem key={group._id} value={group._id}>
+										{group.name} ({group.membersCount} członków)
+									</SelectItem>
+								))}
 						</SelectContent>
 					</Select>
 				)}
