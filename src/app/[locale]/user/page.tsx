@@ -9,8 +9,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { getUser } from '@/features/auth/Login';
+import { useTheme } from 'next-themes';
+import { routing } from '@/i18n/routing';
+import { usePathname } from 'next/navigation';
 
 export default function UserPage() {
+	const pathname = usePathname();
+	const { theme } = useTheme();
 	const { data, isLoading, isError } = useQuery({
 		queryKey: ['getUser'],
 		queryFn: getUser,
@@ -27,13 +32,19 @@ export default function UserPage() {
 	const user = data.data.user;
 
 	const initials = user.index
-		? user.index
-				.split(' ')
-				.map((n) => n[0])
-				.join('')
-				.toUpperCase()
+		? user.index.split('@')[0].toUpperCase()
 		: 'U';
 
+	const locale = pathname.split('/')[1] || routing.defaultLocale;
+	const languageLabel = locale.toUpperCase();
+	
+	const themeLabel =
+		theme === 'system'
+			? 'System'
+			: theme === 'dark'
+			? 'Dark'
+			: 'Light';
+		
 	return (
 		<div className="w-full flex items-center justify-center px-6 py-10">
 			<Card className="w-full max-w-2xl">
@@ -88,11 +99,11 @@ export default function UserPage() {
 						<div className="grid gap-4 md:grid-cols-2">
 							<div className="space-y-1">
 								<Label htmlFor="language">Preferred language</Label>
-								<Input id="language" value="English" readOnly />
+								<Input id="language" value={languageLabel} readOnly />
 							</div>
 							<div className="space-y-1">
 								<Label htmlFor="theme">Preferred theme</Label>
-								<Input id="theme" value="System" readOnly />
+								<Input id="theme" value={themeLabel} readOnly />
 							</div>
 						</div>
 					</section>

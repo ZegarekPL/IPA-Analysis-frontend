@@ -52,11 +52,7 @@ export function NavUser() {
 	const user = data.data.user;
 
 	const initials = user.index
-		? user.index
-				.split(' ')
-				.map((n) => n[0])
-				.join('')
-				.toUpperCase()
+		? user.index.charAt(0).toUpperCase()
 		: 'U';
 
 	const handleLogout = async () => {
@@ -80,8 +76,9 @@ export function NavUser() {
 							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 						>
 							<Avatar className="h-8 w-8 rounded-lg">
-								<AvatarImage src={''} alt={user.index} />
-								<AvatarFallback>{initials}</AvatarFallback>
+								<AvatarFallback className="text-sm">
+									{initials}
+								</AvatarFallback>
 							</Avatar>
 							<div className="grid flex-1 text-left text-sm leading-tight">
 								<span className="truncate font-medium">{user.index}</span>
@@ -99,8 +96,9 @@ export function NavUser() {
 						<DropdownMenuLabel className="p-0 font-normal">
 							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
 								<Avatar className="h-8 w-8 rounded-lg">
-									<AvatarImage src={user.index} alt={user.index} />
-									<AvatarFallback>{initials}</AvatarFallback>
+									<AvatarFallback className="text-sm">
+										{initials}
+									</AvatarFallback>
 								</Avatar>
 								<div className="grid flex-1 text-left text-sm leading-tight">
 									<span className="truncate font-medium">{user.index}</span>
