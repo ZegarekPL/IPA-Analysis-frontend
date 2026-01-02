@@ -10,21 +10,16 @@ import {
 	IconChevronRight,
 	IconChevronsLeft,
 	IconChevronsRight,
-	IconCircleCheckFilled,
 	IconDotsVertical,
 	IconGripVertical,
 	IconLayoutColumns,
-	IconLoader,
 } from '@tabler/icons-react';
 import {
 	ColumnDef,
 	ColumnFiltersState,
 	flexRender,
 	getCoreRowModel,
-	getFacetedRowModel,
-	getFacetedUniqueValues,
 	getFilteredRowModel,
-	getPaginationRowModel,
 	getSortedRowModel,
 	Row,
 	SortingState,
@@ -42,14 +37,12 @@ import {
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { LucideSearch, User, UserStar } from 'lucide-react';
+import { LucideSearch } from 'lucide-react';
 import { changeUserRole } from '../db/api';
 import { Input } from '@/components/ui/input';
 
@@ -227,7 +220,6 @@ export function UsersDataTable({
 		onColumnVisibilityChange: setColumnVisibility,
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 	});
 

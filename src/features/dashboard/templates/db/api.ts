@@ -2,13 +2,20 @@ import { AxiosResponse } from 'axios';
 
 import { appAPI } from '@/utils/appAPI';
 import { z } from 'zod';
+import { AppError, mapApiError } from '@/utils/getErrorMessage';
 
 export type ClosedQuestion = z.infer<typeof closedQuestionSchema>;
 
 export const closedQuestionSchema = z.object({
 	text: z.string(),
 	type: z.enum(['importance', 'performance']),
+	_id: z.string(),
 });
+
+export interface GetTemplatesResponse {
+	total: number;
+	data: Templates[];
+}
 
 export type Templates = z.infer<typeof templatesSchema>;
 
@@ -23,6 +30,7 @@ export const templatesSchema = z.object({
 	createdBy: z.string(),
 	createdAt: z.date(),
 	updatedAt: z.date(),
+	createdByIndex: z.string(),
 });
 
 export type TemplateTableRow = {
@@ -34,27 +42,39 @@ export type TemplateTableRow = {
 	createdBy: string;
 	createdAt: string;
 	updatedAt: string;
+	createdByIndex: string;
 };
 
-export async function getTemplates() {
+export async function getTemplates({
+	Page,
+	rowPePage,
+	search,
+}: {
+	Page: number;
+	rowPePage: number;
+	search: string;
+}): Promise<GetTemplatesResponse> {
 	try {
-		const response: AxiosResponse<Templates[]> = await appAPI.get(`/api/v1/admin/templates`, {
-			withCredentials: true,
-		});
-		if (response.status === 200) {
-			console.log('response', response);
-			return response.data;
-		} else if (response.status === 401) {
-			window.location.replace('/login');
-		} else {
-			console.error('Wystąpił błąd podczas pobierania templates');
-		}
+		const response: AxiosResponse<GetTemplatesResponse> = await appAPI.post(
+			`/api/v1/admin/templates/list`, 
+			{
+				rowPePage,
+				Page,
+				search,
+			},
+			{
+				withCredentials: true,
+			},
+		);
+		return response.data ?? { total: 0, data: [] };
 	} catch (error: any) {
-		if (error.response.status === 401) {
+		const errorCode = mapApiError(error);
+
+		if (errorCode === 'UNAUTHORIZED') {
 			window.location.replace('/login');
-		} else {
-			throw new Error('Error500');
+			throw new AppError('UNAUTHORIZED', 401);
 		}
+		throw new AppError(errorCode, error.response?.status);
 	}
 }
 
