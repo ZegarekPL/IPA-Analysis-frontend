@@ -11,22 +11,22 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { signup, SignupBody, signupSchema } from '@/features/auth/SignUp';
+import { signupRequest, SignupBodyRequest, signupRequestSchema } from '@/features/auth/SignUp';
 
 const RegisterPage = () => {
 	const t = useTranslations('RegisterPage');
 	const router = useRouter();
-	const form = useForm<SignupBody>({
+	const form = useForm<SignupBodyRequest>({
 		defaultValues: {
 			mail: '',
 			password: '',
 			repeatPassword: '',
 		},
-		resolver: zodResolver(signupSchema),
+		resolver: zodResolver(signupRequestSchema),
 	});
 
 	const mutation = useMutation({
-		mutationFn: signup,
+		mutationFn: signupRequest,
 		onSuccess: (response) => {
 			toast.success('SUCCESS', {
 				description: response.status,
@@ -41,7 +41,7 @@ const RegisterPage = () => {
 		},
 	});
 
-	const onSubmit = (data: SignupBody) => {
+	const onSubmit = (data: SignupBodyRequest) => {
 		mutation.mutate(data);
 	};
 
