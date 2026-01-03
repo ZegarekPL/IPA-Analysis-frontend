@@ -27,18 +27,8 @@ export const signupRequestSchema = z
 
 export type SignupBodyRequest = z.infer<typeof signupRequestSchema>;
 export type SignupResponse = {
-	status: 'success';
-	data: {
-		index: string;
-		mail: string;
-		authentication: {
-			password: string;
-			repeatPassword: string;
-			salt: string;
-		};
-		_id: string;
-		__v: number;
-	};
+	status: 'Sucess';
+	message: string;
 };
 
 export type SigninResponse = SignupResponse | FailedResponse;
@@ -51,11 +41,10 @@ export async function signupRequest(data: SignupBodyRequest): Promise<SigninResp
 	return response.data;
 }
 
-export const signupConfirmSchema = z
-	.object({
-		mail: z.string().email(),
-		code: z.string(),
-	})
+export const signupConfirmSchema = z.object({
+	mail: z.string().email(),
+	code: z.string(),
+});
 
 export type SignupBodyConfirm = z.infer<typeof signupConfirmSchema>;
 
