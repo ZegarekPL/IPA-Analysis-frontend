@@ -54,5 +54,12 @@
 		"sign_up_button": "Sign Up",
 		"has_account": "Already have an account?",
 		"login_button": "Sign in"
+	},
+	"PasswordResetPage": {
+		"title": "Password reset ",
+		"email": "Email",
+		"sign_in_button": "Sign In",
+		"back_to_login": "Back to login",
+		"success": "User is logged in"
 	}
 }

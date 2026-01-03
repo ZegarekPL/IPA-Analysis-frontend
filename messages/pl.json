@@ -54,5 +54,13 @@
 		"sign_up_button": "Zarejestruj się",
 		"has_account": "Masz konto?",
 		"login_button": "Zaloguj się"
+	},
+	"PasswordResetPage": {
+		"loading": "Ładowanie",
+		"title": "Reset hasła",
+		"email": "Email",
+		"sign_in_button": "Zaloguj się",
+		"back_to_login": "Wróc na stronę logowania",
+		"success": "Zalogowano się"
 	}
 }

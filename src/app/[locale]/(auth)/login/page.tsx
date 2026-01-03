@@ -84,7 +84,7 @@ const LoginPage = () => {
 				</Form>
 
 				<div className="mt-5 space-y-5">
-					<Link href="#" className="text-sm block underline text-muted-foreground text-center">
+					<Link href="/password-reset" className="text-sm block underline text-muted-foreground text-center">
 						{t('forgot_password')}
 					</Link>
 					<p className="text-sm text-center">

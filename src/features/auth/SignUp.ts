@@ -37,13 +37,16 @@ export async function signupRequest(data: SignupBodyRequest): Promise<SigninResp
 	const response: AxiosResponse<SigninResponse> = await appAPI.post(`/api/v1/signup/request`, data, {
 		withCredentials: true,
 	});
-	console.log(response);
 	return response.data;
 }
 
 export const signupConfirmSchema = z.object({
 	mail: z.string().email(),
-	code: z.string(),
+	code: z
+		.string()
+		.trim()
+		.length(6, 'Code must be 6 characters long')
+		.regex(/^\d{6}$/, 'Code must contain only digits'),
 });
 
 export type SignupBodyConfirm = z.infer<typeof signupConfirmSchema>;
@@ -52,6 +55,5 @@ export async function signupConfirm(data: SignupBodyConfirm): Promise<SigninResp
 	const response: AxiosResponse<SigninResponse> = await appAPI.post(`/api/v1/signup/confirm`, data, {
 		withCredentials: true,
 	});
-	console.log(response);
 	return response.data;
 }
