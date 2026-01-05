@@ -151,11 +151,14 @@ export function AllGroupsDataTable({
 			const groupId = row.original.id;
 
 			const slug = slugify(groupName);
-
 			return (
+
 				<Link href={`/dashboard/groups/${slug}-${groupId}`} className="text-primary hover:underline font-medium">
+									      <div className="truncate max-w-xs" title={groupName}>
 					{groupName}
+									      </div>
 				</Link>
+
 			);
 		},
 		enableHiding: false,
@@ -164,7 +167,11 @@ export function AllGroupsDataTable({
 		accessorKey: 'description',
 		header: 'Description',
 		cell: ({ row }) => {
-			return row.original.description;
+						return (
+			<div className="truncate max-w-xs" title={row.original.description}>
+				{row.original.description}
+			</div>
+			);
 		},
 	},
 	{
