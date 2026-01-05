@@ -5,6 +5,8 @@ export interface CreateTest {
 	groupId: string;
 	name: string;
 	description: string;
+	startsAt: Date;
+	endsAt: Date;
 }
 
 export async function createTest(test: CreateTest) {

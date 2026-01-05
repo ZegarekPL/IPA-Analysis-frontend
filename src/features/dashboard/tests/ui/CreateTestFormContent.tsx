@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { AlertDialogCancel } from '@radix-ui/react-alert-dialog';
-import { InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { AlertDialogFooter } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,8 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 	const [name, setName] = useState('');
 	const [description, setDescription] = useState('');
 	const [selectedGroup, setSelectedGroup] = useState<string>('');
+	const [startsAt, setStartsAt] = useState('');
+	const [endsAt, setEndsAt] = useState('');
 
 	const queryClient = useQueryClient();
 
@@ -46,14 +48,18 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 
 	const handleSubmit = () => {
 		if (!selectedGroup) return alert('Wybierz grupę!');
+		if (!startsAt || !endsAt) return alert('Wybierz datę rozpoczęcia i zakończenia testu!');
 		const data: CreateTest = {
 			templateId,
 			groupId: selectedGroup,
 			name,
 			description,
+			startsAt: new Date(startsAt),
+			endsAt: new Date(endsAt),
 		};
 		createMutation.mutate(data);
 	};
+
 	return (
 		<div>
 			<div className="mb-4">
@@ -95,6 +101,26 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 						</SelectContent>
 					</Select>
 				)}
+			</div>
+
+			<div className="mb-4">
+				<Label className="block mb-1 font-semibold">Data rozpoczęcia</Label>
+				<input
+					type="datetime-local"
+					value={startsAt}
+					onChange={(e) => setStartsAt(e.target.value)}
+					className="w-full border p-2 rounded"
+				/>
+			</div>
+
+			<div className="mb-4">
+				<Label className="block mb-1 font-semibold">Data zakończenia</Label>
+				<input
+					type="datetime-local"
+					value={endsAt}
+					onChange={(e) => setEndsAt(e.target.value)}
+					className="w-full border p-2 rounded"
+				/>
 			</div>
 
 			<AlertDialogFooter>
