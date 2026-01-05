@@ -52,6 +52,7 @@ import { slugify } from '@/utils/slugify';
 import { Input } from '@/components/ui/input';
 import { LucideSearch } from 'lucide-react';
 import { joinGroup, leaveGroup } from '../db/api';
+import { GetUserSuccessResponse } from '@/features/auth/Login';
 
 export const schema = z.object({
 	id: z.string(),
@@ -82,7 +83,38 @@ function DragHandle({ id }: { id: string }) {
 	);
 }
 
-const columns: ColumnDef<z.infer<typeof schema>>[] = [
+interface AllGroupsDataTableProps {
+	data: z.infer<typeof schema>[];
+	page: number;
+	setPage: (p: number) => void;
+	rowsPerPage: number;
+	setRowsPerPage: (r: number) => void;
+	total: number;
+	search: string;
+	setSearch: (s: string) => void;
+	userData: GetUserSuccessResponse;
+}
+
+export function AllGroupsDataTable({
+	data,
+	page,
+	setPage,
+	rowsPerPage,
+	setRowsPerPage,
+	total,
+	search,
+	setSearch,
+	userData,
+}: AllGroupsDataTableProps) {
+	const [rowSelection, setRowSelection] = React.useState({});
+	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+	const [sorting, setSorting] = React.useState<SortingState>([]);
+	const [inputValue, setInputValue] = React.useState(search || '');
+
+	const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
+
+	const columns: ColumnDef<z.infer<typeof schema>>[] = React.useMemo(() => [
 	{
 		id: 'drag',
 		header: () => null,
@@ -167,6 +199,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end" className="w-32">
+					{userData.data.user.role === 'admin' &&
 					<DropdownMenuItem asChild>
 						<EditGroupForm
 							group={{
@@ -176,6 +209,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
 							}}
 						/>
 					</DropdownMenuItem>
+					}
 					<DropdownMenuItem
 						onSelect={(e) => {
 							e.preventDefault();
@@ -188,6 +222,8 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
 					>
 						{row.original.isMember ? 'Leave' : 'Join'}
 					</DropdownMenuItem>
+					{userData.data.user.role === 'admin' &&
+					<>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
 						<DeleteGroupForm
@@ -198,39 +234,13 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
 							}}
 						/>
 					</DropdownMenuItem>
+					</>
+					}
 				</DropdownMenuContent>
 			</DropdownMenu>
 		),
 	},
-];
-interface AllGroupsDataTableProps {
-	data: z.infer<typeof schema>[];
-	page: number;
-	setPage: (p: number) => void;
-	rowsPerPage: number;
-	setRowsPerPage: (r: number) => void;
-	total: number;
-	search: string;
-	setSearch: (s: string) => void;
-}
-
-export function AllGroupsDataTable({
-	data,
-	page,
-	setPage,
-	rowsPerPage,
-	setRowsPerPage,
-	total,
-	search,
-	setSearch,
-}: AllGroupsDataTableProps) {
-	const [rowSelection, setRowSelection] = React.useState({});
-	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-	const [sorting, setSorting] = React.useState<SortingState>([]);
-	const [inputValue, setInputValue] = React.useState(search || '');
-
-	const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
+], [userData]);
 
 	const table = useReactTable({
 		data,

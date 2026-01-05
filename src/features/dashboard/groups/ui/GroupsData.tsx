@@ -11,6 +11,7 @@ import { getAllGroups, getMyGroups } from '@/features/dashboard/groups/db/api';
 import { formatDate } from '@/utils/formatDate';
 import { useTranslations } from 'next-intl';
 import { getErrorMessage } from '@/utils/getErrorMessage';
+import { getUser } from '@/features/auth/Login';
 
 export function GroupsTabs() {
 	const [activeTab, setActiveTab] = React.useState<'all' | 'my'>('all');
@@ -25,7 +26,12 @@ export function GroupsTabs() {
 		setSearch('');
 	}, [activeTab]);
 
-	const { data, isLoading, isError, error, refetch } = useQuery({
+	const { data: userData, isLoading: userLoading, isError: userError } = useQuery({
+		queryKey: ['getUser'],
+		queryFn: getUser,
+	});
+
+	const { data: groupsData, isLoading: groupsLoading, isError: groupsError, error, refetch } = useQuery({
 		queryKey: [activeTab, 'groups', page, rowsPerPage, search],
 		queryFn: () =>
 			activeTab === 'all' ? getAllGroups({ page, rowsPerPage, search }) : getMyGroups({ page, rowsPerPage, search }),
@@ -34,7 +40,7 @@ export function GroupsTabs() {
 
 	const tableData = React.useMemo(() => {
 		return (
-			data?.data.map((g: any) => ({
+			groupsData?.data.map((g: any) => ({
 				id: g._id,
 				header: g.name,
 				description: g.description,
@@ -44,13 +50,13 @@ export function GroupsTabs() {
 				updatedAt: formatDate(g.updatedAt),
 			})) ?? []
 		);
-	}, [data]);
+	}, [groupsData]);
 
-	if (isLoading) {
+	if (groupsLoading || userLoading) {
 		return <p className="text-center mt-10">{t('Common.loading')}</p>;
 	}
 
-	if (isError) {
+	if (groupsError || userError || !userData || userData.status !== 'success') {
 		return (
 			<div className="text-center mt-10">
 				<p className="text-red-500">{getErrorMessage(t, error)}</p>
@@ -73,7 +79,7 @@ export function GroupsTabs() {
 					<TabsTrigger value="all">All Groups</TabsTrigger>
 					<TabsTrigger value="my">My Groups</TabsTrigger>
 				</TabsList>
-				<AddGroupForm />
+				{userData.data.user.role === 'admin' && <AddGroupForm />}
 			</div>
 
 			<TabsContent value="all">
@@ -83,9 +89,10 @@ export function GroupsTabs() {
 					setPage={setPage}
 					rowsPerPage={rowsPerPage}
 					setRowsPerPage={setRowsPerPage}
-					total={data?.total || 0}
+					total={groupsData?.total || 0}
 					search={search}
 					setSearch={setSearch}
+					userData={userData}
 				/>
 			</TabsContent>
 
@@ -96,9 +103,10 @@ export function GroupsTabs() {
 					setPage={setPage}
 					rowsPerPage={rowsPerPage}
 					setRowsPerPage={setRowsPerPage}
-					total={data?.total || 0}
+					total={groupsData?.total || 0}
 					search={search}
 					setSearch={setSearch}
+					userData={userData}
 				/>
 			</TabsContent>
 		</Tabs>

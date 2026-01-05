@@ -50,7 +50,7 @@ export async function getUsers({
 	}
 }
 
-export async function getUser(id: string): Promise<User[]> {
+export async function getUserById(id: string): Promise<User[]> {
 	try {
 		const response: AxiosResponse<{ users: User[] }> = await appAPI.get(`/api/v1/admin/users/${id}`, {
 			withCredentials: true,
