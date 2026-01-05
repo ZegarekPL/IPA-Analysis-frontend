@@ -114,140 +114,145 @@ export function AllGroupsDataTable({
 
 	const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
 
-	const columns: ColumnDef<z.infer<typeof schema>>[] = React.useMemo(() => [
-	{
-		id: 'drag',
-		header: () => null,
-		cell: ({ row }) => <DragHandle id={row.original.id} />,
-	},
-	{
-		id: 'select',
-		header: ({ table }) => (
-			<div className="flex items-center justify-center">
-				<Checkbox
-					checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-					onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-					aria-label="Select all"
-				/>
-			</div>
-		),
-		cell: ({ row }) => (
-			<div className="flex items-center justify-center">
-				<Checkbox
-					checked={row.getIsSelected()}
-					onCheckedChange={(value) => row.toggleSelected(!!value)}
-					aria-label="Select row"
-				/>
-			</div>
-		),
-		enableSorting: false,
-		enableHiding: false,
-	},
-	{
-		accessorKey: 'name',
-		header: 'Name',
-		cell: ({ row }) => {
-			const groupName = row.original.header;
-			const groupId = row.original.id;
-
-			const slug = slugify(groupName);
-			return (
-
-				<Link href={`/dashboard/groups/${slug}-${groupId}`} className="text-primary hover:underline font-medium">
-									      <div className="truncate max-w-xs" title={groupName}>
-					{groupName}
-									      </div>
-				</Link>
-
-			);
-		},
-		enableHiding: false,
-	},
-	{
-		accessorKey: 'description',
-		header: 'Description',
-		cell: ({ row }) => {
-						return (
-			<div className="truncate max-w-xs" title={row.original.description}>
-				{row.original.description}
-			</div>
-			);
-		},
-	},
-	{
-		accessorKey: 'members',
-		header: 'Members',
-		cell: ({ row }) => {
-			return row.original.membersCount;
-		},
-	},
-	{
-		accessorKey: 'created At',
-		header: 'Created At',
-		cell: ({ row }) => {
-			return row.original.createdAt;
-		},
-	},
-	{
-		accessorKey: 'updated At',
-		header: 'Updated At',
-		cell: ({ row }) => {
-			return row.original.updatedAt;
-		},
-	},
-	{
-		id: 'actions',
-		cell: ({ row }) => (
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button variant="ghost" className="data-[state=open]:bg-muted text-muted-foreground flex size-8" size="icon">
-						<IconDotsVertical />
-						<span className="sr-only">Open menu</span>
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent align="end" className="w-32">
-					{userData.data.user.role === 'admin' &&
-					<DropdownMenuItem asChild>
-						<EditGroupForm
-							group={{
-								id: row.original.id,
-								name: row.original.header,
-								description: row.original.description,
-							}}
+	const columns: ColumnDef<z.infer<typeof schema>>[] = React.useMemo(
+		() => [
+			{
+				id: 'drag',
+				header: () => null,
+				cell: ({ row }) => <DragHandle id={row.original.id} />,
+			},
+			{
+				id: 'select',
+				header: ({ table }) => (
+					<div className="flex items-center justify-center">
+						<Checkbox
+							checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+							onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+							aria-label="Select all"
 						/>
-					</DropdownMenuItem>
-					}
-					<DropdownMenuItem
-						onSelect={(e) => {
-							e.preventDefault();
-							if (row.original.isMember) {
-								leaveGroup(row.original.id);
-							} else {
-								joinGroup(row.original.id);
-							}
-						}}
-					>
-						{row.original.isMember ? 'Leave' : 'Join'}
-					</DropdownMenuItem>
-					{userData.data.user.role === 'admin' &&
-					<>
-					<DropdownMenuSeparator />
-					<DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
-						<DeleteGroupForm
-							group={{
-								id: row.original.id,
-								name: row.original.header,
-								description: row.original.description,
-							}}
+					</div>
+				),
+				cell: ({ row }) => (
+					<div className="flex items-center justify-center">
+						<Checkbox
+							checked={row.getIsSelected()}
+							onCheckedChange={(value) => row.toggleSelected(!!value)}
+							aria-label="Select row"
 						/>
-					</DropdownMenuItem>
-					</>
-					}
-				</DropdownMenuContent>
-			</DropdownMenu>
-		),
-	},
-], [userData]);
+					</div>
+				),
+				enableSorting: false,
+				enableHiding: false,
+			},
+			{
+				accessorKey: 'name',
+				header: 'Name',
+				cell: ({ row }) => {
+					const groupName = row.original.header;
+					const groupId = row.original.id;
+
+					const slug = slugify(groupName);
+					return (
+						<Link href={`/dashboard/groups/${slug}-${groupId}`} className="text-primary hover:underline font-medium">
+							<div className="truncate max-w-xs" title={groupName}>
+								{groupName}
+							</div>
+						</Link>
+					);
+				},
+				enableHiding: false,
+			},
+			{
+				accessorKey: 'description',
+				header: 'Description',
+				cell: ({ row }) => {
+					return (
+						<div className="truncate max-w-xs" title={row.original.description}>
+							{row.original.description}
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'members',
+				header: 'Members',
+				cell: ({ row }) => {
+					return row.original.membersCount;
+				},
+			},
+			{
+				accessorKey: 'created At',
+				header: 'Created At',
+				cell: ({ row }) => {
+					return row.original.createdAt;
+				},
+			},
+			{
+				accessorKey: 'updated At',
+				header: 'Updated At',
+				cell: ({ row }) => {
+					return row.original.updatedAt;
+				},
+			},
+			{
+				id: 'actions',
+				cell: ({ row }) => (
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button
+								variant="ghost"
+								className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+								size="icon"
+							>
+								<IconDotsVertical />
+								<span className="sr-only">Open menu</span>
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="end" className="w-32">
+							{userData.data.user.role === 'admin' && (
+								<DropdownMenuItem asChild>
+									<EditGroupForm
+										group={{
+											id: row.original.id,
+											name: row.original.header,
+											description: row.original.description,
+										}}
+									/>
+								</DropdownMenuItem>
+							)}
+							<DropdownMenuItem
+								onSelect={(e) => {
+									e.preventDefault();
+									if (row.original.isMember) {
+										leaveGroup(row.original.id);
+									} else {
+										joinGroup(row.original.id);
+									}
+								}}
+							>
+								{row.original.isMember ? 'Leave' : 'Join'}
+							</DropdownMenuItem>
+							{userData.data.user.role === 'admin' && (
+								<>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
+										<DeleteGroupForm
+											group={{
+												id: row.original.id,
+												name: row.original.header,
+												description: row.original.description,
+											}}
+										/>
+									</DropdownMenuItem>
+								</>
+							)}
+						</DropdownMenuContent>
+					</DropdownMenu>
+				),
+			},
+		],
+		[userData],
+	);
 
 	const table = useReactTable({
 		data,

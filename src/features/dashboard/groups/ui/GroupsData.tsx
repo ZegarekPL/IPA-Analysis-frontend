@@ -26,12 +26,22 @@ export function GroupsTabs() {
 		setSearch('');
 	}, [activeTab]);
 
-	const { data: userData, isLoading: userLoading, isError: userError } = useQuery({
+	const {
+		data: userData,
+		isLoading: userLoading,
+		isError: userError,
+	} = useQuery({
 		queryKey: ['getUser'],
 		queryFn: getUser,
 	});
 
-	const { data: groupsData, isLoading: groupsLoading, isError: groupsError, error, refetch } = useQuery({
+	const {
+		data: groupsData,
+		isLoading: groupsLoading,
+		isError: groupsError,
+		error,
+		refetch,
+	} = useQuery({
 		queryKey: [activeTab, 'groups', page, rowsPerPage, search],
 		queryFn: () =>
 			activeTab === 'all' ? getAllGroups({ page, rowsPerPage, search }) : getMyGroups({ page, rowsPerPage, search }),

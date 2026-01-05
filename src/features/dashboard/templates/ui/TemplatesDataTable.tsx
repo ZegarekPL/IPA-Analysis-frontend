@@ -99,11 +99,11 @@ const columns: ColumnDef<TemplateTableRow>[] = [
 		accessorKey: 'name',
 		header: 'Name',
 		cell: ({ row }) => {
-			    return (
-      <div className="truncate max-w-xs" title={row.original.name}>
-        {row.original.name}
-      </div>
-    );
+			return (
+				<div className="truncate max-w-xs" title={row.original.name}>
+					{row.original.name}
+				</div>
+			);
 		},
 		enableHiding: false,
 	},
@@ -112,9 +112,9 @@ const columns: ColumnDef<TemplateTableRow>[] = [
 		header: 'Description',
 		cell: ({ row }) => {
 			return (
-			<div className="truncate max-w-xs" title={row.original.description}>
-				{row.original.description}
-			</div>
+				<div className="truncate max-w-xs" title={row.original.description}>
+					{row.original.description}
+				</div>
 			);
 		},
 	},
