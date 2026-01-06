@@ -12,6 +12,11 @@ export const closedQuestionSchema = z.object({
 	_id: z.string(),
 });
 
+export type ClosedQuestionForm = {
+	text: string;
+	type: 'importance' | 'performance';
+};
+
 export interface GetTemplatesResponse {
 	total: number;
 	data: Templates[];
@@ -81,7 +86,7 @@ export async function getTemplates({
 export interface CreateTemplates {
 	name: string;
 	description: string;
-	closedQuestions: ClosedQuestion[];
+	closedQuestions: ClosedQuestionForm[];
 	openQuestion: {
 		text: string;
 	};
@@ -114,7 +119,7 @@ export interface EditTemplatesFormProps {
 		id: string;
 		name: string;
 		description: string;
-		closedQuestions: ClosedQuestion[];
+		closedQuestions: ClosedQuestionForm[];
 		openQuestion: {
 			text: string;
 		};

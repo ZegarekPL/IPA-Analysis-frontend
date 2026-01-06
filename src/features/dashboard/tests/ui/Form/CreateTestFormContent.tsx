@@ -6,8 +6,8 @@ import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@ta
 
 import { AlertDialogFooter } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { CreateTest, createTest } from '../db/api';
-import { getAllGroups, GetGroupsResponse, Groups } from '../../groups/db/api';
+import { CreateTest, createTest } from '../../db/api';
+import { getAllGroups, GetGroupsResponse, Groups } from '../../../groups/db/api';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 

@@ -65,7 +65,8 @@ export default function GroupPageClient({ group }: Props) {
 							<div>
 								<p className="font-medium">{test.testId}</p>
 								<p className="text-sm text-muted-foreground">
-									Przypisano: {formatDate(test.assignedAt)} | Rozpoczęcie: {formatDate(test.startsAt)} | Zakończenie: {formatDate(test.endsAt)}
+									Przypisano: {formatDate(test.assignedAt)} | Rozpoczęcie: {formatDate(test.startsAt)} | Zakończenie:{' '}
+									{formatDate(test.endsAt)}
 								</p>
 							</div>
 						</CardContent>

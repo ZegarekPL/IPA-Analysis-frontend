@@ -13,7 +13,6 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { CreateTest } from '../db/api';
 
 export default function CreateTestForm({ templateId }: { templateId: string }) {
 	const [open, setOpen] = useState(false);

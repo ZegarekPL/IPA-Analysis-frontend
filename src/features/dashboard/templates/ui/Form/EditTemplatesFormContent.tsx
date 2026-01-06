@@ -5,7 +5,13 @@ import { AlertDialogCancel } from '@radix-ui/react-alert-dialog';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { AlertDialogFooter } from '../../../../../components/ui/alert-dialog';
-import { ClosedQuestion, CreateTemplates, EditTemplatesFormProps, editTemplates } from '../../db/api';
+import {
+	ClosedQuestion,
+	ClosedQuestionForm,
+	CreateTemplates,
+	EditTemplatesFormProps,
+	editTemplates,
+} from '../../db/api';
 
 import { Button } from '@/components/ui/button';
 
@@ -19,8 +25,11 @@ export default function EditTemplatesFormContent({ initialData, onCancel, onSucc
 	const [name, setName] = useState(initialData.template.name || '');
 	const [description, setDescription] = useState(initialData.template.description || '');
 	const [openQuestion, setOpenQuestion] = useState(initialData.template.openQuestion.text || '');
-	const [closedQuestions, setClosedQuestions] = useState<ClosedQuestion[]>(
-		initialData.template.closedQuestions || [{ text: '', type: 'importance' }],
+	const [closedQuestions, setClosedQuestions] = useState<ClosedQuestionForm[]>(
+		initialData.template.closedQuestions.map(({ text, type }) => ({
+			text,
+			type,
+		})),
 	);
 
 	const queryClient = useQueryClient();

@@ -34,18 +34,17 @@ import {
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { TemplateTableRow } from '../db/api';
-import EditTemplatesForm from './Form/EditTemplatesForm';
-import DeleteTemplatesForm from './Form/DeleteTemplatesForm';
+import { TestsTableRow } from '../db/api';
+
 import CreateTestForm from '../../tests/ui/Form/CreateTestForm';
 import { Input } from '@/components/ui/input';
 import { LucideSearch } from 'lucide-react';
+import EditTestsForm from './Form/EditTestsForm';
 
 function DragHandle({ id }: { id: string }) {
 	const { attributes, listeners } = useSortable({
@@ -66,7 +65,7 @@ function DragHandle({ id }: { id: string }) {
 	);
 }
 
-const columns: ColumnDef<TemplateTableRow>[] = [
+const columns: ColumnDef<TestsTableRow>[] = [
 	{
 		id: 'drag',
 		header: () => null,
@@ -119,31 +118,45 @@ const columns: ColumnDef<TemplateTableRow>[] = [
 		},
 	},
 	{
-		accessorKey: 'closed Questions',
-		header: 'Closed Questions',
+		accessorKey: 'template',
+		header: 'Template',
 		cell: ({ row }) => {
-			return row.original.closedQuestions.length;
+			return row.original.template;
 		},
 	},
 	{
 		accessorKey: 'created By',
 		header: 'Created By',
 		cell: ({ row }) => {
-			return row.original.createdByIndex;
+			return row.original.createdBy;
 		},
 	},
 	{
-		accessorKey: 'created At',
+		accessorKey: 'startsAt',
+		header: 'Starts At',
+		cell: ({ row }) => {
+			return row.original.startsAt;
+		},
+	},
+	{
+		accessorKey: 'endsAt',
+		header: 'Ends At',
+		cell: ({ row }) => {
+			return row.original.endsAt;
+		},
+	},
+	{
+		accessorKey: 'IsActive',
+		header: 'Is Active',
+		cell: ({ row }) => {
+			return row.original.active;
+		},
+	},
+	{
+		accessorKey: 'createdAt',
 		header: 'Created At',
 		cell: ({ row }) => {
 			return row.original.createdAt;
-		},
-	},
-	{
-		accessorKey: 'updated At',
-		header: 'Updated At',
-		cell: ({ row }) => {
-			return row.original.updatedAt;
 		},
 	},
 	{
@@ -158,42 +171,19 @@ const columns: ColumnDef<TemplateTableRow>[] = [
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end" className="w-32">
 					<DropdownMenuItem asChild>
-						<EditTemplatesForm
-							template={{
+						<EditTestsForm
+							test={{
 								id: row.original.id,
 								name: row.original.name,
 								description: row.original.description,
-								closedQuestions: row.original.closedQuestions.map((q) => ({
-									text: q.text,
-									type: q.type,
-									_id: q._id,
-								})),
-								openQuestion: {
-									text: row.original.openQuestion,
-								},
+								startsAt: row.original.startsAt,
+								endsAt: row.original.endsAt,
+								active: row.original.active,
 							}}
 						/>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild>
 						<CreateTestForm templateId={row.original.id} />
-					</DropdownMenuItem>
-					<DropdownMenuSeparator />
-					<DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
-						<DeleteTemplatesForm
-							template={{
-								id: row.original.id,
-								name: row.original.name,
-								description: row.original.description,
-								closedQuestions: row.original.closedQuestions.map((q) => ({
-									text: q.text,
-									type: q.type,
-									_id: q._id,
-								})),
-								openQuestion: {
-									text: row.original.openQuestion,
-								},
-							}}
-						/>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
@@ -201,8 +191,8 @@ const columns: ColumnDef<TemplateTableRow>[] = [
 	},
 ];
 
-interface TemplatesDataTableProps {
-	data: TemplateTableRow[];
+interface TestsDataTableProps {
+	data: TestsTableRow[];
 	page: number;
 	setPage: (p: number) => void;
 	rowsPerPage: number;
@@ -212,7 +202,7 @@ interface TemplatesDataTableProps {
 	setSearch: (s: string) => void;
 }
 
-export function TemplatesDataTable({
+export function TestsDataTable({
 	data,
 	page,
 	setPage,
@@ -221,7 +211,7 @@ export function TemplatesDataTable({
 	total,
 	search,
 	setSearch,
-}: TemplatesDataTableProps) {
+}: TestsDataTableProps) {
 	const [rowSelection, setRowSelection] = React.useState({});
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -428,7 +418,7 @@ export function TemplatesDataTable({
 	);
 }
 
-function DraggableRow({ row }: { row: Row<TemplateTableRow> }) {
+function DraggableRow({ row }: { row: Row<TestsTableRow> }) {
 	const { transform, transition, setNodeRef, isDragging } = useSortable({
 		id: row.original.id,
 	});
