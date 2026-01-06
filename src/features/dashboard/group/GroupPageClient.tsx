@@ -63,9 +63,9 @@ export default function GroupPageClient({ group }: Props) {
 					<Card key={idx}>
 						<CardContent className="flex justify-between items-center">
 							<div>
-								<p className="font-medium">{test.test}</p>
+								<p className="font-medium">{test.testId}</p>
 								<p className="text-sm text-muted-foreground">
-									Przypisano: {formatDate(test.assignedAt)} | Termin: {formatDate(test.dueAt)}
+									Przypisano: {formatDate(test.assignedAt)} | Rozpoczęcie: {formatDate(test.startsAt)} | Zakończenie: {formatDate(test.endsAt)}
 								</p>
 							</div>
 						</CardContent>

@@ -184,9 +184,10 @@ export interface GroupDetails {
 }
 
 export interface Tests {
-	test: string;
+	testId: string;
 	assignedAt: Date;
-	dueAt: Date;
+	startsAt: Date;
+	endsAt: Date;
 }
 
 export async function getGroupDetails(groupId: string): Promise<GroupDetails> {
