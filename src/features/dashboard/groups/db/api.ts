@@ -2,7 +2,6 @@ import { AxiosResponse } from 'axios';
 
 import { appAPI } from '@/utils/appAPI';
 import { AppError, mapApiError } from '@/utils/getErrorMessage';
-import { User } from '../../users/db/api';
 
 export interface CreateGroups {
 	name: string;

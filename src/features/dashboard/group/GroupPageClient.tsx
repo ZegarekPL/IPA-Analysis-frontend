@@ -1,11 +1,14 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
-import { getGroupDetails, GroupDetails, Tests, UserGroup } from '@/features/dashboard/groups/db/api';
-import { formatDate } from '@/utils/formatDate';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { getErrorMessage } from '@/utils/getErrorMessage';
 import { useTranslations } from 'next-intl';
+
+import SubmitAnswerForm from '../answer/ui/Form/SubmitAnswerForm';
+
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { getGroupDetails, Tests, UserGroup } from '@/features/dashboard/groups/db/api';
+import { formatDate } from '@/utils/formatDate';
+import { getErrorMessage } from '@/utils/getErrorMessage';
 
 interface Props {
 	group: string;
@@ -68,6 +71,7 @@ export default function GroupPageClient({ group }: Props) {
 									Przypisano: {formatDate(test.assignedAt)} | Rozpoczęcie: {formatDate(test.startsAt)} | Zakończenie:{' '}
 									{formatDate(test.endsAt)}
 								</p>
+								<SubmitAnswerForm testId={test.testId} />
 							</div>
 						</CardContent>
 					</Card>

@@ -1,4 +1,18 @@
 {
+	"Theme": {
+		"light": "Light",
+		"dark": "Dark",
+		"system": "System"
+	},
+	"Language": {
+		"change_language": "Change language",
+		"en": "English",
+		"pl": "Polish"
+	},
+	"Roles": {
+		"user": "User",
+		"admin": "Admin"
+	},
 	"Errors": {
 		"Common": {
 			"UNKNOWN_ERROR": "Unexpected error occurred.",
@@ -18,15 +32,19 @@
 		"try_again": "Try again",
 		"loading": "Loading..."
 	},
+	"Sidebar": {
+		"main": "Main",
+		"groups": "Groups",
+		"admin": "Admin Panel",
+		"users": "Users",
+		"templates": "Templates",
+		"tests": "Tests",
+		"account": "Account",
+		"login": "Sign in",
+		"logout": "Log out"
+	},
 	"UsersData": {
 		"title": "Users"
-	},
-	"Navbar": {
-		"home": "Home",
-		"login": "Sign in"
-	},
-	"LocaleSelector": {
-		"change_language": "Change language"
 	},
 	"HomePage": {
 		"title": "Create, Test, Analyze – All in One Place",
@@ -61,5 +79,17 @@
 		"sign_in_button": "Sign In",
 		"back_to_login": "Back to login",
 		"success": "User is logged in"
+	},
+	"UserPage": {
+		"error": "Failed to load profile",
+		"profile_information": "Profile Information",
+		"username": "Username",
+		"email": "Email",
+		"account_details": "Account Details",
+		"created_at": "Created at",
+		"last_updated": "Last updated",
+		"settings": "Settings",
+		"preferred_language": "Preferred language",
+		"preferred_theme": "Preferred theme"
 	}
 }

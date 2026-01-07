@@ -2,16 +2,16 @@
 
 import * as React from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 
 import { AllGroupsDataTable } from './AllGroupsDataTable';
 import AddGroupForm from './Form/AddGroupForm';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { getUser } from '@/features/auth/Login';
 import { getAllGroups, getMyGroups } from '@/features/dashboard/groups/db/api';
 import { formatDate } from '@/utils/formatDate';
-import { useTranslations } from 'next-intl';
 import { getErrorMessage } from '@/utils/getErrorMessage';
-import { getUser } from '@/features/auth/Login';
 
 export function GroupsTabs() {
 	const [activeTab, setActiveTab] = React.useState<'all' | 'my'>('all');
@@ -42,7 +42,7 @@ export function GroupsTabs() {
 		error,
 		refetch,
 	} = useQuery({
-		queryKey: [activeTab, 'groups', page, rowsPerPage, search],
+		queryKey: ['groups', activeTab, page, rowsPerPage, search],
 		queryFn: () =>
 			activeTab === 'all' ? getAllGroups({ page, rowsPerPage, search }) : getMyGroups({ page, rowsPerPage, search }),
 		gcTime: 0,

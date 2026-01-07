@@ -29,7 +29,7 @@ export default function DeleteGroupForm({ group }: DeleteGroupProps) {
 	const deleteMutation = useMutation({
 		mutationFn: () => deleteGroup(group.id),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['all', 'groups'] });
+			queryClient.invalidateQueries({ queryKey: ['groups', 'all'] });
 			toast.success('Grupa usunięta 🗑️', {
 				description: 'Grupa została pomyślnie usunięta.',
 			});

@@ -1,15 +1,16 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-
-import { formatDate } from '@/utils/formatDate';
-import { getTemplates, TemplateTableRow } from '../db/api';
-import { TemplatesDataTable } from './TemplatesDataTable';
 import { useMemo, useState } from 'react';
-import AddTemplatesForm from './Form/AddTemplatesForm';
-import { Tabs } from '@/components/ui/tabs';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { getErrorMessage } from '@/utils/getErrorMessage';
+
+import { getTemplates, TemplateTableRow } from '../db/api';
+import AddTemplatesForm from './Form/AddTemplatesForm';
+import { TemplatesDataTable } from './TemplatesDataTable';
+
+import { Tabs } from '@/components/ui/tabs';
+import { formatDate } from '@/utils/formatDate';
+import { AppError, getErrorMessage } from '@/utils/getErrorMessage';
 
 export function TemplatesData() {
 	const t = useTranslations();
@@ -45,13 +46,17 @@ export function TemplatesData() {
 	}
 
 	if (isError) {
+		const isForbidden = error instanceof AppError && error.errorCode === 'FORBIDDEN';
+
 		return (
 			<div className="text-center mt-10">
 				<p className="text-red-500">{getErrorMessage(t, error)}</p>
 
-				<button onClick={() => refetch()} className="mt-4 underline text-sm">
-					{t('Common.try_again')}
-				</button>
+				{!isForbidden && (
+					<button onClick={() => refetch()} className="mt-4 underline text-sm">
+						{t('Common.try_again')}
+					</button>
+				)}
 			</div>
 		);
 	}

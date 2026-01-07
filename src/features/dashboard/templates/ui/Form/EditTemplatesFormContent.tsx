@@ -9,8 +9,8 @@ import {
 	ClosedQuestion,
 	ClosedQuestionForm,
 	CreateTemplates,
-	EditTemplatesFormProps,
 	editTemplates,
+	EditTemplatesFormProps,
 } from '../../db/api';
 
 import { Button } from '@/components/ui/button';
@@ -36,7 +36,7 @@ export default function EditTemplatesFormContent({ initialData, onCancel, onSucc
 	const createMutation = useMutation({
 		mutationFn: (form: CreateTemplates) => editTemplates(initialData?.template.id, form),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['all', 'groups'] });
+			queryClient.invalidateQueries({ queryKey: ['groups', 'all'] });
 			onSuccess();
 		},
 		onError: (error) => {

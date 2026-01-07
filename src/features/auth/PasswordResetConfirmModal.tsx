@@ -1,21 +1,20 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-
 import {
+	PasswordResetBodyConfirm,
 	passwordResetConfirm,
 	passwordResetConfirmSchema,
-	PasswordResetBodyConfirm,
 } from '@/features/auth/PasswordReset';
-import { useEffect } from 'react';
 
 type Props = {
 	open: boolean;

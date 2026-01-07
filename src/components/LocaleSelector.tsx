@@ -15,7 +15,7 @@ import {
 import { routing } from '@/i18n/routing';
 
 export default function LocaleSelector() {
-	const t = useTranslations('LocaleSelector');
+	const t = useTranslations('Language');
 	const pathname = usePathname();
 	const router = useRouter();
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -48,7 +48,7 @@ export default function LocaleSelector() {
 						onClick={() => handleLocaleChange(locale)}
 						className={locale === currentLocale ? 'font-semibold' : ''}
 					>
-						{locale.toUpperCase()}
+						{t(locale)}
 					</DropdownMenuItem>
 				))}
 			</DropdownMenuContent>

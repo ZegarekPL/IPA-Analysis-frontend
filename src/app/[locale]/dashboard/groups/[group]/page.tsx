@@ -1,4 +1,5 @@
 import { use } from 'react';
+
 import GroupPageClient from '@/features/dashboard/group/GroupPageClient';
 
 export default function GroupPage({ params }: { params: Promise<{ locale: string; group: string }> }) {

@@ -1,36 +1,36 @@
 'use client';
 
 import * as React from 'react';
-import { BookCheck, LayoutTemplate, SquareTerminal, User, Users } from 'lucide-react';
+import { BookCheck, LayoutTemplate, User, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { NavFolder } from './nav-folder';
 import { NavMain } from './nav-main';
 
-import { NavProjects } from '@/components/nav-projects';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar';
 
 const data = {
-	projects: [
+	main: [
 		{
-			name: 'Users',
+			name: 'groups',
+			url: '/dashboard/groups',
+			icon: Users,
+		},
+	],
+	admin: [
+		{
+			name: 'users',
 			url: '/dashboard/users',
 			icon: User,
 		},
 		{
-			name: 'Groups',
-			url: '/dashboard/groups',
-			icon: Users,
-		},
-		{
-			name: 'Templates',
+			name: 'templates',
 			url: '/dashboard/templates',
 			icon: LayoutTemplate,
 		},
 		{
-			name: 'Tests',
+			name: 'tests',
 			url: '/dashboard/tests',
 			icon: BookCheck,
 		},
@@ -46,7 +46,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				</Link>
 			</SidebarHeader>
 			<SidebarContent>
-				<NavMain projects={data.projects} />
+				<NavMain label={'main'} projects={data.main} />
+				<NavMain label={'admin'} projects={data.admin} />
 			</SidebarContent>
 			<SidebarFooter>
 				<NavUser />

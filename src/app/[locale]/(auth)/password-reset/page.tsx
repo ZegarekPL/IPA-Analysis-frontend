@@ -1,23 +1,23 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-
 import {
+	PasswordResetBodyRequest,
 	passwordResetRequest,
 	passwordResetRequestSchema,
-	PasswordResetBodyRequest,
 } from '@/features/auth/PasswordReset';
 import { PasswordResetConfirmModal } from '@/features/auth/PasswordResetConfirmModal';
-import { useTranslations } from 'next-intl';
 
 const PasswordResetPage = () => {
 	const t = useTranslations('PasswordResetPage');

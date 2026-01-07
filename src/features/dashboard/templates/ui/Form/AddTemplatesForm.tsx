@@ -1,7 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { IconPlus } from '@tabler/icons-react';
 import { toast } from 'sonner';
+
+import AddTemplatesFormContent from './AddTemplatesFormContent';
 
 import {
 	AlertDialog,
@@ -11,9 +14,7 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import AddTemplatesFormContent from './AddTemplatesFormContent';
 import { Button } from '@/components/ui/button';
-import { IconPlus } from '@tabler/icons-react';
 
 export default function AddTemplatesForm() {
 	const [open, setOpen] = useState(false);

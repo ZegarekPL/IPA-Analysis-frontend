@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { AlertDialogCancel } from '@radix-ui/react-alert-dialog';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { AlertDialogFooter } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { ClosedQuestion, CreateTemplates, Templates } from '@/features/dashboard/templates/db/api';
 import { createTemplates } from '@/features/dashboard/templates/db/api';
-import { AlertDialogFooter } from '@/components/ui/alert-dialog';
 
 interface TemplateFormProps {
 	initialData?: Templates;

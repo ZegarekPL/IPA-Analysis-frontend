@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
+import { z } from 'zod';
 
 import { appAPI } from '@/utils/appAPI';
-import { z } from 'zod';
 import { AppError, mapApiError } from '@/utils/getErrorMessage';
 
 export type ClosedQuestion = z.infer<typeof closedQuestionSchema>;
@@ -49,6 +49,21 @@ export type TemplateTableRow = {
 	updatedAt: string;
 	createdByIndex: string;
 };
+
+export type TemplatesSchemaWithoutCreatedByIndex = z.infer<typeof templatesSchemaWithoutCreatedByIndex>;
+
+export const templatesSchemaWithoutCreatedByIndex = z.object({
+	_id: z.string(),
+	name: z.string(),
+	description: z.string(),
+	closedQuestions: z.array(closedQuestionSchema),
+	openQuestion: z.object({
+		text: z.string(),
+	}),
+	createdBy: z.string(),
+	createdAt: z.date(),
+	updatedAt: z.date(),
+});
 
 export async function getTemplates({
 	page,
@@ -111,6 +126,27 @@ export async function createTemplates(templates: CreateTemplates) {
 		} else {
 			throw new Error('Error500');
 		}
+	}
+}
+
+export interface TemplatesById {
+	status: 'success';
+	data: TemplateTableRow;
+}
+
+export async function getTemplatesById(templateId: string): Promise<TemplatesById> {
+	try {
+		const response: AxiosResponse<TemplatesById> = await appAPI.get(`/api/v1/admin/templates/${templateId}`, {
+			withCredentials: true,
+		});
+
+		if (response.status === 200 && response.data?.status == 'success') {
+			console.log('Users fetched:', response.data.data);
+			return response.data;
+		}
+		throw new Error('Unexpected response');
+	} catch (error: any) {
+		throw new Error('Error500');
 	}
 }
 

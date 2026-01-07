@@ -26,8 +26,10 @@ import {
 	useReactTable,
 	VisibilityState,
 } from '@tanstack/react-table';
+import { LucideSearch } from 'lucide-react';
 import { z } from 'zod';
 
+import { changeUserRole } from '../db/api';
 import DeleteUsersForm from './Form/DeleteUsersForm';
 
 import { Button } from '@/components/ui/button';
@@ -39,12 +41,10 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { LucideSearch } from 'lucide-react';
-import { changeUserRole } from '../db/api';
-import { Input } from '@/components/ui/input';
 
 export const schema = z.object({
 	id: z.string(),

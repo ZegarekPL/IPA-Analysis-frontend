@@ -14,23 +14,24 @@ import {
 	IconGripVertical,
 	IconLayoutColumns,
 } from '@tabler/icons-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
 	ColumnDef,
 	ColumnFiltersState,
 	flexRender,
 	getCoreRowModel,
-	getFacetedRowModel,
-	getFacetedUniqueValues,
 	getFilteredRowModel,
-	getPaginationRowModel,
 	getSortedRowModel,
 	Row,
 	SortingState,
 	useReactTable,
 	VisibilityState,
 } from '@tanstack/react-table';
+import { LucideSearch } from 'lucide-react';
+import Link from 'next/link';
 import { z } from 'zod';
 
+import { joinGroup, leaveGroup } from '../db/api';
 import DeleteGroupForm from './Form/DeleteGroupForm';
 import EditGroupForm from './Form/EditGroupForm';
 
@@ -44,15 +45,12 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import Link from 'next/link';
-import { slugify } from '@/utils/slugify';
-import { Input } from '@/components/ui/input';
-import { LucideSearch } from 'lucide-react';
-import { joinGroup, leaveGroup } from '../db/api';
 import { GetUserSuccessResponse } from '@/features/auth/Login';
+import { slugify } from '@/utils/slugify';
 
 export const schema = z.object({
 	id: z.string(),
@@ -113,6 +111,22 @@ export function AllGroupsDataTable({
 	const [inputValue, setInputValue] = React.useState(search || '');
 
 	const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
+
+	const queryClient = useQueryClient();
+
+	const joinMutation = useMutation({
+		mutationFn: joinGroup,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['groups'] });
+		},
+	});
+
+	const leaveMutation = useMutation({
+		mutationFn: leaveGroup,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['groups'] });
+		},
+	});
 
 	const columns: ColumnDef<z.infer<typeof schema>>[] = React.useMemo(
 		() => [
@@ -224,9 +238,9 @@ export function AllGroupsDataTable({
 								onSelect={(e) => {
 									e.preventDefault();
 									if (row.original.isMember) {
-										leaveGroup(row.original.id);
+										leaveMutation.mutate(row.original.id);
 									} else {
-										joinGroup(row.original.id);
+										joinMutation.mutate(row.original.id);
 									}
 								}}
 							>

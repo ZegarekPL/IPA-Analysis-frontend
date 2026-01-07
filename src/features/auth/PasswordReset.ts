@@ -1,6 +1,7 @@
-import { appAPI } from '@/utils/appAPI';
 import { AxiosResponse } from 'axios';
 import { z } from 'zod';
+
+import { appAPI } from '@/utils/appAPI';
 
 export type PasswordResetResponse = {
 	status: string;

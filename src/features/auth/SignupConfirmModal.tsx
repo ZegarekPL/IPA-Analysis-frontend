@@ -1,17 +1,16 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogOverlay, DialogPortal, DialogTitle } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-
-import { signupConfirm, signupConfirmSchema, SignupBodyConfirm } from '@/features/auth/SignUp';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogOverlay, DialogPortal } from '@/components/ui/dialog';
-import { useEffect } from 'react';
+import { SignupBodyConfirm, signupConfirm, signupConfirmSchema } from '@/features/auth/SignUp';
 
 type Props = {
 	open: boolean;

@@ -1,7 +1,13 @@
 import { AxiosResponse } from 'axios';
+import { z } from 'zod';
+
+import {
+	Templates,
+	TemplatesSchemaWithoutCreatedByIndex,
+	templatesSchemaWithoutCreatedByIndex,
+} from '../../templates/db/api';
 
 import { appAPI } from '@/utils/appAPI';
-import { z } from 'zod';
 import { AppError, mapApiError } from '@/utils/getErrorMessage';
 
 export interface CreateTest {
@@ -46,7 +52,7 @@ export const testsSchema = z.object({
 	_id: z.string(),
 	name: z.string(),
 	description: z.string(),
-	template: z.string(),
+	template: templatesSchemaWithoutCreatedByIndex,
 	createdBy: z.string(),
 	startsAt: z.date(),
 	endsAt: z.date(),
@@ -58,7 +64,7 @@ export type TestsTableRow = {
 	id: string;
 	name: string;
 	description: string;
-	template: string;
+	template: TemplatesSchemaWithoutCreatedByIndex;
 	createdBy: string;
 	startsAt: string;
 	endsAt: string;
@@ -137,5 +143,39 @@ export async function editTests(testId: string, test: EditTests) {
 		} else {
 			throw new Error('Error500');
 		}
+	}
+}
+
+export interface TestById {
+	status: 'success';
+	data: {
+		id: string;
+		name: string;
+		description: string;
+		template: Templates;
+		createdBy: string;
+		startsAt: string;
+		endsAt: string;
+		active: boolean;
+		createdAt: string;
+	};
+}
+
+export async function getTestById(id: string): Promise<TestById> {
+	try {
+		const response: AxiosResponse<TestById> = await appAPI.get(`/api/v1/tests/${id}`, {
+			withCredentials: true,
+		});
+
+		if (response.status === 200 && response.data?.status == 'success') {
+			console.log('Users fetched:', response.data.data);
+			return response.data;
+		}
+		throw new Error('Unexpected response');
+	} catch (error: any) {
+		if (error.response?.status === 401) {
+			window.location.replace('/login');
+		}
+		throw new Error('Error500');
 	}
 }

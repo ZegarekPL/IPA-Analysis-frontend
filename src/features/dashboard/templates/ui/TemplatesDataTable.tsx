@@ -26,6 +26,12 @@ import {
 	useReactTable,
 	VisibilityState,
 } from '@tanstack/react-table';
+import { LucideSearch } from 'lucide-react';
+
+import CreateTestForm from '../../tests/ui/Form/CreateTestForm';
+import { TemplateTableRow } from '../db/api';
+import DeleteTemplatesForm from './Form/DeleteTemplatesForm';
+import EditTemplatesForm from './Form/EditTemplatesForm';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -37,15 +43,10 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { TemplateTableRow } from '../db/api';
-import EditTemplatesForm from './Form/EditTemplatesForm';
-import DeleteTemplatesForm from './Form/DeleteTemplatesForm';
-import CreateTestForm from '../../tests/ui/Form/CreateTestForm';
-import { Input } from '@/components/ui/input';
-import { LucideSearch } from 'lucide-react';
 
 function DragHandle({ id }: { id: string }) {
 	const { attributes, listeners } = useSortable({

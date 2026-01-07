@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { Moon, Sun } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
 
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,7 @@ import {
 
 export function ModeToggle() {
 	const { setTheme } = useTheme();
-
+	const t = useTranslations('Theme');
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -25,9 +26,9 @@ export function ModeToggle() {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end">
-				<DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => setTheme('system')}>System</DropdownMenuItem>
+				<DropdownMenuItem onClick={() => setTheme('light')}>{t('light')}</DropdownMenuItem>
+				<DropdownMenuItem onClick={() => setTheme('dark')}>{t('dark')}</DropdownMenuItem>
+				<DropdownMenuItem onClick={() => setTheme('system')}>{t('system')}</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

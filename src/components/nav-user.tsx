@@ -1,11 +1,12 @@
 'use client';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ChevronsUpDown, LogIn, LogOut, Settings, User } from 'lucide-react';
+import { ChevronsUpDown, LogIn, LogOut, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -20,6 +21,7 @@ import { getUser } from '@/features/auth/Login';
 import { logout } from '@/features/auth/Logout';
 
 export function NavUser() {
+	const t = useTranslations('Sidebar');
 	const { isMobile } = useSidebar();
 	const queryClient = useQueryClient();
 	const router = useRouter();
@@ -41,7 +43,7 @@ export function NavUser() {
 					<SidebarMenuButton asChild size="lg">
 						<Link href="/login" className="flex items-center gap-2">
 							<LogIn className="h-4 w-4" />
-							<span>Zaloguj się</span>
+							<span>{t('login')}</span>
 						</Link>
 					</SidebarMenuButton>
 				</SidebarMenuItem>
@@ -105,21 +107,14 @@ export function NavUser() {
 							<DropdownMenuItem asChild>
 								<Link href="/user">
 									<User className="h-4 w-4" />
-									Account
-								</Link>
-							</DropdownMenuItem>
-
-							<DropdownMenuItem asChild>
-								<Link href="/settings">
-									<Settings className="h-4 w-4" />
-									Settings
+									{t('account')}
 								</Link>
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem onClick={handleLogout}>
 							<LogOut />
-							Log out
+							{t('logout')}
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

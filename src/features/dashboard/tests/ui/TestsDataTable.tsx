@@ -26,6 +26,11 @@ import {
 	useReactTable,
 	VisibilityState,
 } from '@tanstack/react-table';
+import { LucideSearch } from 'lucide-react';
+
+import CreateTestForm from '../../tests/ui/Form/CreateTestForm';
+import { TestsTableRow } from '../db/api';
+import EditTestsForm from './Form/EditTestsForm';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -36,15 +41,10 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { TestsTableRow } from '../db/api';
-
-import CreateTestForm from '../../tests/ui/Form/CreateTestForm';
-import { Input } from '@/components/ui/input';
-import { LucideSearch } from 'lucide-react';
-import EditTestsForm from './Form/EditTestsForm';
 
 function DragHandle({ id }: { id: string }) {
 	const { attributes, listeners } = useSortable({
@@ -121,7 +121,11 @@ const columns: ColumnDef<TestsTableRow>[] = [
 		accessorKey: 'template',
 		header: 'Template',
 		cell: ({ row }) => {
-			return row.original.template;
+			return (
+				<div className="truncate max-w-48" title={row.original.template.name}>
+					{row.original.template.name}
+				</div>
+			);
 		},
 	},
 	{

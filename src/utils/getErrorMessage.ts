@@ -1,5 +1,4 @@
 export function mapApiError(error: any): string {
-	console.log('mapApiError:', error);
 	if (!error?.response) {
 		return 'INTERNAL_SERVER_ERROR';
 	}

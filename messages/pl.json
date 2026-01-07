@@ -1,4 +1,18 @@
 {
+	"Theme": {
+		"light": "Jasny",
+		"dark": "Ciemny",
+		"system": "Systemowy"
+	},
+	"Language": {
+		"change_language": "Zmień język",
+		"en": "Angielski",
+		"pl": "Polski"
+	},
+	"Roles": {
+		"user": "Użytkownik",
+		"admin": "Admin"
+	},
 	"Errors": {
 		"Common": {
 			"UNKNOWN_ERROR": "Wystąpił nieoczekiwany błąd.",
@@ -18,15 +32,19 @@
 		"try_again": "Spróbuj ponownie",
 		"loading": "Ładowanie..."
 	},
+	"Sidebar": {
+		"main": "Główne",
+		"groups": "Grupy",
+		"admin": "Panel admina",
+		"users": "Użytkownicy",
+		"templates": "Szablony",
+		"tests": "Testy",
+		"account": "Konto",
+		"login": "Zaloguj się",
+		"logout": "Wyloguj się"
+	},
 	"UsersData": {
 		"title": "Użytkownicy"
-	},
-	"Navbar": {
-		"home": "Strona główna",
-		"login": "Zaloguj się"
-	},
-	"LocaleSelector": {
-		"change_language": "Zmień język"
 	},
 	"HomePage": {
 		"title": "Twórz szablony, generuj testy, analizuj wyniki",
@@ -62,5 +80,17 @@
 		"sign_in_button": "Zaloguj się",
 		"back_to_login": "Wróc na stronę logowania",
 		"success": "Zalogowano się"
+	},
+	"UserPage": {
+		"error": "Nie udało się załadować profilu",
+		"profile_information": "Informację o użytkowniku",
+		"username": "Nazwa użytkownika",
+		"email": "Email",
+		"account_details": "Szczegóły konta",
+		"created_at": "Utworzono",
+		"last_updated": "Ostatnia aktualizacja",
+		"settings": "Ustawienia",
+		"preferred_language": "Preferowany język",
+		"preferred_theme": "Preferowany motyw"
 	}
 }

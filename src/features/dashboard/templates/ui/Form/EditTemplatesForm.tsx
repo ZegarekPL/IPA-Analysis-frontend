@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import { EditTemplatesFormProps } from '../../db/api';
 import EditTemplatesFormContent from './EditTemplatesFormContent';
 
 import {
@@ -13,7 +14,6 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { EditTemplatesFormProps } from '../../db/api';
 
 export default function EditTemplatesForm({ template }: EditTemplatesFormProps) {
 	const [open, setOpen] = useState(false);

@@ -4,10 +4,11 @@ import * as React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 
-import { formatDate } from '@/utils/formatDate';
-import { UsersDataTable } from './UsersDataTable';
 import { getUsers } from '../db/api';
-import { getErrorMessage } from '@/utils/getErrorMessage';
+import { UsersDataTable } from './UsersDataTable';
+
+import { formatDate } from '@/utils/formatDate';
+import { AppError, getErrorMessage } from '@/utils/getErrorMessage';
 
 export function UsersData() {
 	const t = useTranslations();
@@ -39,13 +40,17 @@ export function UsersData() {
 	}
 
 	if (isError) {
+		const isForbidden = error instanceof AppError && error.errorCode === 'FORBIDDEN';
+
 		return (
 			<div className="text-center mt-10">
 				<p className="text-red-500">{getErrorMessage(t, error)}</p>
 
-				<button onClick={() => refetch()} className="mt-4 underline text-sm">
-					{t('Common.try_again')}
-				</button>
+				{!isForbidden && (
+					<button onClick={() => refetch()} className="mt-4 underline text-sm">
+						{t('Common.try_again')}
+					</button>
+				)}
 			</div>
 		);
 	}
