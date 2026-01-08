@@ -318,7 +318,6 @@ export function UsersDataTable({
 						{table.getFilteredSelectedRowModel().rows.length} of {total} row(s) selected.
 					</div>
 					<div className="flex w-full items-center gap-8 lg:w-fit">
-						{/* Rows per page */}
 						<div className="hidden items-center gap-2 lg:flex">
 							<Label htmlFor="rows-per-page" className="text-sm font-medium">
 								Rows per page
@@ -326,8 +325,8 @@ export function UsersDataTable({
 							<Select
 								value={rowsPerPage.toString()}
 								onValueChange={(value) => {
-									setRowsPerPage(Number(value)); // zmienia backendowy rowsPerPage
-									setPage(1); // reset strony przy zmianie page size
+									setRowsPerPage(Number(value));
+									setPage(1);
 								}}
 							>
 								<SelectTrigger size="sm" className="w-20" id="rows-per-page">
@@ -343,12 +342,10 @@ export function UsersDataTable({
 							</Select>
 						</div>
 
-						{/* Page info */}
 						<div className="flex w-fit items-center justify-center text-sm font-medium">
 							Page {page} of {Math.ceil(total / rowsPerPage)}
 						</div>
 
-						{/* Pagination buttons */}
 						<div className="ml-auto flex items-center gap-2 lg:ml-0">
 							<Button
 								variant="outline"

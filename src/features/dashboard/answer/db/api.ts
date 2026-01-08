@@ -1,4 +1,7 @@
+import { AxiosResponse } from 'axios';
+
 import { appAPI } from '@/utils/appAPI';
+import { AppError, mapApiError } from '@/utils/getErrorMessage';
 
 export interface Answer {
 	closedAnswers: ClosedAnswer[];
@@ -29,5 +32,31 @@ export async function subminAnswer(testId: string, answer: Answer) {
 		} else {
 			throw new Error('Error500');
 		}
+	}
+}
+
+export interface AvrageAnswersForTestById {
+	avgImportance: number;
+	avgPerformance: number;
+}
+
+export async function getAvrageAnswersForTestById(testId: string): Promise<AvrageAnswersForTestById> {
+	try {
+		const response: AxiosResponse<any> = await appAPI.get(`/api/v1/admin/answers/results/${testId}`, {
+			withCredentials: true,
+		});
+		if (response.data.status === 'failed') {
+			throw new AppError(response.data.message || 'UNKNOWN_ERROR', response.status);
+		}
+
+		return response.data.data as AvrageAnswersForTestById;
+	} catch (error: any) {
+		const errorCode = mapApiError(error);
+
+		if (errorCode === 'UNAUTHORIZED') {
+			window.location.replace('/login');
+			throw new AppError('UNAUTHORIZED', 401);
+		}
+		throw new AppError(errorCode, error.response?.status);
 	}
 }

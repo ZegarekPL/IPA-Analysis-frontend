@@ -68,7 +68,6 @@ export default function SubmitAnswerFormContent({
 
 	return (
 		<div className="space-y-6">
-			{/* Closed questions */}
 			<div>
 				<h3 className="font-semibold mb-3">Pytania zamknięte</h3>
 
@@ -94,7 +93,6 @@ export default function SubmitAnswerFormContent({
 				))}
 			</div>
 
-			{/* Open question */}
 			<div>
 				<h3 className="font-semibold mb-2">Pytanie otwarte</h3>
 				<p className="mb-2 text-sm text-muted-foreground">{openQuestion}</p>

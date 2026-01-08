@@ -1,16 +1,18 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import SubmitAnswerForm from '../answer/ui/Form/SubmitAnswerForm';
 
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getGroupDetails, Tests, UserGroup } from '@/features/dashboard/groups/db/api';
 import { formatDate } from '@/utils/formatDate';
 import { getErrorMessage } from '@/utils/getErrorMessage';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
+import { slugify } from '@/utils/slugify';
 
 interface Props {
 	group: string;
@@ -39,11 +41,11 @@ export default function GroupPageClient({ group }: Props) {
 			</div>
 		);
 	}
-	
+
 	const isTestActive = (startsAt: string | Date, endsAt: string | Date) => {
-		const now = new Date().getTime()
-		return now >= new Date(startsAt).getTime() && now <= new Date(endsAt).getTime()
-		}
+		const now = new Date().getTime();
+		return now >= new Date(startsAt).getTime() && now <= new Date(endsAt).getTime();
+	};
 
 	return (
 		<div className="p-6 max-w-5xl mx-auto space-y-6">
@@ -67,52 +69,61 @@ export default function GroupPageClient({ group }: Props) {
 			</Card>
 
 			<div className="space-y-4">
-			<h2 className="text-xl font-semibold">Testy</h2>
+				<h2 className="text-xl font-semibold">Testy</h2>
 
-			{data!.tests.length === 0 ? (
-				<p className="text-muted-foreground">Brak przypisanych testów</p>
-			) : (
-				<Table>
-				<TableHeader>
-					<TableRow>
-					<TableHead>ID testu</TableHead>
-					<TableHead>Przypisano</TableHead>
-					<TableHead>Rozpoczęcie</TableHead>
-					<TableHead>Zakończenie</TableHead>
-					<TableHead className="text-right">Akcje</TableHead>
-					</TableRow>
-				</TableHeader>
+				{data!.tests.length === 0 ? (
+					<p className="text-muted-foreground">Brak przypisanych testów</p>
+				) : (
+					<Table>
+						<TableHeader>
+							<TableRow>
+								<TableHead>ID testu</TableHead>
+								<TableHead>Przypisano</TableHead>
+								<TableHead>Rozpoczęcie</TableHead>
+								<TableHead>Zakończenie</TableHead>
+								<TableHead className="text-right">Rozwiąż test</TableHead>
+							</TableRow>
+						</TableHeader>
 
-				<TableBody>
-					{data!.tests.map((test: Tests, idx: number) => {
-						const active = isTestActive(test.startsAt, test.endsAt)
+						<TableBody>
+							{data!.tests.map((test: Tests, idx: number) => {
+								const active = isTestActive(test.startsAt, test.endsAt);
+								const testName = test.testId;
+								const testId = test.testId;
 
-						return (
-						<TableRow key={idx}>
-							<TableCell className="font-medium">
-							{test.testId}
-							</TableCell>
-							<TableCell>{formatDate(test.assignedAt)}</TableCell>
-							<TableCell>{formatDate(test.startsAt)}</TableCell>
-							<TableCell>{formatDate(test.endsAt)}</TableCell>
+								const slug = slugify(testName);
+								return (
+									<TableRow key={idx}>
+										<TableCell className="font-medium">
+											<Link
+												href={`/dashboard/tests/${slug}-${testId}`}
+												className="text-primary hover:underline font-medium"
+											>
+												<div className="truncate max-w-xs" title={testName}>
+													{testName}
+												</div>
+											</Link>
+										</TableCell>
 
-							<TableCell className="text-right">
-								{active ? (
-									<SubmitAnswerForm testId={test.testId} />
-								) : (
-									<Button disabled variant="secondary">
-									Niedostępny
-									</Button>
-								)}
-								</TableCell>
+										<TableCell>{formatDate(test.assignedAt)}</TableCell>
+										<TableCell>{formatDate(test.startsAt)}</TableCell>
+										<TableCell>{formatDate(test.endsAt)}</TableCell>
 
-						</TableRow>
-						)
-					})}
-					</TableBody>
-
-				</Table>
-			)}
+										<TableCell className="text-right">
+											{active ? (
+												<SubmitAnswerForm testId={test.testId} />
+											) : (
+												<Button disabled variant="secondary">
+													Niedostępny
+												</Button>
+											)}
+										</TableCell>
+									</TableRow>
+								);
+							})}
+						</TableBody>
+					</Table>
+				)}
 			</div>
 
 			<div className="space-y-4">
@@ -124,18 +135,18 @@ export default function GroupPageClient({ group }: Props) {
 					<Table>
 						<TableHeader>
 							<TableRow>
-							<TableHead>Indeks</TableHead>
-							<TableHead>Email</TableHead>
-							<TableHead>Rola</TableHead>
+								<TableHead>Indeks</TableHead>
+								<TableHead>Email</TableHead>
+								<TableHead>Rola</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
 							{data!.members.map((member: UserGroup, idx: number) => (
-							<TableRow key={idx}>
-								<TableCell className="font-medium">{member.index}</TableCell>
-								<TableCell>{member.mail}</TableCell>
-								<TableCell>{member.role}</TableCell>
-							</TableRow>
+								<TableRow key={idx}>
+									<TableCell className="font-medium">{member.index}</TableCell>
+									<TableCell>{member.mail}</TableCell>
+									<TableCell>{member.role}</TableCell>
+								</TableRow>
 							))}
 						</TableBody>
 					</Table>

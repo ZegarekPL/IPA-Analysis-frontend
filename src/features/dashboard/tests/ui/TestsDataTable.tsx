@@ -27,8 +27,8 @@ import {
 	VisibilityState,
 } from '@tanstack/react-table';
 import { LucideSearch } from 'lucide-react';
+import Link from 'next/link';
 
-import CreateTestForm from '../../tests/ui/Form/CreateTestForm';
 import { TestsTableRow } from '../db/api';
 import EditTestsForm from './Form/EditTestsForm';
 
@@ -45,6 +45,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { slugify } from '@/utils/slugify';
 
 function DragHandle({ id }: { id: string }) {
 	const { attributes, listeners } = useSortable({
@@ -98,10 +99,16 @@ const columns: ColumnDef<TestsTableRow>[] = [
 		accessorKey: 'name',
 		header: 'Name',
 		cell: ({ row }) => {
+			const testName = row.original.name;
+			const testId = row.original.id;
+
+			const slug = slugify(testName);
 			return (
-				<div className="truncate max-w-xs" title={row.original.name}>
-					{row.original.name}
-				</div>
+				<Link href={`/dashboard/tests/${slug}-${testId}`} className="text-primary hover:underline font-medium">
+					<div className="truncate max-w-xs" title={testName}>
+						{testName}
+					</div>
+				</Link>
 			);
 		},
 		enableHiding: false,
@@ -340,7 +347,6 @@ export function TestsDataTable({
 						{table.getFilteredSelectedRowModel().rows.length} of {total} row(s) selected.
 					</div>
 					<div className="flex w-full items-center gap-8 lg:w-fit">
-						{/* Rows per page */}
 						<div className="hidden items-center gap-2 lg:flex">
 							<Label htmlFor="rows-per-page" className="text-sm font-medium">
 								Rows per page
@@ -348,8 +354,8 @@ export function TestsDataTable({
 							<Select
 								value={rowsPerPage.toString()}
 								onValueChange={(value) => {
-									setRowsPerPage(Number(value)); // zmienia backendowy rowsPerPage
-									setPage(1); // reset strony przy zmianie page size
+									setRowsPerPage(Number(value));
+									setPage(1);
 								}}
 							>
 								<SelectTrigger size="sm" className="w-20" id="rows-per-page">
@@ -365,12 +371,10 @@ export function TestsDataTable({
 							</Select>
 						</div>
 
-						{/* Page info */}
 						<div className="flex w-fit items-center justify-center text-sm font-medium">
 							Page {page} of {Math.ceil(total / rowsPerPage)}
 						</div>
 
-						{/* Pagination buttons */}
 						<div className="ml-auto flex items-center gap-2 lg:ml-0">
 							<Button
 								variant="outline"
