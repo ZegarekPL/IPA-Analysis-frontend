@@ -113,7 +113,6 @@ export async function createTemplates(templates: CreateTemplates) {
 			withCredentials: true,
 		});
 		if (response.status === 201) {
-			console.log('response', response);
 			return response.data.data;
 		} else if (response.status === 401) {
 			window.location.replace('/login');

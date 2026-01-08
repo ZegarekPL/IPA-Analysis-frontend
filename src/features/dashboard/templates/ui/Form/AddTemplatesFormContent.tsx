@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { AlertDialogFooter } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { ClosedQuestion, CreateTemplates, Templates } from '@/features/dashboard/templates/db/api';
+import { ClosedQuestion, ClosedQuestionForm, CreateTemplates, Templates } from '@/features/dashboard/templates/db/api';
 import { createTemplates } from '@/features/dashboard/templates/db/api';
 
 interface TemplateFormProps {
@@ -19,7 +19,7 @@ export default function AddTemplatesFormContent({ initialData, onCancel, onSucce
 	const [name, setName] = useState(initialData?.name || '');
 	const [description, setDescription] = useState(initialData?.description || '');
 	const [openQuestion, setOpenQuestion] = useState(initialData?.openQuestion.text || '');
-	const [closedQuestions, setClosedQuestions] = useState<ClosedQuestion[]>(
+	const [closedQuestions, setClosedQuestions] = useState<ClosedQuestionForm[]>(
 		initialData?.closedQuestions || [{ text: '', type: 'importance' }],
 	);
 
