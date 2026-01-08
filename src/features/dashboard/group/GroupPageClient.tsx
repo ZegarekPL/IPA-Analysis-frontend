@@ -9,6 +9,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { getGroupDetails, Tests, UserGroup } from '@/features/dashboard/groups/db/api';
 import { formatDate } from '@/utils/formatDate';
 import { getErrorMessage } from '@/utils/getErrorMessage';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
 
 interface Props {
 	group: string;
@@ -37,7 +39,12 @@ export default function GroupPageClient({ group }: Props) {
 			</div>
 		);
 	}
-	console.log(data);
+	
+	const isTestActive = (startsAt: string | Date, endsAt: string | Date) => {
+		const now = new Date().getTime()
+		return now >= new Date(startsAt).getTime() && now <= new Date(endsAt).getTime()
+		}
+
 	return (
 		<div className="p-6 max-w-5xl mx-auto space-y-6">
 			<Card>
@@ -60,38 +67,79 @@ export default function GroupPageClient({ group }: Props) {
 			</Card>
 
 			<div className="space-y-4">
-				<h2 className="text-xl font-semibold">Testy</h2>
-				{data!.tests.length === 0 && <p className="text-muted-foreground">Brak przypisanych testów</p>}
-				{data!.tests.map((test: Tests, idx: number) => (
-					<Card key={idx}>
-						<CardContent className="flex justify-between items-center">
-							<div>
-								<p className="font-medium">{test.testId}</p>
-								<p className="text-sm text-muted-foreground">
-									Przypisano: {formatDate(test.assignedAt)} | Rozpoczęcie: {formatDate(test.startsAt)} | Zakończenie:{' '}
-									{formatDate(test.endsAt)}
-								</p>
-								<SubmitAnswerForm testId={test.testId} />
-							</div>
-						</CardContent>
-					</Card>
-				))}
+			<h2 className="text-xl font-semibold">Testy</h2>
+
+			{data!.tests.length === 0 ? (
+				<p className="text-muted-foreground">Brak przypisanych testów</p>
+			) : (
+				<Table>
+				<TableHeader>
+					<TableRow>
+					<TableHead>ID testu</TableHead>
+					<TableHead>Przypisano</TableHead>
+					<TableHead>Rozpoczęcie</TableHead>
+					<TableHead>Zakończenie</TableHead>
+					<TableHead className="text-right">Akcje</TableHead>
+					</TableRow>
+				</TableHeader>
+
+				<TableBody>
+					{data!.tests.map((test: Tests, idx: number) => {
+						const active = isTestActive(test.startsAt, test.endsAt)
+
+						return (
+						<TableRow key={idx}>
+							<TableCell className="font-medium">
+							{test.testId}
+							</TableCell>
+							<TableCell>{formatDate(test.assignedAt)}</TableCell>
+							<TableCell>{formatDate(test.startsAt)}</TableCell>
+							<TableCell>{formatDate(test.endsAt)}</TableCell>
+
+							<TableCell className="text-right">
+								{active ? (
+									<SubmitAnswerForm testId={test.testId} />
+								) : (
+									<Button disabled variant="secondary">
+									Niedostępny
+									</Button>
+								)}
+								</TableCell>
+
+						</TableRow>
+						)
+					})}
+					</TableBody>
+
+				</Table>
+			)}
 			</div>
 
 			<div className="space-y-4">
 				<h2 className="text-xl font-semibold">Członkowie</h2>
-				{data!.members.length === 0 && <p className="text-muted-foreground">Brak przypisanych członków</p>}
-				{data!.members.map((member: UserGroup, idx: number) => (
-					<Card key={idx}>
-						<CardContent className="flex justify-between items-center">
-							<div>
-								<p className="font-medium">{member.index}</p>
-								<p className="font-medium">{member.mail}</p>
-								<p className="font-medium">{member.role}</p>
-							</div>
-						</CardContent>
-					</Card>
-				))}
+
+				{data!.members.length === 0 ? (
+					<p className="text-muted-foreground">Brak przypisanych członków</p>
+				) : (
+					<Table>
+						<TableHeader>
+							<TableRow>
+							<TableHead>Indeks</TableHead>
+							<TableHead>Email</TableHead>
+							<TableHead>Rola</TableHead>
+							</TableRow>
+						</TableHeader>
+						<TableBody>
+							{data!.members.map((member: UserGroup, idx: number) => (
+							<TableRow key={idx}>
+								<TableCell className="font-medium">{member.index}</TableCell>
+								<TableCell>{member.mail}</TableCell>
+								<TableCell>{member.role}</TableCell>
+							</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				)}
 			</div>
 		</div>
 	);

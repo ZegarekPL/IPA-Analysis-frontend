@@ -43,10 +43,10 @@ export async function createTest(test: CreateTest) {
 
 export interface GetTestsResponse {
 	total: number;
-	data: Tests[];
+	data: TestsWithTemplates[];
 }
 
-export type Tests = z.infer<typeof testsSchema>;
+export type TestsWithTemplates = z.infer<typeof testsSchema>;
 
 export const testsSchema = z.object({
 	_id: z.string(),

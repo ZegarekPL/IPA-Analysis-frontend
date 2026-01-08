@@ -186,9 +186,6 @@ const columns: ColumnDef<TestsTableRow>[] = [
 							}}
 						/>
 					</DropdownMenuItem>
-					<DropdownMenuItem asChild>
-						<CreateTestForm templateId={row.original.id} />
-					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
 		),
