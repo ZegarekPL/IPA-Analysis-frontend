@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { IconPlus } from '@tabler/icons-react';
+import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
 import AddGroupFormContent from './AddGroupFormContent';
@@ -30,7 +30,7 @@ export default function AddGroupForm() {
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<Button variant="outline" size="sm">
-					<IconPlus />
+					<Plus />
 					<span className="hidden lg:inline">Create Group</span>
 				</Button>
 			</AlertDialogTrigger>

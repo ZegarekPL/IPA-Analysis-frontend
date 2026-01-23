@@ -1,19 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { type UniqueIdentifier } from '@dnd-kit/core';
-import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import {
-	IconChevronDown,
-	IconChevronLeft,
-	IconChevronRight,
-	IconChevronsLeft,
-	IconChevronsRight,
-	IconDotsVertical,
-	IconGripVertical,
-	IconLayoutColumns,
-} from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
 	ColumnDef,
@@ -22,12 +9,20 @@ import {
 	getCoreRowModel,
 	getFilteredRowModel,
 	getSortedRowModel,
-	Row,
 	SortingState,
 	useReactTable,
 	VisibilityState,
 } from '@tanstack/react-table';
-import { LucideSearch } from 'lucide-react';
+import {
+	ChevronDown,
+	ChevronLeft,
+	ChevronRight,
+	ChevronsLeft,
+	ChevronsRight,
+	MoreVertical,
+	LayoutGrid,
+	Search,
+} from 'lucide-react';
 import Link from 'next/link';
 import { z } from 'zod';
 
@@ -62,25 +57,6 @@ export const schema = z.object({
 	updatedAt: z.string(),
 });
 
-function DragHandle({ id }: { id: string }) {
-	const { attributes, listeners } = useSortable({
-		id,
-	});
-
-	return (
-		<Button
-			{...attributes}
-			{...listeners}
-			variant="ghost"
-			size="icon"
-			className="text-muted-foreground size-7 hover:bg-transparent"
-		>
-			<IconGripVertical className="text-muted-foreground size-3" />
-			<span className="sr-only">Drag to reorder</span>
-		</Button>
-	);
-}
-
 interface AllGroupsDataTableProps {
 	data: z.infer<typeof schema>[];
 	page: number;
@@ -110,8 +86,6 @@ export function AllGroupsDataTable({
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [inputValue, setInputValue] = React.useState(search || '');
 
-	const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
-
 	const queryClient = useQueryClient();
 
 	const joinMutation = useMutation({
@@ -130,11 +104,6 @@ export function AllGroupsDataTable({
 
 	const columns: ColumnDef<z.infer<typeof schema>>[] = React.useMemo(
 		() => [
-			{
-				id: 'drag',
-				header: () => null,
-				cell: ({ row }) => <DragHandle id={row.original.id} />,
-			},
 			{
 				id: 'select',
 				header: ({ table }) => (
@@ -218,7 +187,7 @@ export function AllGroupsDataTable({
 								className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
 								size="icon"
 							>
-								<IconDotsVertical />
+								<MoreVertical />
 								<span className="sr-only">Open menu</span>
 							</Button>
 						</DropdownMenuTrigger>
@@ -316,17 +285,17 @@ export function AllGroupsDataTable({
 							setPage(1);
 						}}
 					>
-						<LucideSearch className="w-4 h-4" />
+						<Search className="w-4 h-4" />
 					</Button>
 				</div>
 				<div className="flex items-center gap-2">
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="outline" size="sm">
-								<IconLayoutColumns />
+								<LayoutGrid />
 								<span className="hidden lg:inline">Customize Columns</span>
 								<span className="lg:hidden">Columns</span>
-								<IconChevronDown />
+								<ChevronDown />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end" className="w-56">
@@ -367,11 +336,13 @@ export function AllGroupsDataTable({
 						</TableHeader>
 						<TableBody className="**:data-[slot=table-cell]:first:w-8">
 							{table.getRowModel().rows?.length ? (
-								<SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
-									{table.getRowModel().rows.map((row) => (
-										<DraggableRow key={row.id} row={row} />
-									))}
-								</SortableContext>
+								table.getRowModel().rows.map((row) => (
+									<TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+										{row.getVisibleCells().map((cell) => (
+											<TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+										))}
+									</TableRow>
+								))
 							) : (
 								<TableRow>
 									<TableCell colSpan={columns.length} className="h-24 text-center">
@@ -423,7 +394,7 @@ export function AllGroupsDataTable({
 								disabled={page === 1}
 							>
 								<span className="sr-only">Go to first page</span>
-								<IconChevronsLeft />
+								<ChevronsLeft />
 							</Button>
 							<Button
 								variant="outline"
@@ -433,7 +404,7 @@ export function AllGroupsDataTable({
 								disabled={page === 1}
 							>
 								<span className="sr-only">Go to previous page</span>
-								<IconChevronLeft />
+								<ChevronLeft />
 							</Button>
 							<Button
 								variant="outline"
@@ -443,7 +414,7 @@ export function AllGroupsDataTable({
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
 								<span className="sr-only">Go to next page</span>
-								<IconChevronRight />
+								<ChevronRight />
 							</Button>
 							<Button
 								variant="outline"
@@ -453,7 +424,7 @@ export function AllGroupsDataTable({
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
 								<span className="sr-only">Go to last page</span>
-								<IconChevronsRight />
+								<ChevronsRight />
 							</Button>
 						</div>
 					</div>
@@ -463,25 +434,3 @@ export function AllGroupsDataTable({
 	);
 }
 
-function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
-	const { transform, transition, setNodeRef, isDragging } = useSortable({
-		id: row.original.id,
-	});
-
-	return (
-		<TableRow
-			data-state={row.getIsSelected() && 'selected'}
-			data-dragging={isDragging}
-			ref={setNodeRef}
-			className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-			style={{
-				transform: CSS.Transform.toString(transform),
-				transition: transition,
-			}}
-		>
-			{row.getVisibleCells().map((cell) => (
-				<TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-			))}
-		</TableRow>
-	);
-}
