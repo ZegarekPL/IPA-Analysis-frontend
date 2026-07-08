@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { getTestById } from '@/features/dashboard/tests/db/api';
+import { useTranslations } from 'next-intl';
 
 interface SubmitAnswerFormProps {
 	testId: string;
@@ -23,6 +24,7 @@ interface SubmitAnswerFormProps {
 
 export default function SubmitAnswerForm({ testId }: SubmitAnswerFormProps) {
 	const [open, setOpen] = useState(false);
+	const t = useTranslations();	
 
 	const { data, isLoading, isError } = useQuery({
 		queryKey: ['test', testId],
@@ -30,10 +32,8 @@ export default function SubmitAnswerForm({ testId }: SubmitAnswerFormProps) {
 		enabled: open,
 	});
 
-	console.log('testData', data);
-
 	const handleSuccess = () => {
-		toast.success('Odpowiedzi wysłane 🎉', {
+		toast.success('Odpowiedzi wysłane', {
 			description: 'Twoje odpowiedzi zostały zapisane.',
 		});
 		setOpen(false);
@@ -42,17 +42,17 @@ export default function SubmitAnswerForm({ testId }: SubmitAnswerFormProps) {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
-				<Button className="mt-4 w-full">Take Test</Button>
+				<Button className="w-full">{t('SubmitAnswerForm.take_test')}</Button>
 			</AlertDialogTrigger>
 
 			<AlertDialogContent className="max-w-2xl">
 				<AlertDialogHeader>
-					<AlertDialogTitle>Rozwiąż test</AlertDialogTitle>
-					<AlertDialogDescription>Odpowiedz na wszystkie pytania i zapisz test.</AlertDialogDescription>
+					<AlertDialogTitle>{t('SubmitAnswerForm.take_the_test')}</AlertDialogTitle>
+					<AlertDialogDescription>{t('SubmitAnswerForm.answer_questions')}</AlertDialogDescription>
 				</AlertDialogHeader>
 
-				{isLoading && <p>Ładowanie pytań...</p>}
-				{isError && <p className="text-red-500">Błąd ładowania testu</p>}
+				{isLoading && <p>{t('SubmitAnswerForm.loading_questions')}</p>}
+				{isError && <p className="text-red-500">{t('SubmitAnswerForm.error_loading_test')}</p>}
 
 				{data && (
 					<SubmitAnswerFormContent

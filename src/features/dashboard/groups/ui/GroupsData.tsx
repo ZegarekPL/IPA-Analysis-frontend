@@ -86,8 +86,8 @@ export function GroupsTabs() {
 		>
 			<div className="flex items-center justify-between px-4 lg:px-6">
 				<TabsList>
-					<TabsTrigger value="all">All Groups</TabsTrigger>
-					<TabsTrigger value="my">My Groups</TabsTrigger>
+					<TabsTrigger value="all">{t('GroupsTabs.all_groups')}</TabsTrigger>
+					<TabsTrigger value="my">{t('GroupsTabs.my_groups')}</TabsTrigger>
 				</TabsList>
 				{userData.data.user.role === 'admin' && <AddGroupForm />}
 			</div>

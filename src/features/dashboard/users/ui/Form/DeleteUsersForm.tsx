@@ -17,6 +17,7 @@ import {
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 interface DeleteUsersProps {
 	user: any;
@@ -25,19 +26,20 @@ interface DeleteUsersProps {
 export default function DeleteUsersForm({ user }: DeleteUsersProps) {
 	const [open, setOpen] = useState(false);
 	const queryClient = useQueryClient();
+	const t = useTranslations();
 
 	const deleteMutation = useMutation({
 		mutationFn: () => deleteUser(user.id),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['users'] });
-			toast.success('Użytkownik usunięty 🗑️', {
-				description: 'Użytkownik został pomyślnie usunięty.',
+			toast.success(t("DeleteUsersForm.toast_title"), {
+				description: t("DeleteUsersForm.toast_description"),
 			});
 			setOpen(false);
 		},
 		onError: (error) => {
-			console.error('Błąd podczas usuwania użytkownika:', error);
-			toast.error('Nie udało się usunąć użytkownika');
+			console.error('t("DeleteUsersForm.error_deleting_form")', error);
+			toast.error(t("DeleteUsersForm.error_deleting_form_description"));
 		},
 	});
 
@@ -48,22 +50,22 @@ export default function DeleteUsersForm({ user }: DeleteUsersProps) {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
-				<span>Usuń użytkownika</span>
+				<span>{t('DeleteUsersForm.delete_user')}</span>
 			</AlertDialogTrigger>
 
 			<AlertDialogContent className="max-w-md">
 				<AlertDialogHeader>
-					<AlertDialogTitle>Potwierdź usunięcie</AlertDialogTitle>
+					<AlertDialogTitle>{t('DeleteUsersForm.confirm_delete')}</AlertDialogTitle>
 					<AlertDialogDescription>
-						Czy na pewno chcesz usunąć użytkownika? Operacji nie da się cofnąć.
+						{t('DeleteUsersForm.remove_user')}
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 
 				<AlertDialogFooter>
 					<Button variant="destructive" onClick={handleConfirm} disabled={deleteMutation.isPending}>
-						{deleteMutation.isPending ? 'Usuwanie...' : 'Potwierdzam'}
+						{deleteMutation.isPending ? t('DeleteUsersForm.deleting') : t('DeleteUsersForm.confirm')}
 					</Button>
-					<AlertDialogCancel>Anuluj</AlertDialogCancel>
+					<AlertDialogCancel>{t('DeleteUsersForm.cancel')}</AlertDialogCancel>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>

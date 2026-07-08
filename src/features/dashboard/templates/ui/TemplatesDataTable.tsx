@@ -47,160 +47,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-
-function DragHandle({ id }: { id: string }) {
-	const { attributes, listeners } = useSortable({
-		id,
-	});
-
-	return (
-		<Button
-			{...attributes}
-			{...listeners}
-			variant="ghost"
-			size="icon"
-			className="text-muted-foreground size-7 hover:bg-transparent"
-		>
-			<IconGripVertical className="text-muted-foreground size-3" />
-			<span className="sr-only">Drag to reorder</span>
-		</Button>
-	);
-}
-
-const columns: ColumnDef<TemplateTableRow>[] = [
-	{
-		id: 'drag',
-		header: () => null,
-		cell: ({ row }) => <DragHandle id={row.original.id} />,
-	},
-	{
-		id: 'select',
-		header: ({ table }) => (
-			<div className="flex items-center justify-center">
-				<Checkbox
-					checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-					onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-					aria-label="Select all"
-				/>
-			</div>
-		),
-		cell: ({ row }) => (
-			<div className="flex items-center justify-center">
-				<Checkbox
-					checked={row.getIsSelected()}
-					onCheckedChange={(value) => row.toggleSelected(!!value)}
-					aria-label="Select row"
-				/>
-			</div>
-		),
-		enableSorting: false,
-		enableHiding: false,
-	},
-	{
-		accessorKey: 'name',
-		header: 'Name',
-		cell: ({ row }) => {
-			return (
-				<div className="truncate max-w-xs" title={row.original.name}>
-					{row.original.name}
-				</div>
-			);
-		},
-		enableHiding: false,
-	},
-	{
-		accessorKey: 'description',
-		header: 'Description',
-		cell: ({ row }) => {
-			return (
-				<div className="truncate max-w-xs" title={row.original.description}>
-					{row.original.description}
-				</div>
-			);
-		},
-	},
-	{
-		accessorKey: 'closed Questions',
-		header: 'Closed Questions',
-		cell: ({ row }) => {
-			return row.original.closedQuestions.length;
-		},
-	},
-	{
-		accessorKey: 'created By',
-		header: 'Created By',
-		cell: ({ row }) => {
-			return row.original.createdByIndex;
-		},
-	},
-	{
-		accessorKey: 'created At',
-		header: 'Created At',
-		cell: ({ row }) => {
-			return row.original.createdAt;
-		},
-	},
-	{
-		accessorKey: 'updated At',
-		header: 'Updated At',
-		cell: ({ row }) => {
-			return row.original.updatedAt;
-		},
-	},
-	{
-		id: 'actions',
-		cell: ({ row }) => (
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button variant="ghost" className="data-[state=open]:bg-muted text-muted-foreground flex size-8" size="icon">
-						<IconDotsVertical />
-						<span className="sr-only">Open menu</span>
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent align="end" className="w-32">
-					<DropdownMenuItem asChild>
-						<EditTemplatesForm
-							template={{
-								id: row.original.id,
-								name: row.original.name,
-								description: row.original.description,
-								closedQuestions: row.original.closedQuestions.map((q) => ({
-									text: q.text,
-									type: q.type,
-									_id: q._id,
-								})),
-								openQuestion: {
-									text: row.original.openQuestion,
-								},
-							}}
-						/>
-					</DropdownMenuItem>
-					<DropdownMenuItem asChild>
-						<CreateTestForm templateId={row.original.id} />
-					</DropdownMenuItem>
-					<DropdownMenuSeparator />
-					<DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
-						<DeleteTemplatesForm
-							template={{
-								id: row.original.id,
-								name: row.original.name,
-								description: row.original.description,
-								closedQuestions: row.original.closedQuestions.map((q) => ({
-									text: q.text,
-									type: q.type,
-									_id: q._id,
-								})),
-								openQuestion: {
-									text: row.original.openQuestion,
-								},
-							}}
-						/>
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
-		),
-	},
-];
+import { useTranslations } from 'next-intl';
 
 interface TemplatesDataTableProps {
 	data: TemplateTableRow[];
@@ -228,8 +75,139 @@ export function TemplatesDataTable({
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [inputValue, setInputValue] = React.useState(search || '');
-
+	const t = useTranslations();
+	
 	const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
+
+	const columns: ColumnDef<TemplateTableRow>[] = [
+		{
+			id: 'select',
+			header: ({ table }) => (
+				<div className="flex items-center justify-center">
+					<Checkbox
+						checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+						onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+						aria-label={t('Table.select_all')}
+					/>
+				</div>
+			),
+			cell: ({ row }) => (
+				<div className="flex items-center justify-center">
+					<Checkbox
+						checked={row.getIsSelected()}
+						onCheckedChange={(value) => row.toggleSelected(!!value)}
+						aria-label={t('Table.select_row')}
+					/>
+				</div>
+			),
+			enableSorting: false,
+			enableHiding: false,
+		},
+		{
+			accessorKey: 'name',
+			header: t('TemplatesDataTable.name'),
+			cell: ({ row }) => {
+				return (
+					<div className="truncate max-w-xs" title={row.original.name}>
+						{row.original.name}
+					</div>
+				);
+			},
+			enableHiding: false,
+		},
+		{
+			accessorKey: 'description',
+			header: t('TemplatesDataTable.description'),
+			cell: ({ row }) => {
+				return (
+					<div className="truncate max-w-xs" title={row.original.description}>
+						{row.original.description}
+					</div>
+				);
+			},
+		},
+		{
+			accessorKey: 'closed Questions',
+			header: t('TemplatesDataTable.closed_questions'),
+			cell: ({ row }) => {
+				return row.original.closedQuestions.length;
+			},
+		},
+		{
+			accessorKey: 'created By',
+			header: t('TemplatesDataTable.created_by'),
+			cell: ({ row }) => {
+				return row.original.createdByIndex;
+			},
+		},
+		{
+			accessorKey: 'created At',
+			header: t('TemplatesDataTable.created_at'),
+			cell: ({ row }) => {
+				return row.original.createdAt;
+			},
+		},
+		{
+			accessorKey: 'updated At',
+			header: t('TemplatesDataTable.updated_at'),
+			cell: ({ row }) => {
+				return row.original.updatedAt;
+			},
+		},
+		{
+			id: 'actions',
+			cell: ({ row }) => (
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button variant="ghost" className="data-[state=open]:bg-muted text-muted-foreground flex size-8" size="icon">
+							<IconDotsVertical />
+							<span className="sr-only">{t('Table.open_menu')}</span>
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="end" className="w-32">
+						<DropdownMenuItem asChild>
+							<EditTemplatesForm
+								template={{
+									id: row.original.id,
+									name: row.original.name,
+									description: row.original.description,
+									closedQuestions: row.original.closedQuestions.map((q) => ({
+										text: q.text,
+										type: q.type,
+										_id: q._id,
+									})),
+									openQuestion: {
+										text: row.original.openQuestion,
+									},
+								}}
+							/>
+						</DropdownMenuItem>
+						<DropdownMenuItem asChild>
+							<CreateTestForm templateId={row.original.id} />
+						</DropdownMenuItem>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
+							<DeleteTemplatesForm
+								template={{
+									id: row.original.id,
+									name: row.original.name,
+									description: row.original.description,
+									closedQuestions: row.original.closedQuestions.map((q) => ({
+										text: q.text,
+										type: q.type,
+										_id: q._id,
+									})),
+									openQuestion: {
+										text: row.original.openQuestion,
+									},
+								}}
+							/>
+						</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
+			),
+		},
+	];
 
 	const table = useReactTable({
 		data,
@@ -261,7 +239,7 @@ export function TemplatesDataTable({
 				<div className="flex items-center gap-2">
 					<Input
 						type="text"
-						placeholder="Search..."
+						placeholder={`${t("Table.search")}...`}
 						value={inputValue}
 						onChange={(e) => setInputValue(e.target.value)}
 						onKeyDown={(e) => {
@@ -287,8 +265,8 @@ export function TemplatesDataTable({
 						<DropdownMenuTrigger asChild>
 							<Button variant="outline" size="sm">
 								<IconLayoutColumns />
-								<span className="hidden lg:inline">Customize Columns</span>
-								<span className="lg:hidden">Columns</span>
+								<span className="hidden lg:inline">{t("Table.customize_columns")}</span>
+								<span className="lg:hidden">{t("Table.columns")}</span>
 								<IconChevronDown />
 							</Button>
 						</DropdownMenuTrigger>
@@ -338,7 +316,7 @@ export function TemplatesDataTable({
 							) : (
 								<TableRow>
 									<TableCell colSpan={columns.length} className="h-24 text-center">
-										No results.
+										{t("Table.no_results")}
 									</TableCell>
 								</TableRow>
 							)}
@@ -347,12 +325,12 @@ export function TemplatesDataTable({
 				</div>
 				<div className="flex items-center justify-between px-4">
 					<div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-						{table.getFilteredSelectedRowModel().rows.length} of {total} row(s) selected.
+						{table.getFilteredSelectedRowModel().rows.length} {t("Table.of")} {total} {t("Table.rows_selected")}
 					</div>
 					<div className="flex w-full items-center gap-8 lg:w-fit">
 						<div className="hidden items-center gap-2 lg:flex">
 							<Label htmlFor="rows-per-page" className="text-sm font-medium">
-								Rows per page
+								{t("Table.rows_per_page")}
 							</Label>
 							<Select
 								value={rowsPerPage.toString()}
@@ -375,7 +353,7 @@ export function TemplatesDataTable({
 						</div>
 
 						<div className="flex w-fit items-center justify-center text-sm font-medium">
-							Page {page} of {Math.ceil(total / rowsPerPage)}
+							{t("Table.page")} {page} {t("Table.of")} {Math.ceil(total / rowsPerPage)}
 						</div>
 
 						<div className="ml-auto flex items-center gap-2 lg:ml-0">
@@ -385,7 +363,7 @@ export function TemplatesDataTable({
 								onClick={() => setPage(1)}
 								disabled={page === 1}
 							>
-								<span className="sr-only">Go to first page</span>
+								<span className="sr-only">{t("Table.go_to_first_page")}</span>
 								<IconChevronsLeft />
 							</Button>
 							<Button
@@ -395,7 +373,7 @@ export function TemplatesDataTable({
 								onClick={() => setPage(page - 1)}
 								disabled={page === 1}
 							>
-								<span className="sr-only">Go to previous page</span>
+								<span className="sr-only">{t("Table.go_to_previous_page")}</span>
 								<IconChevronLeft />
 							</Button>
 							<Button
@@ -405,7 +383,7 @@ export function TemplatesDataTable({
 								onClick={() => setPage(page + 1)}
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
-								<span className="sr-only">Go to next page</span>
+								<span className="sr-only">{t("Table.go_to_next_page")}</span>
 								<IconChevronRight />
 							</Button>
 							<Button
@@ -415,7 +393,7 @@ export function TemplatesDataTable({
 								onClick={() => setPage(Math.ceil(total / rowsPerPage))}
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
-								<span className="sr-only">Go to last page</span>
+								<span className="sr-only">{t("Table.go_to_last_page")}</span>
 								<IconChevronsRight />
 							</Button>
 						</div>

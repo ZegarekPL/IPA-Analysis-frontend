@@ -14,13 +14,15 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { useTranslations } from 'next-intl';
 
 export default function EditGroupForm({ group }: EditGroupFormProps) {
 	const [open, setOpen] = useState(false);
+	const t = useTranslations();
 
 	const handleSuccess = () => {
-		toast.success('Grupa edytowana 🎉', {
-			description: 'Grupa została zapisana pomyślnie.',
+		toast.success(t("EditGroupForm.toast_title"), {
+			description: t("EditGroupForm.toast_description"),
 		});
 		setOpen(false);
 	};
@@ -29,14 +31,14 @@ export default function EditGroupForm({ group }: EditGroupFormProps) {
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<span className="cursor-pointer text-sm hover:bg-accent hover:text-accent-foreground rounded-sm px-2 py-1.5 w-full block">
-					Edit Group
+					{t('EditGroupForm.edit_group')}
 				</span>
 			</AlertDialogTrigger>
 
 			<AlertDialogContent className="max-w-2xl">
 				<AlertDialogHeader>
-					<AlertDialogTitle>{'Edytuj grupę'}</AlertDialogTitle>
-					<AlertDialogDescription>{'Wypełnij poniższy formularz, aby edytować grupę.'}</AlertDialogDescription>
+					<AlertDialogTitle>{t('EditGroupForm.group_name')}</AlertDialogTitle>
+					<AlertDialogDescription>{t('EditGroupForm.group_description')}</AlertDialogDescription>
 				</AlertDialogHeader>
 
 				<EditGroupFormContent initialData={{ group }} onCancel={() => setOpen(false)} onSuccess={handleSuccess} />

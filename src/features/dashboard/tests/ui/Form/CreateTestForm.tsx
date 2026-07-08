@@ -13,13 +13,15 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { useTranslations } from 'next-intl';
 
 export default function CreateTestForm({ templateId }: { templateId: string }) {
 	const [open, setOpen] = useState(false);
+	const t = useTranslations();
 
 	const handleSuccess = () => {
-		toast.success('Szablon edytowany 🎉', {
-			description: 'Szablon został zapisany pomyślnie.',
+		toast.success(t("CreateTestForm.toast_title"), {
+			description: t("CreateTestForm.toast_description"),
 		});
 		setOpen(false);
 	};
@@ -28,14 +30,14 @@ export default function CreateTestForm({ templateId }: { templateId: string }) {
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<span className="cursor-pointer text-sm hover:bg-accent hover:text-accent-foreground rounded-sm px-2 py-1.5 w-full block">
-					Create a Test
+					{t("CreateTestForm.create_test")}
 				</span>
 			</AlertDialogTrigger>
 
 			<AlertDialogContent className="max-w-2xl">
 				<AlertDialogHeader>
-					<AlertDialogTitle>{'Edytuj grupę'}</AlertDialogTitle>
-					<AlertDialogDescription>{'Wypełnij poniższy formularz, aby edytować grupę.'}</AlertDialogDescription>
+					<AlertDialogTitle>{t("CreateTestForm.test_title")}</AlertDialogTitle>
+					<AlertDialogDescription>{t("CreateTestForm.test_description")}</AlertDialogDescription>
 				</AlertDialogHeader>
 
 				<CreateTestFormContent templateId={templateId} onCancel={() => setOpen(false)} onSuccess={handleSuccess} />

@@ -43,8 +43,31 @@
 		"login": "Sign in",
 		"logout": "Log out"
 	},
-	"UsersData": {
-		"title": "Users"
+	"Table":{
+		"select_all": "Select all",
+		"select_row": "Select row",
+		"search": "Search",
+		"customize_columns": "Customize Columns",
+		"columns": "Columns",
+		"no_results": "No results",
+		"of": "of",
+		"rows_selected": "row(s) selected.",
+		"rows_per_page": "Rows per page",
+		"page": "Page",
+		"go_to_first_page": "Go to first page",
+		"go_to_previous_page": "Go to previous page",
+		"go_to_next_page": "Go to next page",
+		"go_to_last_page": "Go to last page",
+		"open_menu": "Open menu"
+	},
+	"UsersDataTable": {
+		"index": "Index",
+		"email": "Email",
+		"role": "Role",
+		"Admin": "Admin",
+		"User": "User",
+		"created_at": "Created At",
+		"updated_at": "Updated At"
 	},
 	"HomePage": {
 		"title": "Create, Test, Analyze – All in One Place",
@@ -91,5 +114,192 @@
 		"settings": "Settings",
 		"preferred_language": "Preferred language",
 		"preferred_theme": "Preferred theme"
+	},
+	"SubmitAnswerForm": {
+		"take_test": "Take Test",
+		"take_the_test": "Take the test",
+		"answer_questions": "Answer all questions and save the test.",
+		"loading_questions": "Loading questions...",
+		"error_loading_test": "Error loading the test"
+	},
+	"SubmitAnswerFormContent": {
+		"closed_questions": "Closed Questions",
+		"open_questions": "Open Questions",
+		"open_question_placeholder": "Your answer...",
+		"sending": "Sending...",
+		"submit_answers": "Submit Answers",
+		"cancel": "Cancel"
+	},
+	"GroupPageClient": {
+		"members": "Members",
+		"you_are_a_member": "You are a member",
+		"you_are_not_a_member": "You are not a member",
+		"create": "Create",
+		"update": "Update",
+		"tests": "Tests",
+		"no_tests": "No tests available",
+		"test_name": "Test Name",
+		"test_assigned_at": "Assigned At",
+		"test_start_time": "Start Time",
+		"test_end_time": "End Time",
+		"take_test": "Take Test",
+		"unavailable": "Unavailable",
+		"users": "Users",
+		"no_users": "You don't have access to the users' information",
+		"member_index": "Index",
+		"member_email": "Email",
+		"member_role": "Role"
+	},
+	"GroupsTabs": {
+		"all_groups": "All Groups",
+		"my_groups": "My Groups"
+	},
+	"AllGroupsDataTable": {
+		"name": "Name",
+		"description": "Description",
+		"members": "Members",
+		"created_at": "Created At",
+		"updated_at": "Updated At",
+		"leave_group": "Leave group",
+		"join_group": "Join group"
+	},
+	"EditGroupForm": {
+		"edit_group": "Edit Group",
+		"group_name": "Edit group",
+		"group_description": "Fill out the form below to edit the group.",
+		"toast_title": "Edited group",
+		"toast_description": "The group has been saved successfully."
+	},
+	"EditGroupFormContent": {
+		"error_editing_group": "Error editing group:",
+		"group_name": "Edit Group Name",
+		"group_description": "Fill out the form below to edit the group.",
+		"name": "Name",
+		"description": "Description",
+		"saving": "Saving...",
+		"save": "Save",
+		"cancel": "Cancel"
+	},
+	"DeleteGroupForm": {
+		"toast_title": "Group deleted",
+		"toast_description": "The group has been deleted successfully.",
+		"error_deleting_group": "Error deleting group:",
+		"error_deleting_group_description": "Failed to delete the group.",
+		"delete_group": "Delete Group",
+		"confirm_delete_group": "Confirm Deletion",
+		"delete_group_description1": "Are you sure you want to delete group",
+		"delete_group_description2": "This action cannot be undone.",
+		"deleting": "Deleting...",
+		"confirm": "Confirm",
+		"cancel": "Cancel"
+	},
+	"AddGroupForm": {
+		"toast_title": "Group created",
+		"toast_description": "The new group has been saved successfully.",
+		"create_group": "Create Group",
+		"group_title": "Create group",
+		"group_description": "Fill out the form below to create a new group."
+	},
+	"AddGroupFormContent": {
+		"error_creating_group": "Error creating group:",
+		"name": "Name",
+		"description": "Description",
+		"saving": "Saving...",
+		"save": "Save",
+		"cancel": "Cancel"
+	},
+	"DeleteUsersForm": {
+		"toast_title": "Edited group",
+		"toast_description": "The group has been saved successfully.",
+		"error_deleting_form": "Error deleting group:",
+		"error_deleting_form_description": "Failed to delete the group.",
+		"delete_user": "Delete user",
+		"confirm_delete": "Confirm deletion",
+		"remove_user": "Are you sure you want to delete the user? This action cannot be undone.",
+		"deleting": "Deleting...",
+		"confirm": "Confirm",
+		"cancel": "Cancel"
+	},
+	"AddTemplatesForm": {
+		"toast_title": "Template created",
+		"toast_description": "The new template has been saved successfully.",
+		"create_template": "Create Template",
+		"template_title": "Create template",
+		"template_description": "Fill out the form below to create a new template."
+	},
+	"AddTemplatesFormContent": {
+		"name": "Name",
+		"description": "Description",
+		"closed_questions": "Closed Questions",
+		"closed_question_text": "Question text",
+		"importance": "Importance",
+		"performance": "Performance",
+		"add_closed_question": "Add closed question",
+		"open_question": "Open Question",
+		"saving": "Saving...",
+		"save": "Save",
+		"cancel": "Cancel"
+	},
+	"TemplatesDataTable":{
+		"name": "Name",
+		"description": "Description",
+		"closed_questions": "Closed Questions",
+		"created_by": "Created By",
+		"created_at": "Created At",
+		"updated_at": "Updated At"
+	},
+	"EditTemplatesForm": {
+		"edit_template": "Edit Template",
+		"template_name": "Edit template",
+		"template_description": "Fill out the form below to edit the template.",
+		"toast_title": "Edited template",
+		"toast_description": "The template has been saved successfully."
+	},
+	"EditTemplatesFormContent": {
+		"error_editing_template": "Error editing template:",
+		"name": "Name",
+		"description": "Description",
+		"closed_questions": "Closed Questions",
+		"closed_question_text": "Question text",
+		"importance": "Importance",
+		"performance": "Performance",
+		"add_closed_question": "Add closed question",
+		"open_question": "Open Question",
+		"saving": "Saving...",
+		"save": "Save",
+		"cancel": "Cancel"
+	},
+	"DeleteTemplatesForm": {
+		"toast_title": "Template deleted",
+		"toast_description": "The template has been deleted successfully.",
+		"error_deleting_form": "Error deleting template:",
+		"error_deleting_form_description": "Failed to delete the template.",
+		"delete_template": "Delete Template",
+		"confirm_delete_template": "Confirm Deletion",
+		"delete_template_description1": "Are you sure you want to delete template",
+		"delete_template_description2": "This action cannot be undone.",
+		"deleting": "Deleting...",
+		"confirm": "Confirm",
+		"cancel": "Cancel"
+	},
+	"CreateTestForm": {
+		"toast_title": "Test created",
+		"toast_description": "The new test has been saved successfully.",
+		"create_test": "Create Test",
+		"test_title": "Create test",
+		"test_description": "Fill out the form below to create a new test."
+	},
+	"CreateTestFormContent": {
+		"error_creating_test": "Error creating test:",
+		"name": "Name",
+		"description": "Description",
+		"select_group": "Select group",
+		"start_date": "Start Date",
+		"end_date": "End Date",
+		"Creating": "Creating...",
+		"create_test": "Create Test",
+		"cancel": "Cancel"
 	}
 }
+
+

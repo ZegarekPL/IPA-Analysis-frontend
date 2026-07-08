@@ -14,6 +14,7 @@ import {
 } from '../../db/api';
 
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 interface EditTemplatesFormContentProps {
 	initialData: EditTemplatesFormProps;
@@ -31,6 +32,7 @@ export default function EditTemplatesFormContent({ initialData, onCancel, onSucc
 			type,
 		})),
 	);
+	const t = useTranslations();
 
 	const queryClient = useQueryClient();
 	const createMutation = useMutation({
@@ -40,7 +42,7 @@ export default function EditTemplatesFormContent({ initialData, onCancel, onSucc
 			onSuccess();
 		},
 		onError: (error) => {
-			console.error('Błąd podczas edycji grupy:', error);
+			console.error(t('EditTemplatesFormContent.error_editing_template'), error);
 		},
 	});
 
@@ -64,7 +66,7 @@ export default function EditTemplatesFormContent({ initialData, onCancel, onSucc
 	return (
 		<div>
 			<div className="mb-4">
-				<label className="block mb-1 font-semibold">Nazwa</label>
+				<label className="block mb-1 font-semibold">{t('EditTemplatesFormContent.name')}</label>
 				<input
 					type="text"
 					value={name}
@@ -74,7 +76,7 @@ export default function EditTemplatesFormContent({ initialData, onCancel, onSucc
 			</div>
 
 			<div className="mb-4">
-				<label className="block mb-1 font-semibold">Opis</label>
+				<label className="block mb-1 font-semibold">{t('EditTemplatesFormContent.description')}</label>
 				<textarea
 					value={description}
 					onChange={(e) => setDescription(e.target.value)}
@@ -82,12 +84,12 @@ export default function EditTemplatesFormContent({ initialData, onCancel, onSucc
 				/>
 			</div>
 
-			<h3 className="font-semibold mb-2">Zamknięte pytania</h3>
+			<h3 className="font-semibold mb-2">{t('EditTemplatesFormContent.closed_questions')}</h3>
 			{closedQuestions.map((q, i) => (
 				<div key={i} className="flex gap-2 mb-2">
 					<input
 						type="text"
-						placeholder="Tekst pytania"
+						placeholder={t('EditTemplatesFormContent.closed_question_text')}
 						value={q.text}
 						onChange={(e) => handleChangeClosedQuestion(i, 'text', e.target.value)}
 						className="flex-1 border p-2 rounded"
@@ -97,17 +99,17 @@ export default function EditTemplatesFormContent({ initialData, onCancel, onSucc
 						onChange={(e) => handleChangeClosedQuestion(i, 'type', e.target.value)}
 						className="border p-2 rounded"
 					>
-						<option value="importance">Importance</option>
-						<option value="performance">Performance</option>
+						<option value="importance">{t('EditTemplatesFormContent.importance')}</option>
+						<option value="performance">{t('EditTemplatesFormContent.performance')}</option>
 					</select>
 				</div>
 			))}
 			<Button variant="outline" className="mb-4" onClick={handleAddClosedQuestion}>
-				Dodaj zamknięte pytanie
+				{t('EditTemplatesFormContent.add_closed_question')}
 			</Button>
 
 			<div className="mb-4">
-				<label className="block mb-1 font-semibold">Otwarte pytanie</label>
+				<label className="block mb-1 font-semibold">{t('EditTemplatesFormContent.open_question')}</label>
 				<input
 					type="text"
 					value={openQuestion}
@@ -118,9 +120,9 @@ export default function EditTemplatesFormContent({ initialData, onCancel, onSucc
 
 			<AlertDialogFooter>
 				<Button onClick={handleSubmit} disabled={createMutation.isPending}>
-					{createMutation.isPending ? 'Zapisywanie...' : 'Zapisz'}
+					{createMutation.isPending ? t('EditTemplatesFormContent.saving') : t('EditTemplatesFormContent.save')}
 				</Button>
-				<AlertDialogCancel onClick={onCancel}>Anuluj</AlertDialogCancel>
+				<AlertDialogCancel onClick={onCancel}>{t('EditTemplatesFormContent.cancel')}</AlertDialogCancel>
 			</AlertDialogFooter>
 		</div>
 	);
