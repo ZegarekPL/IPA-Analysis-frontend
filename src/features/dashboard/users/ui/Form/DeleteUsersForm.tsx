@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
+import { deleteUser } from '../../db/api';
+
 import {
 	AlertDialog,
 	AlertDialogCancel,
@@ -15,7 +17,6 @@ import {
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { deleteUser } from '../../db/api';
 
 interface DeleteUsersProps {
 	user: any;

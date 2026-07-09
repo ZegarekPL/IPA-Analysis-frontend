@@ -1,10 +1,50 @@
 {
-	"Navbar": {
-		"home": "Strona główna",
-		"login": "Zaloguj się"
+	"Theme": {
+		"light": "Jasny",
+		"dark": "Ciemny",
+		"system": "Systemowy"
 	},
-	"LocaleSelector": {
-		"change_language": "Zmień język"
+	"Language": {
+		"change_language": "Zmień język",
+		"en": "Angielski",
+		"pl": "Polski"
+	},
+	"Roles": {
+		"user": "Użytkownik",
+		"admin": "Admin"
+	},
+	"Errors": {
+		"Common": {
+			"UNKNOWN_ERROR": "Wystąpił nieoczekiwany błąd.",
+			"INTERNAL_SERVER_ERROR": "Coś poszło nie tak. Spróbuj ponownie później.",
+			"UNAUTHORIZED": "Nie jesteś uprawniony. Proszę się zalogować.",
+			"FORBIDDEN": "Nie masz uprawnień do wykonania tej czynności.",
+			"NOT_FOUND": "Zasób nie został znaleziony."
+		},
+		"Group": {
+			"CREATE_FAILED": "Nie udało się utworzyć grupy.",
+			"EDIT_FAILED": "Nie udało się edytować grupy.",
+			"DELETE_FAILED": "Nie udało się usunąć grupy.",
+			"NOT_FOUND": "Grupa nie została znaleziona."
+		}
+	},
+	"Common": {
+		"try_again": "Spróbuj ponownie",
+		"loading": "Ładowanie..."
+	},
+	"Sidebar": {
+		"main": "Główne",
+		"groups": "Grupy",
+		"admin": "Panel admina",
+		"users": "Użytkownicy",
+		"templates": "Szablony",
+		"tests": "Testy",
+		"account": "Konto",
+		"login": "Zaloguj się",
+		"logout": "Wyloguj się"
+	},
+	"UsersData": {
+		"title": "Użytkownicy"
 	},
 	"HomePage": {
 		"title": "Twórz szablony, generuj testy, analizuj wyniki",
@@ -32,5 +72,25 @@
 		"sign_up_button": "Zarejestruj się",
 		"has_account": "Masz konto?",
 		"login_button": "Zaloguj się"
+	},
+	"PasswordResetPage": {
+		"loading": "Ładowanie",
+		"title": "Reset hasła",
+		"email": "Email",
+		"sign_in_button": "Zaloguj się",
+		"back_to_login": "Wróc na stronę logowania",
+		"success": "Zalogowano się"
+	},
+	"UserPage": {
+		"error": "Nie udało się załadować profilu",
+		"profile_information": "Informację o użytkowniku",
+		"username": "Nazwa użytkownika",
+		"email": "Email",
+		"account_details": "Szczegóły konta",
+		"created_at": "Utworzono",
+		"last_updated": "Ostatnia aktualizacja",
+		"settings": "Ustawienia",
+		"preferred_language": "Preferowany język",
+		"preferred_theme": "Preferowany motyw"
 	}
 }

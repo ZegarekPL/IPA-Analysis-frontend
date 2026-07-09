@@ -15,13 +15,17 @@ import {
 export default function DynamicBreadcrumb() {
 	const pathname = usePathname();
 
-	const segments = pathname.split('/').filter(Boolean).slice(1); // pomijamy locale
+	const segments = pathname.split('/').filter(Boolean).slice(1);
 
 	const locale = pathname.split('/')[1];
 
 	const buildHref = (i: number) => `/${locale}/${segments.slice(0, i + 1).join('/')}`;
 
-	const formatLabel = (str: string) => str.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+	const formatLabel = (str: string) => {
+		const withoutId = str.replace(/-[a-f0-9]{24}$/i, '');
+
+		return withoutId.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+	};
 
 	return (
 		<Breadcrumb>

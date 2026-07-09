@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 
-import { ApiResponse, appAPI } from '@/utils/appAPI';
+import { appAPI } from '@/utils/appAPI';
+import { AppError, mapApiError } from '@/utils/getErrorMessage';
 
 export interface CreateGroups {
 	name: string;
@@ -81,55 +82,177 @@ export async function deleteGroup(groupId: string) {
 	}
 }
 
+export interface GetGroupsResponse {
+	total: number;
+	data: Groups[];
+}
+
 export interface Groups {
 	_id: string;
 	name: string;
 	description: string;
+	isMember: boolean;
 	membersCount: number;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export async function getAllGroups(): Promise<Groups[]> {
+export async function getAllGroups({
+	page,
+	rowsPerPage,
+	search,
+}: {
+	page: number;
+	rowsPerPage: number;
+	search: string;
+}): Promise<GetGroupsResponse> {
 	try {
-		const response: AxiosResponse<ApiResponse<{ groups: Groups[] }>> = await appAPI.get(`/api/v1/groups`, {
-			withCredentials: true,
-		});
-
-		if (response.status === 200 && response.data?.data?.groups) {
-			console.log('Groups fetched:', response.data.data.groups);
-			return response.data.data.groups;
-		} else if (response.status === 401) {
-			return [];
-		} else {
-			console.error('Wystąpił błąd podczas pobierania grup');
-			return [];
-		}
+		const response: AxiosResponse<GetGroupsResponse> = await appAPI.post(
+			`/api/v1/groups`,
+			{
+				Page: page,
+				rowPePage: rowsPerPage,
+				search,
+			},
+			{
+				withCredentials: true,
+			},
+		);
+		return response.data ?? { total: 0, data: [] };
 	} catch (error: any) {
-		if (error.response?.status === 401) {
+		const errorCode = mapApiError(error);
+
+		if (errorCode === 'UNAUTHORIZED') {
+			window.location.replace('/login');
+			throw new AppError('UNAUTHORIZED', 401);
 		}
-		throw new Error('Error500');
+		throw new AppError(errorCode, error.response?.status);
 	}
 }
 
-export async function getMyGroups(): Promise<Groups[]> {
+export async function getMyGroups({
+	page,
+	rowsPerPage,
+	search,
+}: {
+	page: number;
+	rowsPerPage: number;
+	search: string;
+}): Promise<GetGroupsResponse> {
 	try {
-		const response: AxiosResponse<ApiResponse<{ groups: Groups[] }>> = await appAPI.get(`/api/v1/groups/me`, {
+		const response: AxiosResponse<GetGroupsResponse> = await appAPI.post(
+			`/api/v1/groups/me`,
+			{
+				page,
+				rowsPerPage,
+				search,
+			},
+			{
+				withCredentials: true,
+			},
+		);
+		return response.data ?? { total: 0, data: [] };
+	} catch (error: any) {
+		const errorCode = mapApiError(error);
+
+		if (errorCode === 'UNAUTHORIZED') {
+			window.location.replace('/login');
+			throw new AppError('UNAUTHORIZED', 401);
+		}
+		throw new AppError(errorCode, error.response?.status);
+	}
+}
+
+export interface UserGroup {
+	_id: string;
+	index: string;
+	mail: string;
+	role: 'user' | 'admin';
+}
+
+export interface GroupDetails {
+	_id: string;
+	name: string;
+	description: string;
+	membersCount: number;
+	isMember: boolean;
+	members: UserGroup[];
+	tests: Tests[];
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+export interface Tests {
+	testId: string;
+	assignedAt: Date;
+	startsAt: Date;
+	endsAt: Date;
+}
+
+export async function getGroupDetails(groupId: string): Promise<GroupDetails> {
+	try {
+		const response: AxiosResponse<any> = await appAPI.get(`/api/v1/groups/${groupId}`, {
 			withCredentials: true,
 		});
+		if (response.data.status === 'failed') {
+			throw new AppError(response.data.message || 'UNKNOWN_ERROR', response.status);
+		}
 
-		if (response.status === 200 && response.data?.data?.groups) {
-			console.log('Groups fetched:', response.data.data.groups);
-			return response.data.data.groups;
-		} else if (response.status === 401) {
-			return [];
-		} else {
-			console.error('Wystąpił błąd podczas pobierania grup');
-			return [];
-		}
+		return response.data.data.group as GroupDetails;
 	} catch (error: any) {
-		if (error.response?.status === 401) {
+		const errorCode = mapApiError(error);
+
+		if (errorCode === 'UNAUTHORIZED') {
+			window.location.replace('/login');
+			throw new AppError('UNAUTHORIZED', 401);
 		}
-		throw new Error('Error500');
+		throw new AppError(errorCode, error.response?.status);
+	}
+}
+
+export interface GetSMResponse {
+	status: string;
+	message: string;
+}
+
+export async function joinGroup(groupId: string) {
+	try {
+		const response: AxiosResponse<GetSMResponse> = await appAPI.post(
+			`/api/v1/groups/${groupId}/join`,
+			{},
+			{
+				withCredentials: true,
+			},
+		);
+		return response.data;
+	} catch (error: any) {
+		const errorCode = mapApiError(error);
+
+		if (errorCode === 'UNAUTHORIZED') {
+			window.location.replace('/login');
+			throw new AppError('UNAUTHORIZED', 401);
+		}
+		throw new AppError(errorCode, error.response?.status);
+	}
+}
+
+export async function leaveGroup(groupId: string) {
+	try {
+		const response: AxiosResponse<GetSMResponse> = await appAPI.post(
+			`/api/v1/groups/${groupId}/leave`,
+			{},
+			{
+				withCredentials: true,
+			},
+		);
+		return response.data;
+	} catch (error: any) {
+		const errorCode = mapApiError(error);
+
+		if (errorCode === 'UNAUTHORIZED') {
+			window.location.replace('/login');
+			throw new AppError('UNAUTHORIZED', 401);
+		}
+		throw new AppError(errorCode, error.response?.status);
 	}
 }

@@ -1,12 +1,9 @@
-import React from 'react';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
 
 export default async function ReleaseBadge() {
-	const res = await fetch('https://api.github.com/repos/ZegarekPL/IPA-Analysis-frontend/releases/latest', {
-		cache: 'force-cache',
-	});
+	const res = await fetch('https://api.github.com/repos/ZegarekPL/IPA-Analysis-frontend/releases/latest');
 	const data = await res.json();
 
 	return (

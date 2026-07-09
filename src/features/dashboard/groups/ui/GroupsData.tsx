@@ -2,36 +2,81 @@
 
 import * as React from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 
 import { AllGroupsDataTable } from './AllGroupsDataTable';
 import AddGroupForm from './Form/AddGroupForm';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { getUser } from '@/features/auth/Login';
 import { getAllGroups, getMyGroups } from '@/features/dashboard/groups/db/api';
 import { formatDate } from '@/utils/formatDate';
+import { getErrorMessage } from '@/utils/getErrorMessage';
 
 export function GroupsTabs() {
 	const [activeTab, setActiveTab] = React.useState<'all' | 'my'>('all');
+	const t = useTranslations();
 
-	const { data, isLoading } = useQuery({
-		queryKey: [activeTab, 'groups'],
-		queryFn: activeTab === 'all' ? getAllGroups : getMyGroups,
+	const [page, setPage] = React.useState(1);
+	const [rowsPerPage, setRowsPerPage] = React.useState(10);
+	const [search, setSearch] = React.useState('');
+
+	React.useEffect(() => {
+		setPage(1);
+		setSearch('');
+	}, [activeTab]);
+
+	const {
+		data: userData,
+		isLoading: userLoading,
+		isError: userError,
+	} = useQuery({
+		queryKey: ['getUser'],
+		queryFn: getUser,
+	});
+
+	const {
+		data: groupsData,
+		isLoading: groupsLoading,
+		isError: groupsError,
+		error,
+		refetch,
+	} = useQuery({
+		queryKey: ['groups', activeTab, page, rowsPerPage, search],
+		queryFn: () =>
+			activeTab === 'all' ? getAllGroups({ page, rowsPerPage, search }) : getMyGroups({ page, rowsPerPage, search }),
+		gcTime: 0,
 	});
 
 	const tableData = React.useMemo(() => {
 		return (
-			data?.map((g: any) => ({
+			groupsData?.data.map((g: any) => ({
 				id: g._id,
 				header: g.name,
 				description: g.description,
+				isMember: g.isMember,
 				membersCount: g.membersCount.toString(),
 				createdAt: formatDate(g.createdAt),
 				updatedAt: formatDate(g.updatedAt),
 			})) ?? []
 		);
-	}, [data]);
+	}, [groupsData]);
 
-	if (isLoading) return <p className="text-center mt-10">Ładowanie...</p>;
+	if (groupsLoading || userLoading) {
+		return <p className="text-center mt-10">{t('Common.loading')}</p>;
+	}
+
+	if (groupsError || userError || !userData || userData.status !== 'success') {
+		return (
+			<div className="text-center mt-10">
+				<p className="text-red-500">{getErrorMessage(t, error)}</p>
+
+				<button onClick={() => refetch()} className="mt-4 underline text-sm">
+					{t('Common.try_again')}
+				</button>
+			</div>
+		);
+	}
 
 	return (
 		<Tabs
@@ -44,15 +89,35 @@ export function GroupsTabs() {
 					<TabsTrigger value="all">All Groups</TabsTrigger>
 					<TabsTrigger value="my">My Groups</TabsTrigger>
 				</TabsList>
-				<AddGroupForm />
+				{userData.data.user.role === 'admin' && <AddGroupForm />}
 			</div>
 
 			<TabsContent value="all">
-				<AllGroupsDataTable data={activeTab === 'all' ? tableData : []} />
+				<AllGroupsDataTable
+					data={activeTab === 'all' ? tableData : []}
+					page={page}
+					setPage={setPage}
+					rowsPerPage={rowsPerPage}
+					setRowsPerPage={setRowsPerPage}
+					total={groupsData?.total || 0}
+					search={search}
+					setSearch={setSearch}
+					userData={userData}
+				/>
 			</TabsContent>
 
 			<TabsContent value="my">
-				<AllGroupsDataTable data={activeTab === 'my' ? tableData : []} />
+				<AllGroupsDataTable
+					data={activeTab === 'my' ? tableData : []}
+					page={page}
+					setPage={setPage}
+					rowsPerPage={rowsPerPage}
+					setRowsPerPage={setRowsPerPage}
+					total={groupsData?.total || 0}
+					search={search}
+					setSearch={setSearch}
+					userData={userData}
+				/>
 			</TabsContent>
 		</Tabs>
 	);

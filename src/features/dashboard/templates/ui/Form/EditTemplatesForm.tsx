@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import { EditTemplatesFormProps } from '../../db/api';
 import EditTemplatesFormContent from './EditTemplatesFormContent';
 
 import {
@@ -13,7 +14,6 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { EditTemplatesFormProps } from '../../db/api';
 
 export default function EditTemplatesForm({ template }: EditTemplatesFormProps) {
 	const [open, setOpen] = useState(false);
@@ -29,7 +29,7 @@ export default function EditTemplatesForm({ template }: EditTemplatesFormProps) 
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<span className="cursor-pointer text-sm hover:bg-accent hover:text-accent-foreground rounded-sm px-2 py-1.5 w-full block">
-					Edit Group
+					Edit Template
 				</span>
 			</AlertDialogTrigger>
 

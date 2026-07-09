@@ -1,7 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
+
+import AddTemplatesFormContent from './AddTemplatesFormContent';
 
 import {
 	AlertDialog,
@@ -11,9 +14,7 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import AddTemplatesFormContent from './AddTemplatesFormContent';
 import { Button } from '@/components/ui/button';
-import { IconPlus } from '@tabler/icons-react';
 
 export default function AddTemplatesForm() {
 	const [open, setOpen] = useState(false);
@@ -28,8 +29,8 @@ export default function AddTemplatesForm() {
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<Button variant="outline" size="sm">
-					<IconPlus />
-					<span className="hidden lg:inline">Add Groups</span>
+					<Plus />
+					<span className="hidden lg:inline">Create Templates</span>
 				</Button>
 			</AlertDialogTrigger>
 

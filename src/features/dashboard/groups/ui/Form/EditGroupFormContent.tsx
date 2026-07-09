@@ -22,7 +22,7 @@ export default function EditGroupFormContent({ initialData, onCancel, onSuccess 
 	const createMutation = useMutation({
 		mutationFn: (form: CreateGroups) => editGroups(initialData?.group.id, form),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['all', 'groups'] });
+			queryClient.invalidateQueries({ queryKey: ['groups', 'all'] });
 			onSuccess();
 		},
 		onError: (error) => {
