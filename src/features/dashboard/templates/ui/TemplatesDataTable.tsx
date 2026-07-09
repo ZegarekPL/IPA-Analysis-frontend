@@ -1,19 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { type UniqueIdentifier } from '@dnd-kit/core';
-import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import {
-	IconChevronDown,
-	IconChevronLeft,
-	IconChevronRight,
-	IconChevronsLeft,
-	IconChevronsRight,
-	IconDotsVertical,
-	IconGripVertical,
-	IconLayoutColumns,
-} from '@tabler/icons-react';
 import {
 	ColumnDef,
 	ColumnFiltersState,
@@ -21,12 +8,20 @@ import {
 	getCoreRowModel,
 	getFilteredRowModel,
 	getSortedRowModel,
-	Row,
 	SortingState,
 	useReactTable,
 	VisibilityState,
 } from '@tanstack/react-table';
-import { LucideSearch } from 'lucide-react';
+import {
+	ChevronDown,
+	ChevronLeft,
+	ChevronRight,
+	ChevronsLeft,
+	ChevronsRight,
+	MoreVertical,
+	LayoutGrid,
+	Search,
+} from 'lucide-react';
 
 import CreateTestForm from '../../tests/ui/Form/CreateTestForm';
 import { TemplateTableRow } from '../db/api';
@@ -257,7 +252,7 @@ export function TemplatesDataTable({
 							setPage(1);
 						}}
 					>
-						<LucideSearch className="w-4 h-4" />
+						<Search className="w-4 h-4" />
 					</Button>
 				</div>
 				<div className="flex items-center gap-2">
@@ -308,11 +303,13 @@ export function TemplatesDataTable({
 						</TableHeader>
 						<TableBody className="**:data-[slot=table-cell]:first:w-8">
 							{table.getRowModel().rows?.length ? (
-								<SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
-									{table.getRowModel().rows.map((row) => (
-										<DraggableRow key={row.id} row={row} />
-									))}
-								</SortableContext>
+								table.getRowModel().rows.map((row) => (
+									<TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+										{row.getVisibleCells().map((cell) => (
+											<TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+										))}
+									</TableRow>
+								))
 							) : (
 								<TableRow>
 									<TableCell colSpan={columns.length} className="h-24 text-center">
@@ -404,25 +401,3 @@ export function TemplatesDataTable({
 	);
 }
 
-function DraggableRow({ row }: { row: Row<TemplateTableRow> }) {
-	const { transform, transition, setNodeRef, isDragging } = useSortable({
-		id: row.original.id,
-	});
-
-	return (
-		<TableRow
-			data-state={row.getIsSelected() && 'selected'}
-			data-dragging={isDragging}
-			ref={setNodeRef}
-			className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-			style={{
-				transform: CSS.Transform.toString(transform),
-				transition: transition,
-			}}
-		>
-			{row.getVisibleCells().map((cell) => (
-				<TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-			))}
-		</TableRow>
-	);
-}

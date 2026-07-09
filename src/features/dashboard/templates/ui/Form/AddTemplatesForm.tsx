@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { IconPlus } from '@tabler/icons-react';
+import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
 import AddTemplatesFormContent from './AddTemplatesFormContent';
