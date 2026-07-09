@@ -27,14 +27,14 @@ const LoginPage = () => {
 	const mutation = useMutation({
 		mutationFn: login,
 		onSuccess: () => {
-			toast.success('SUCCESS', {
-				description: t('success'),
+			toast.success(t('success_title'), {
+				description: t('success_description'),
 			});
 			router.push('/user');
 		},
 
 		onError: (error: any) => {
-			toast.error('ERROR', {
+			toast.error(t('error_title'), {
 				description: error?.response?.data?.message || 'Unexpected error',
 			});
 		},

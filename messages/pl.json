@@ -84,7 +84,9 @@
 		"forgot_password": "Zapomniałeś hasła?",
 		"no_account": "Nie masz konta?",
 		"register_button": "Zarejestruj się",
-		"success": "Zalogowano się"
+		"success_title": "Sukces",
+		"success_description": "Zalogowano się",
+		"error_title": "Błąd"
 	},
 	"RegisterPage": {
 		"loading": "Ładowanie",
@@ -298,6 +300,33 @@
 		"start_date": "Data rozpoczęcia",
 		"end_date": "Data zakończenia",
 		"Creating": "Zapisywanie...",
+		"create_test": "Utwórz test",
+		"cancel": "Anuluj"
+	},
+	"TestsDataTable": {
+		"name": "Nazwa",
+		"description": "Opis",
+		"template": "Szablon",
+		"created_by": "Utworzono przez",
+		"starts_at": "Rozpoczyna się o",
+		"ends_at": "Kończy się o",
+		"is_active": "Czy aktywny",
+		"created_at": "Utworzono"
+	},
+	"EditTestsForm": {
+		"edit_test": "Edytuj Test",
+		"test_name": "Edytuj test",
+		"test_description": "Wypełnij formularz poniżej, aby edytować test.",
+		"toast_title": "Test edytowany",
+		"toast_description": "Test został zapisany pomyślnie."
+	},
+	"EditTestsFormContent": {
+		"error_editing_test": "Błąd podczas edycji testu:",
+		"name": "Nazwa",
+		"description": "Opis",
+		"start_date": "Data rozpoczęcia",
+		"end_date": "Data zakończenia",
+		"creating": "Zapisywanie...",
 		"create_test": "Utwórz test",
 		"cancel": "Anuluj"
 	}

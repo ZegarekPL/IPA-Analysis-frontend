@@ -84,7 +84,9 @@
 		"forgot_password": "Forgot your password?",
 		"no_account": "Don't have an account?",
 		"register_button": "Sign up",
-		"success": "User is logged in"
+		"success_title": "Success",
+		"success_description": "User is logged in",
+		"error_title": "Error"
 	},
 	"RegisterPage": {
 		"loading": "Loading",
@@ -299,7 +301,32 @@
 		"Creating": "Creating...",
 		"create_test": "Create Test",
 		"cancel": "Cancel"
+	},
+	"TestsDataTable": {
+		"name": "Name",
+		"description": "Description",
+		"template": "Template",
+		"created_by": "Created By",
+		"starts_at": "Starts At",
+		"ends_at": "Ends At",
+		"is_active": "Is Active",
+		"created_at": "Created At"
+	},
+	"EditTestsForm": {
+		"edit_test": "Edit Test",
+		"test_name": "Edit test",
+		"test_description": "Fill out the form below to edit the test.",
+		"toast_title": "Edited test",
+		"toast_description": "The test has been saved successfully."
+	},
+	"EditTestsFormContent": {
+		"error_editing_test": "Error editing test:",
+		"name": "Name",
+		"description": "Description",
+		"start_date": "Start Date",
+		"end_date": "End Date",
+		"creating": "Creating...",
+		"create_test": "Create Test",
+		"cancel": "Cancel"
 	}
 }
-
-
