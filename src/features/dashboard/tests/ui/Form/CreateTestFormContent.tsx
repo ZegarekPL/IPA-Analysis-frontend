@@ -11,6 +11,7 @@ import { AlertDialogFooter } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useTranslations } from 'next-intl';
 
 interface CreateTestFormContentProps {
 	templateId: string;
@@ -24,10 +25,11 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 	const [selectedGroup, setSelectedGroup] = useState<string>('');
 	const [startsAt, setStartsAt] = useState('');
 	const [endsAt, setEndsAt] = useState('');
-
+	const t = useTranslations();
+	
 	const queryClient = useQueryClient();
 
-	const rowsPerPage = 5;
+	const rowsPerPage = 7;
 
 	const infinite = useInfiniteQuery<GetGroupsResponse, Error, InfiniteData<GetGroupsResponse>, string[], number>({
 		queryKey: ['groups'],
@@ -43,7 +45,7 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 			onSuccess();
 		},
 		onError: (error) => {
-			console.error('Błąd podczas tworzenia testu:', error);
+			console.error(t('CreateTestFormContent.error_creating_test'), error);
 		},
 	});
 
@@ -64,7 +66,7 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 	return (
 		<div>
 			<div className="mb-4">
-				<label className="block mb-1 font-semibold">Nazwa testu</label>
+				<label className="block mb-1 font-semibold">{t('CreateTestFormContent.name')}</label>
 				<input
 					type="text"
 					value={name}
@@ -74,7 +76,7 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 			</div>
 
 			<div className="mb-4">
-				<label className="block mb-1 font-semibold">Opis testu</label>
+				<label className="block mb-1 font-semibold">{t('CreateTestFormContent.description')}</label>
 				<textarea
 					value={description}
 					onChange={(e) => setDescription(e.target.value)}
@@ -83,20 +85,20 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 			</div>
 
 			<div className="mb-4">
-				<Label className="block mb-1 font-semibold">Wybierz grupę</Label>
+				<Label className="block mb-1 font-semibold">{t('CreateTestFormContent.select_group')}</Label>
 				{infinite.isLoading ? (
-					<p className="text-muted-foreground">Ładowanie grup...</p>
+					<p className="text-muted-foreground">Loading groups...</p>
 				) : (
 					<Select value={selectedGroup} onValueChange={setSelectedGroup}>
 						<SelectTrigger>
-							<SelectValue placeholder="-- Wybierz grupę --" />
+							<SelectValue placeholder={"-- " + t("CreateTestFormContent.select_group") + " --"} />
 						</SelectTrigger>
 						<SelectContent>
 							{infinite.data?.pages
 								.flatMap((p) => p.data)
 								.map((group) => (
 									<SelectItem key={group._id} value={group._id}>
-										{group.name} ({group.membersCount} członków)
+										{group.name} ({group.membersCount} members)
 									</SelectItem>
 								))}
 						</SelectContent>
@@ -105,7 +107,7 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 			</div>
 
 			<div className="mb-4">
-				<Label className="block mb-1 font-semibold">Data rozpoczęcia</Label>
+				<Label className="block mb-1 font-semibold">{t('CreateTestFormContent.start_date')}</Label>
 				<input
 					type="datetime-local"
 					value={startsAt}
@@ -115,7 +117,7 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 			</div>
 
 			<div className="mb-4">
-				<Label className="block mb-1 font-semibold">Data zakończenia</Label>
+				<Label className="block mb-1 font-semibold">{t('CreateTestFormContent.end_date')}</Label>
 				<input
 					type="datetime-local"
 					value={endsAt}
@@ -126,9 +128,9 @@ export default function CreateTestFormContent({ templateId, onCancel, onSuccess 
 
 			<AlertDialogFooter>
 				<Button onClick={handleSubmit} disabled={createMutation.isPending}>
-					{createMutation.isPending ? 'Tworzenie...' : 'Utwórz test'}
+					{createMutation.isPending ? t('CreateTestFormContent.Creating') : t('CreateTestFormContent.create_test')}
 				</Button>
-				<AlertDialogCancel onClick={onCancel}>Anuluj</AlertDialogCancel>
+				<AlertDialogCancel onClick={onCancel}>{t('CreateTestFormContent.cancel')}</AlertDialogCancel>
 			</AlertDialogFooter>
 		</div>
 	);

@@ -184,6 +184,7 @@ export interface GroupDetails {
 
 export interface Tests {
 	testId: string;
+	testName: string;
 	assignedAt: Date;
 	startsAt: Date;
 	endsAt: Date;

@@ -1,8 +1,35 @@
-Dockerfile
-.dockerignore
+# --- node ---
 node_modules
 npm-debug.log
-README.md
+yarn-error.log
+.pnpm-debug.log
+
+# --- next build output ---
 .next
+out
+
+# --- VCS ---
 .git
+.gitignore
+
+# --- editor / OS ---
+.vscode
 .idea
+.DS_Store
+*.swp
+*.swo
+
+# --- cache ---
+.eslintcache
+.turbo
+.cache
+
+# --- docs / local ---
+README.md
+
+# --- docker (lokalne) ---
+docker-compose.yml
+
+# --- testy ---
+__tests__
+coverage

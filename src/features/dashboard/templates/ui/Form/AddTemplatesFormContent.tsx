@@ -8,6 +8,7 @@ import { AlertDialogFooter } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { ClosedQuestion, ClosedQuestionForm, CreateTemplates, Templates } from '@/features/dashboard/templates/db/api';
 import { createTemplates } from '@/features/dashboard/templates/db/api';
+import { useTranslations } from 'next-intl';
 
 interface TemplateFormProps {
 	initialData?: Templates;
@@ -16,6 +17,7 @@ interface TemplateFormProps {
 }
 
 export default function AddTemplatesFormContent({ initialData, onCancel, onSuccess }: TemplateFormProps) {
+	const t = useTranslations();
 	const [name, setName] = useState(initialData?.name || '');
 	const [description, setDescription] = useState(initialData?.description || '');
 	const [openQuestion, setOpenQuestion] = useState(initialData?.openQuestion.text || '');
@@ -57,7 +59,7 @@ export default function AddTemplatesFormContent({ initialData, onCancel, onSucce
 	return (
 		<div>
 			<div className="mb-4">
-				<label className="block mb-1 font-semibold">Nazwa</label>
+				<label className="block mb-1 font-semibold">{t('AddTemplatesFormContent.name')}</label>
 				<input
 					type="text"
 					value={name}
@@ -67,7 +69,7 @@ export default function AddTemplatesFormContent({ initialData, onCancel, onSucce
 			</div>
 
 			<div className="mb-4">
-				<label className="block mb-1 font-semibold">Opis</label>
+				<label className="block mb-1 font-semibold">{t('AddTemplatesFormContent.description')}</label>
 				<textarea
 					value={description}
 					onChange={(e) => setDescription(e.target.value)}
@@ -75,12 +77,12 @@ export default function AddTemplatesFormContent({ initialData, onCancel, onSucce
 				/>
 			</div>
 
-			<h3 className="font-semibold mb-2">Zamknięte pytania</h3>
+			<h3 className="font-semibold mb-2">{t('AddTemplatesFormContent.closed_questions')}</h3>
 			{closedQuestions.map((q, i) => (
 				<div key={i} className="flex gap-2 mb-2">
 					<input
 						type="text"
-						placeholder="Tekst pytania"
+						placeholder={t('AddTemplatesFormContent.closed_question_text')}
 						value={q.text}
 						onChange={(e) => handleChangeClosedQuestion(i, 'text', e.target.value)}
 						className="flex-1 border p-2 rounded"
@@ -90,17 +92,17 @@ export default function AddTemplatesFormContent({ initialData, onCancel, onSucce
 						onChange={(e) => handleChangeClosedQuestion(i, 'type', e.target.value)}
 						className="border p-2 rounded"
 					>
-						<option value="importance">Importance</option>
-						<option value="performance">Performance</option>
+						<option value="importance">{t('AddTemplatesFormContent.importance')}</option>
+						<option value="performance">{t('AddTemplatesFormContent.performance')}</option>
 					</select>
 				</div>
 			))}
 			<Button variant="outline" className="mb-4" onClick={handleAddClosedQuestion}>
-				Dodaj zamknięte pytanie
+				{t('AddTemplatesFormContent.add_closed_question')}
 			</Button>
 
 			<div className="mb-4">
-				<label className="block mb-1 font-semibold">Otwarte pytanie</label>
+				<label className="block mb-1 font-semibold">{t('AddTemplatesFormContent.open_question')}</label>
 				<input
 					type="text"
 					value={openQuestion}
@@ -111,9 +113,9 @@ export default function AddTemplatesFormContent({ initialData, onCancel, onSucce
 
 			<AlertDialogFooter>
 				<Button onClick={handleSubmit} disabled={createMutation.isPending}>
-					{createMutation.isPending ? 'Zapisywanie...' : 'Zapisz'}
+					{createMutation.isPending ? t('AddTemplatesFormContent.saving') : t('AddTemplatesFormContent.save')}
 				</Button>
-				<AlertDialogCancel onClick={onCancel}>Anuluj</AlertDialogCancel>
+				<AlertDialogCancel onClick={onCancel}>{t('AddTemplatesFormContent.cancel')}</AlertDialogCancel>
 			</AlertDialogFooter>
 		</div>
 	);

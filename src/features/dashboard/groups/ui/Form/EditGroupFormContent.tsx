@@ -8,6 +8,7 @@ import { AlertDialogFooter } from '../../../../../components/ui/alert-dialog';
 import { CreateGroups, EditGroupFormProps, editGroups } from '../../db/api';
 
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 interface EditGroupFormContentProps {
 	initialData: EditGroupFormProps;
@@ -18,6 +19,8 @@ interface EditGroupFormContentProps {
 export default function EditGroupFormContent({ initialData, onCancel, onSuccess }: EditGroupFormContentProps) {
 	const [name, setName] = useState(initialData?.group.name || '');
 	const [description, setDescription] = useState(initialData?.group.description || '');
+	const t = useTranslations();
+	
 	const queryClient = useQueryClient();
 	const createMutation = useMutation({
 		mutationFn: (form: CreateGroups) => editGroups(initialData?.group.id, form),
@@ -26,7 +29,7 @@ export default function EditGroupFormContent({ initialData, onCancel, onSuccess 
 			onSuccess();
 		},
 		onError: (error) => {
-			console.error('Błąd podczas edycji grupy:', error);
+			console.error(t('EditGroupFormContent.error_editing_group'), error);
 		},
 	});
 	const handleSubmit = () => {
@@ -36,7 +39,7 @@ export default function EditGroupFormContent({ initialData, onCancel, onSuccess 
 	return (
 		<div>
 			<div className="mb-4">
-				<label className="block mb-1 font-semibold">Nazwa</label>
+				<label className="block mb-1 font-semibold">{t('EditGroupFormContent.name')}</label>
 				<input
 					type="text"
 					value={name}
@@ -45,7 +48,7 @@ export default function EditGroupFormContent({ initialData, onCancel, onSuccess 
 				/>
 			</div>
 			<div className="mb-4">
-				<label className="block mb-1 font-semibold">Opis</label>
+				<label className="block mb-1 font-semibold">{t('EditGroupFormContent.description')}</label>
 				<textarea
 					value={description}
 					onChange={(e) => setDescription(e.target.value)}
@@ -54,9 +57,9 @@ export default function EditGroupFormContent({ initialData, onCancel, onSuccess 
 			</div>
 			<AlertDialogFooter>
 				<Button onClick={handleSubmit} disabled={createMutation.isPending}>
-					{createMutation.isPending ? 'Zapisywanie...' : 'Zapisz'}
+					{createMutation.isPending ? t('EditGroupFormContent.saving') : t('EditGroupFormContent.save')}
 				</Button>
-				<AlertDialogCancel onClick={onCancel}>Anuluj</AlertDialogCancel>
+				<AlertDialogCancel onClick={onCancel}>{t('EditGroupFormContent.cancel')}</AlertDialogCancel>
 			</AlertDialogFooter>
 		</div>
 	);

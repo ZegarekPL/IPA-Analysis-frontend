@@ -8,6 +8,7 @@ import { Answer, subminAnswer } from '../../db/api';
 
 import { AlertDialogFooter } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 interface SubmitAnswerFormContentProps {
 	testId: string;
@@ -31,7 +32,8 @@ export default function SubmitAnswerFormContent({
 
 	const [openAnswer, setOpenAnswer] = useState('');
 	const [closedAnswers, setClosedAnswers] = useState<Record<string, number>>({});
-
+	const t = useTranslations();
+	
 	const submitMutation = useMutation({
 		mutationFn: (data: Answer) => subminAnswer(testId, data),
 		onSuccess: () => {
@@ -69,7 +71,7 @@ export default function SubmitAnswerFormContent({
 	return (
 		<div className="space-y-6">
 			<div>
-				<h3 className="font-semibold mb-3">Pytania zamknięte</h3>
+				<h3 className="font-semibold mb-3">{t('SubmitAnswerFormContent.closed_questions')}</h3>
 
 				{closedQuestions.map((q, index) => (
 					<div key={q.id} className="mb-4">
@@ -94,22 +96,22 @@ export default function SubmitAnswerFormContent({
 			</div>
 
 			<div>
-				<h3 className="font-semibold mb-2">Pytanie otwarte</h3>
+				<h3 className="font-semibold mb-2">{t('SubmitAnswerFormContent.open_questions')}</h3>
 				<p className="mb-2 text-sm text-muted-foreground">{openQuestion}</p>
 
 				<textarea
 					value={openAnswer}
 					onChange={(e) => setOpenAnswer(e.target.value)}
 					className="w-full border p-2 rounded min-h-[100px]"
-					placeholder="Twoja odpowiedź..."
+					placeholder={t('SubmitAnswerFormContent.open_question_placeholder')}
 				/>
 			</div>
 
 			<AlertDialogFooter>
 				<Button onClick={handleSubmit} disabled={submitMutation.isPending}>
-					{submitMutation.isPending ? 'Wysyłanie...' : 'Wyślij odpowiedzi'}
+					{submitMutation.isPending ? t('SubmitAnswerFormContent.sending') : t('SubmitAnswerFormContent.submit_answers')}
 				</Button>
-				<AlertDialogCancel onClick={onCancel}>Anuluj</AlertDialogCancel>
+				<AlertDialogCancel onClick={onCancel}>{t('SubmitAnswerFormContent.cancel')}</AlertDialogCancel>
 			</AlertDialogFooter>
 		</div>
 	);

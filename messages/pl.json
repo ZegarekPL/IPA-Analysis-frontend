@@ -43,8 +43,31 @@
 		"login": "Zaloguj się",
 		"logout": "Wyloguj się"
 	},
-	"UsersData": {
-		"title": "Użytkownicy"
+	"Table":{
+		"select_all": "Zaznacz wszystkie",
+		"select_row": "Zaznacz wiersz",
+		"search": "Wyszukaj",
+		"customize_columns": "Dostosuj kolumny",
+		"columns": "Kolumny",
+		"no_results": "Brak wyników",
+		"of": "z",
+		"rows_selected": "wiersz(y) wybrany(e).",
+		"rows_per_page": "Wierszy na stronę",
+		"page": "Strona",
+		"go_to_first_page": "Idź do pierwszej strony",
+		"go_to_previous_page": "Idź do poprzedniej strony",
+		"go_to_next_page": "Idź do następnej strony",
+		"go_to_last_page": "Idź do ostatniej strony",
+		"open_menu": "Otwórz menu"
+	},
+	"UsersDataTable": {
+		"index": "Index",
+		"email": "Email",
+		"role": "Rola",
+		"Admin": "Admin",
+		"User": "Użytkownik",
+		"created_at": "Utworzono",
+		"updated_at": "Zaktualizowano"
 	},
 	"HomePage": {
 		"title": "Twórz szablony, generuj testy, analizuj wyniki",
@@ -61,7 +84,9 @@
 		"forgot_password": "Zapomniałeś hasła?",
 		"no_account": "Nie masz konta?",
 		"register_button": "Zarejestruj się",
-		"success": "Zalogowano się"
+		"success_title": "Sukces",
+		"success_description": "Zalogowano się",
+		"error_title": "Błąd"
 	},
 	"RegisterPage": {
 		"loading": "Ładowanie",
@@ -92,5 +117,217 @@
 		"settings": "Ustawienia",
 		"preferred_language": "Preferowany język",
 		"preferred_theme": "Preferowany motyw"
+	},
+	"SubmitAnswerForm": {
+		"take_test": "Rozwiąż test",
+		"take_the_test": "Rozwiąż test",
+		"answer_questions": "Odpowiedz na wszystkie pytania i zapisz test.",
+		"loading_questions": "Ładowanie pytań...",
+		"error_loading_test": "Błąd ładowania testu"
+	},
+	"SubmitAnswerFormContent": {
+		"closed_questions": "Pytania zamknięte",
+		"open_questions": "Pytania otwarte",
+		"open_question_placeholder": "Twoja odpowiedź...",
+		"sending": "Wysyłanie...",
+		"submit_answers": "Prześlij odpowiedzi",
+		"cancel": "Anuluj"
+	},
+	"GroupPageClient": {
+		"members": "Członkowie",
+		"you_are_a_member": "Jesteś członkiem",
+		"you_are_not_a_member": "Nie jesteś członkiem",
+		"create": "Utworzono",
+		"update": "Aktualizacja",
+		"tests": "Testy",
+		"no_tests": "Brak przypisanych testów",
+		"test_name": "Nazwa testu",
+		"test_assigned_at": "Przypisano",
+		"test_start_time": "Czas rozpoczęcia",
+		"test_end_time": "Czas zakończenia",
+		"take_test": "Rozwiąż test",
+		"unavailable": "Niedostępny",
+		"users": "Członkowie",
+		"no_users": "Brak przypisanych członków",
+		"member_index": "Index",
+		"member_email": "Email",
+		"member_role": "Rola"
+	},
+	"GroupsTabs": {
+		"all_groups": "Wszystkie grupy",
+		"my_groups": "Moje grupy"
+	},
+	"AllGroupsDataTable": {
+		"name": "Nazwa",
+		"description": "Opis",
+		"members": "Członkowie",
+		"created_at": "Utworzono",
+		"updated_at": "Zaktualizowano",
+		"leave_group": "Opuść grupę",
+		"join_group": "Dołącz do grupy"
+	},
+	"EditGroupForm": {
+		"edit_group": "Edytuj grupę",
+		"group_name": "Edytuj grupę",
+		"group_description": "Wypełnij formularz poniżej, aby edytować grupę.",
+		"toast_title": "Grupa edytowana",
+		"toast_description": "Grupa została zapisana pomyślnie."
+	},
+	"EditGroupFormContent": {
+		"error_editing_group": "Błąd podczas edycji grupy:",
+		"group_name": "Edytuj nazwę grupy",
+		"group_description": "Wypełnij formularz poniżej, aby edytować grupę.",
+		"name": "Nazwa",
+		"description": "Opis",
+		"saving": "Zapisywanie...",
+		"save": "Zapisz",
+		"cancel": "Anuluj"
+	},
+	"DeleteGroupForm": {
+		"toast_title": "Grupa usunięta",
+		"toast_description": "Grupa została usunięta pomyślnie.",
+		"error_deleting_group": "Błąd podczas usuwania grupy:",
+		"error_deleting_group_description": "Nie udało się usunąć grupy.",
+		"delete_group": "Usuń grupę",
+		"confirm_delete_group": "Potwierdź usunięcie",
+		"delete_group_description1": "Czy na pewno chcesz usunąć grupę",
+		"delete_group_description2": "Operacji nie da się cofnąć.",
+		"deleting": "Usuwanie...",
+		"confirm": "Potwierdź",
+		"cancel": "Anuluj"
+	},
+	"AddGroupForm": {
+		"toast_title": "Grupa utworzona",
+		"toast_description": "Nowa grupa została zapisana pomyślnie.",
+		"create_group": "Utwórz grupę",
+		"group_title": "Utwórz grupę",
+		"group_description": "Wypełnij formularz poniżej, aby utworzyć nową grupę."
+	},
+	"AddGroupFormContent": {
+		"error_creating_group": "Błąd podczas tworzenia grupy:",
+		"name": "Nazwa",
+		"description": "Opis",
+		"saving": "Zapisywanie...",
+		"save": "Zapisz",
+		"cancel": "Anuluj"
+	},
+	"DeleteUsersForm":{
+		"toast_title": "Użytkownik usunięty",
+		"toast_description": "Użytkownik został pomyślnie usunięty.'",
+		"error_deleting_form": "Błąd podczas usuwania użytkownika:",
+		"error_deleting_form_description": "Nie udało się usunąć użytkownika",
+		"delete_user": "Usuń użytkownika",
+		"confirm_delete": "Potwierdź usunięcie",
+		"remove_user": "Czy na pewno chcesz usunąć użytkownika? Operacji nie da się cofnąć.",
+		"deleting": "Usuwanie...",
+		"confirm": "Potwierdzam",
+		"cancel": "Anuluj"
+	},
+	"AddTemplatesForm": {
+		"toast_title": "Szablon utworzony",
+		"toast_description": "Nowy szablon został zapisany pomyślnie.",
+		"create_template": "Utwórz szablon",
+		"template_title": "Utwórz szablon",
+		"template_description": "Wypełnij formularz poniżej, aby utworzyć nowy szablon."
+	},
+	"AddTemplatesFormContent": {
+		"name": "Nazwa",
+		"description": "Opis",
+		"closed_questions": "Pytania zamknięte",
+		"closed_question_text": "Treść pytania",
+		"importance": "Istotność",
+		"performance": "Wydajność",
+		"add_closed_question": "Dodaj pytanie zamknięte",
+		"open_question": "Pytanie otwarte",
+		"saving": "Zapisywanie...",
+		"save": "Zapisz",
+		"cancel": "Anuluj"
+	},
+	"TemplatesDataTable":{
+		"name": "Nazwa",
+		"description": "Opis",
+		"closed_questions": "Pytania zamknięte",
+		"created_by": "Utworzono przez",
+		"created_at": "Utworzono",
+		"updated_at": "Zaktualizowano"
+	},
+	"EditTemplatesForm": {
+		"edit_template": "Edytuj Szablon",
+		"template_name": "Edytuj szablon",
+		"template_description": "Wypełnij formularz poniżej, aby edytować szablon.",
+		"toast_title": "Szablon edytowany",
+		"toast_description": "Szablon został zapisany pomyślnie."
+	},
+	"EditTemplatesFormContent": {
+		"error_editing_template": "Błąd podczas edycji szablonu:",
+		"name": "Nazwa",
+		"description": "Opis",
+		"closed_questions": "Pytania zamknięte",
+		"closed_question_text": "Treść pytania",
+		"importance": "Istotność",
+		"performance": "Wydajność",
+		"add_closed_question": "Dodaj pytanie zamknięte",
+		"open_question": "Pytanie otwarte",
+		"saving": "Zapisywanie...",
+		"save": "Zapisz",
+		"cancel": "Anuluj"
+	},
+	"DeleteTemplatesForm": {
+		"toast_title": "Szablon usunięty",
+		"toast_description": "Szablon został pomyślnie usunięty.",
+		"error_deleting_form": "Błąd podczas usuwania szablonu:",
+		"error_deleting_form_description": "Nie udało się usunąć szablonu.",
+		"delete_template": "Usuń szablon",
+		"confirm_delete_template": "Potwierdź usunięcie",
+		"delete_template_description1": "Czy na pewno chcesz usunąć szablon",
+		"delete_template_description2": "Operacji nie da się cofnąć.",
+		"deleting": "Usuwanie...",
+		"confirm": "Potwierdzam",
+		"cancel": "Anuluj"
+	},
+	"CreateTestForm": {
+		"toast_title": "Test utworzony",
+		"toast_description": "Nowy test został zapisany pomyślnie.",
+		"create_test": "Utwórz test",
+		"test_title": "Utwórz test",
+		"test_description": "Wypełnij formularz poniżej, aby utworzyć nowy test."
+	},
+	"CreateTestFormContent": {
+		"error_creating_test": "Błąd podczas tworzenia testu:",
+		"name": "Nazwa",
+		"description": "Opis",
+		"select_group": "Wybierz grupę",
+		"start_date": "Data rozpoczęcia",
+		"end_date": "Data zakończenia",
+		"Creating": "Zapisywanie...",
+		"create_test": "Utwórz test",
+		"cancel": "Anuluj"
+	},
+	"TestsDataTable": {
+		"name": "Nazwa",
+		"description": "Opis",
+		"template": "Szablon",
+		"created_by": "Utworzono przez",
+		"starts_at": "Rozpoczyna się o",
+		"ends_at": "Kończy się o",
+		"is_active": "Czy aktywny",
+		"created_at": "Utworzono"
+	},
+	"EditTestsForm": {
+		"edit_test": "Edytuj Test",
+		"test_name": "Edytuj test",
+		"test_description": "Wypełnij formularz poniżej, aby edytować test.",
+		"toast_title": "Test edytowany",
+		"toast_description": "Test został zapisany pomyślnie."
+	},
+	"EditTestsFormContent": {
+		"error_editing_test": "Błąd podczas edycji testu:",
+		"name": "Nazwa",
+		"description": "Opis",
+		"start_date": "Data rozpoczęcia",
+		"end_date": "Data zakończenia",
+		"creating": "Zapisywanie...",
+		"create_test": "Utwórz test",
+		"cancel": "Anuluj"
 	}
 }

@@ -8,6 +8,7 @@ import { EditTests, editTests } from '../../db/api';
 
 import { AlertDialogFooter } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 interface EditTestsFormContentProps {
 	initialData: {
@@ -28,6 +29,7 @@ export default function EditTestsFormContent({ initialData, onCancel, onSuccess 
 	const [startsAt, setStartsAt] = useState(initialData.startsAt);
 	const [endsAt, setEndsAt] = useState(initialData.endsAt);
 	const [active, setActive] = useState(initialData.active);
+	const t = useTranslations();
 
 	const queryClient = useQueryClient();
 
@@ -38,7 +40,7 @@ export default function EditTestsFormContent({ initialData, onCancel, onSuccess 
 			onSuccess();
 		},
 		onError: (error) => {
-			console.error('Błąd podczas edycji testu:', error);
+			console.error(t('EditTestsFormContent.error_editing_test'), error);
 		},
 	});
 
@@ -57,7 +59,7 @@ export default function EditTestsFormContent({ initialData, onCancel, onSuccess 
 	return (
 		<div>
 			<div className="mb-4">
-				<label className="block mb-1 font-semibold">Nazwa</label>
+				<label className="block mb-1 font-semibold">{t("EditTestsFormContent.name")}</label>
 				<input
 					type="text"
 					value={name}
@@ -67,7 +69,7 @@ export default function EditTestsFormContent({ initialData, onCancel, onSuccess 
 			</div>
 
 			<div className="mb-4">
-				<label className="block mb-1 font-semibold">Opis</label>
+				<label className="block mb-1 font-semibold">{t("EditTestsFormContent.description")}</label>
 				<textarea
 					value={description}
 					onChange={(e) => setDescription(e.target.value)}
@@ -77,7 +79,7 @@ export default function EditTestsFormContent({ initialData, onCancel, onSuccess 
 
 			<div className="mb-4 grid grid-cols-2 gap-4">
 				<div>
-					<label className="block mb-1 font-semibold">Start</label>
+					<label className="block mb-1 font-semibold">{t("EditTestsFormContent.start_date")}</label>
 					<input
 						type="datetime-local"
 						value={startsAt}
@@ -87,7 +89,7 @@ export default function EditTestsFormContent({ initialData, onCancel, onSuccess 
 				</div>
 
 				<div>
-					<label className="block mb-1 font-semibold">Koniec</label>
+					<label className="block mb-1 font-semibold">{t("EditTestsFormContent.end_date")}</label>
 					<input
 						type="datetime-local"
 						value={endsAt}
@@ -104,9 +106,9 @@ export default function EditTestsFormContent({ initialData, onCancel, onSuccess 
 
 			<AlertDialogFooter>
 				<Button onClick={handleSubmit} disabled={editMutation.isPending}>
-					{editMutation.isPending ? 'Zapisywanie...' : 'Zapisz'}
+					{editMutation.isPending ? t("EditTestsFormContent.creating") : t("EditTestsFormContent.create_test")}
 				</Button>
-				<AlertDialogCancel onClick={onCancel}>Anuluj</AlertDialogCancel>
+				<AlertDialogCancel onClick={onCancel}>{t("EditTestsFormContent.cancel")}</AlertDialogCancel>
 			</AlertDialogFooter>
 		</div>
 	);

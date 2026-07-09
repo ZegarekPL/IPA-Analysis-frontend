@@ -15,13 +15,15 @@ import {
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 export default function AddGroupForm() {
 	const [open, setOpen] = useState(false);
-
+	const t = useTranslations();
+	
 	const handleSuccess = () => {
-		toast.success('Grupa dodana 🎉', {
-			description: 'Nowa grupa została zapisana pomyślnie.',
+		toast.success(t("AddGroupForm.toast_title"), {
+			description: t("AddGroupForm.toast_description"),
 		});
 		setOpen(false);
 	};
@@ -30,15 +32,15 @@ export default function AddGroupForm() {
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<Button variant="outline" size="sm">
-					<Plus />
-					<span className="hidden lg:inline">Create Group</span>
+					<IconPlus />
+					<span className="hidden lg:inline">{t("AddGroupForm.create_group")}</span>
 				</Button>
 			</AlertDialogTrigger>
 
 			<AlertDialogContent className="max-w-2xl">
 				<AlertDialogHeader>
-					<AlertDialogTitle>{'Utwórz nową grupę'}</AlertDialogTitle>
-					<AlertDialogDescription>{'Wypełnij poniższy formularz, aby utworzyć nową grupę.'}</AlertDialogDescription>
+					<AlertDialogTitle>{t("AddGroupForm.group_title")}</AlertDialogTitle>
+					<AlertDialogDescription>{t("AddGroupForm.group_description")}</AlertDialogDescription>
 				</AlertDialogHeader>
 
 				<AddGroupFormContent onCancel={() => setOpen(false)} onSuccess={handleSuccess} />

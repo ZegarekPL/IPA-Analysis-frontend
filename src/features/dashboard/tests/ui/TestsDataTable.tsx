@@ -12,16 +12,7 @@ import {
 	useReactTable,
 	VisibilityState,
 } from '@tanstack/react-table';
-import {
-	ChevronDown,
-	ChevronLeft,
-	ChevronRight,
-	ChevronsLeft,
-	ChevronsRight,
-	MoreVertical,
-	LayoutGrid,
-	Search,
-} from 'lucide-react';
+import { Check, LucideSearch, X } from 'lucide-react';
 import Link from 'next/link';
 
 import { TestsTableRow } from '../db/api';
@@ -41,134 +32,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { slugify } from '@/utils/slugify';
-
-const columns: ColumnDef<TestsTableRow>[] = [
-	{
-		id: 'select',
-		header: ({ table }) => (
-			<div className="flex items-center justify-center">
-				<Checkbox
-					checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-					onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-					aria-label="Select all"
-				/>
-			</div>
-		),
-		cell: ({ row }) => (
-			<div className="flex items-center justify-center">
-				<Checkbox
-					checked={row.getIsSelected()}
-					onCheckedChange={(value) => row.toggleSelected(!!value)}
-					aria-label="Select row"
-				/>
-			</div>
-		),
-		enableSorting: false,
-		enableHiding: false,
-	},
-	{
-		accessorKey: 'name',
-		header: 'Name',
-		cell: ({ row }) => {
-			const testName = row.original.name;
-			const testId = row.original.id;
-
-			const slug = slugify(testName);
-			return (
-				<Link href={`/dashboard/tests/${slug}-${testId}`} className="text-primary hover:underline font-medium">
-					<div className="truncate max-w-xs" title={testName}>
-						{testName}
-					</div>
-				</Link>
-			);
-		},
-		enableHiding: false,
-	},
-	{
-		accessorKey: 'description',
-		header: 'Description',
-		cell: ({ row }) => {
-			return (
-				<div className="truncate max-w-xs" title={row.original.description}>
-					{row.original.description}
-				</div>
-			);
-		},
-	},
-	{
-		accessorKey: 'template',
-		header: 'Template',
-		cell: ({ row }) => {
-			return (
-				<div className="truncate max-w-48" title={row.original.template.name}>
-					{row.original.template.name}
-				</div>
-			);
-		},
-	},
-	{
-		accessorKey: 'created By',
-		header: 'Created By',
-		cell: ({ row }) => {
-			return row.original.createdBy;
-		},
-	},
-	{
-		accessorKey: 'startsAt',
-		header: 'Starts At',
-		cell: ({ row }) => {
-			return row.original.startsAt;
-		},
-	},
-	{
-		accessorKey: 'endsAt',
-		header: 'Ends At',
-		cell: ({ row }) => {
-			return row.original.endsAt;
-		},
-	},
-	{
-		accessorKey: 'IsActive',
-		header: 'Is Active',
-		cell: ({ row }) => {
-			return row.original.active;
-		},
-	},
-	{
-		accessorKey: 'createdAt',
-		header: 'Created At',
-		cell: ({ row }) => {
-			return row.original.createdAt;
-		},
-	},
-	{
-		id: 'actions',
-		cell: ({ row }) => (
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button variant="ghost" className="data-[state=open]:bg-muted text-muted-foreground flex size-8" size="icon">
-						<MoreVertical />
-						<span className="sr-only">Open menu</span>
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent align="end" className="w-32">
-					<DropdownMenuItem asChild>
-						<EditTestsForm
-							test={{
-								id: row.original.id,
-								name: row.original.name,
-								description: row.original.description,
-								startsAt: row.original.startsAt,
-								endsAt: row.original.endsAt,
-								active: row.original.active,
-							}}
-						/>
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
-		),
-	},
-];
+import { useTranslations } from 'next-intl';
 
 interface TestsDataTableProps {
 	data: TestsTableRow[];
@@ -196,7 +60,141 @@ export function TestsDataTable({
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [inputValue, setInputValue] = React.useState(search || '');
+	const t = useTranslations();
+	
+	const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
 
+	const columns: ColumnDef<TestsTableRow>[] = [
+		{
+			id: 'select',
+			header: ({ table }) => (
+				<div className="flex items-center justify-center">
+					<Checkbox
+						checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+						onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+						aria-label={t('Table.select_all')}
+					/>
+				</div>
+			),
+			cell: ({ row }) => (
+				<div className="flex items-center justify-center">
+					<Checkbox
+						checked={row.getIsSelected()}
+						onCheckedChange={(value) => row.toggleSelected(!!value)}
+						aria-label={t('Table.select_row')}
+					/>
+				</div>
+			),
+			enableSorting: false,
+			enableHiding: false,
+		},
+		{
+			accessorKey: 'name',
+			header: () => t('TestsDataTable.name'),
+			cell: ({ row }) => {
+				const testName = row.original.name;
+				const testId = row.original.id;
+
+				const slug = slugify(testName);
+				return (
+					<Link href={`/dashboard/tests/${slug}-${testId}`} className="text-primary hover:underline font-medium">
+						<div className="truncate max-w-[20rem]" title={testName}>
+							{testName}
+						</div>
+					</Link>
+				);
+			},
+			enableHiding: false,
+		},
+		{
+			accessorKey: 'description',
+			header: () => t('TestsDataTable.description'),
+			cell: ({ row }) => {
+				return (
+					<div className="truncate max-w-[10rem]" title={row.original.description}>
+						{row.original.description}
+					</div>
+				);
+			},
+		},
+		{
+			accessorKey: 'template',
+			header: () => t('TestsDataTable.template'),
+			cell: ({ row }) => {
+				return (
+					<div className="truncate max-w-48" title={row.original.template.name}>
+						{row.original.template.name}
+					</div>
+				);
+			},
+		},
+		{
+			accessorKey: 'created By',
+			header: () => t('TestsDataTable.created_by'),
+			cell: ({ row }) => {
+				return row.original.createdBy;
+			},
+		},
+		{
+			accessorKey: 'startsAt',
+			header: () => t('TestsDataTable.starts_at'),
+			cell: ({ row }) => {
+				return row.original.startsAt;
+			},
+		},
+		{
+			accessorKey: 'endsAt',
+			header: () => t('TestsDataTable.ends_at'),
+			cell: ({ row }) => {
+				return row.original.endsAt;
+			},
+		},
+		{
+		accessorKey: 'IsActive',
+		header: () => t('TestsDataTable.is_active'),
+		cell: ({ row }) => {
+			return row.original.active ? (
+				<Check className="h-4 w-4 text-green-600" />
+			) : (
+				<X className="h-4 w-4 text-red-600" />
+			);
+		},
+		},
+		{
+			accessorKey: 'createdAt',
+			header: () => t('TestsDataTable.created_at'),
+			cell: ({ row }) => {
+				return row.original.createdAt;
+			},
+		},
+		{
+			id: 'actions',
+			cell: ({ row }) => (
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button variant="ghost" className="data-[state=open]:bg-muted text-muted-foreground flex size-8" size="icon">
+							<IconDotsVertical />
+							<span className="sr-only">{t('Table.open_menu')}</span>
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="end" className="w-32">
+						<DropdownMenuItem asChild>
+							<EditTestsForm
+								test={{
+									id: row.original.id,
+									name: row.original.name,
+									description: row.original.description,
+									startsAt: row.original.startsAt,
+									endsAt: row.original.endsAt,
+									active: row.original.active,
+								}}
+							/>
+						</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
+			),
+		},
+	];
 
 	const table = useReactTable({
 		data,
@@ -228,7 +226,7 @@ export function TestsDataTable({
 				<div className="flex items-center gap-2">
 					<Input
 						type="text"
-						placeholder="Search..."
+						placeholder={`${t("Table.search")}...`}
 						value={inputValue}
 						onChange={(e) => setInputValue(e.target.value)}
 						onKeyDown={(e) => {
@@ -253,10 +251,10 @@ export function TestsDataTable({
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="outline" size="sm">
-								<LayoutGrid />
-								<span className="hidden lg:inline">Customize Columns</span>
-								<span className="lg:hidden">Columns</span>
-								<ChevronDown />
+								<IconLayoutColumns />
+								<span className="hidden lg:inline">{t("Table.customize_columns")}</span>
+								<span className="lg:hidden">{t("Table.columns")}</span>
+								<IconChevronDown />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end" className="w-56">
@@ -307,7 +305,7 @@ export function TestsDataTable({
 							) : (
 								<TableRow>
 									<TableCell colSpan={columns.length} className="h-24 text-center">
-										No results.
+										{t("Table.no_results")}
 									</TableCell>
 								</TableRow>
 							)}
@@ -316,12 +314,12 @@ export function TestsDataTable({
 				</div>
 				<div className="flex items-center justify-between px-4">
 					<div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-						{table.getFilteredSelectedRowModel().rows.length} of {total} row(s) selected.
+						{table.getFilteredSelectedRowModel().rows.length} {t("Table.of")} {total} {t("Table.rows_selected")}
 					</div>
 					<div className="flex w-full items-center gap-8 lg:w-fit">
 						<div className="hidden items-center gap-2 lg:flex">
 							<Label htmlFor="rows-per-page" className="text-sm font-medium">
-								Rows per page
+								{t("Table.rows_per_page")}
 							</Label>
 							<Select
 								value={rowsPerPage.toString()}
@@ -344,7 +342,7 @@ export function TestsDataTable({
 						</div>
 
 						<div className="flex w-fit items-center justify-center text-sm font-medium">
-							Page {page} of {Math.ceil(total / rowsPerPage)}
+							{t("Table.page")} {page} {t("Table.of")} {Math.ceil(total / rowsPerPage)}
 						</div>
 
 						<div className="ml-auto flex items-center gap-2 lg:ml-0">
@@ -354,8 +352,8 @@ export function TestsDataTable({
 								onClick={() => setPage(1)}
 								disabled={page === 1}
 							>
-								<span className="sr-only">Go to first page</span>
-								<ChevronsLeft />
+								<span className="sr-only">{t("Table.go_to_first_page")}</span>
+								<IconChevronsLeft />
 							</Button>
 							<Button
 								variant="outline"
@@ -364,8 +362,8 @@ export function TestsDataTable({
 								onClick={() => setPage(page - 1)}
 								disabled={page === 1}
 							>
-								<span className="sr-only">Go to previous page</span>
-								<ChevronLeft />
+								<span className="sr-only">{t("Table.go_to_previous_page")}</span>
+								<IconChevronLeft />
 							</Button>
 							<Button
 								variant="outline"
@@ -374,8 +372,8 @@ export function TestsDataTable({
 								onClick={() => setPage(page + 1)}
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
-								<span className="sr-only">Go to next page</span>
-								<ChevronRight />
+								<span className="sr-only">{t("Table.go_to_next_page")}</span>
+								<IconChevronRight />
 							</Button>
 							<Button
 								variant="outline"
@@ -384,8 +382,8 @@ export function TestsDataTable({
 								onClick={() => setPage(Math.ceil(total / rowsPerPage))}
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
-								<span className="sr-only">Go to last page</span>
-								<ChevronsRight />
+								<span className="sr-only">{t("Table.go_to_last_page")}</span>
+								<IconChevronsRight />
 							</Button>
 						</div>
 					</div>

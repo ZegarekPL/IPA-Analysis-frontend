@@ -116,10 +116,13 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
-        uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-        with:
-          tag_name: ${{ steps.get_tag.outputs.new_tag }}
-          release_name: Release ${{ steps.get_tag.outputs.new_tag }}
-          body: ${{ steps.generate_notes.outputs.release_body }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cat <<'EOF' > release_notes.md
+          ${{ steps.generate_notes.outputs.release_body }}
+          EOF
+
+          gh release create "${{ steps.get_tag.outputs.new_tag }}" \
+            --title "Release ${{ steps.get_tag.outputs.new_tag }}" \
+            --notes-file release_notes.md

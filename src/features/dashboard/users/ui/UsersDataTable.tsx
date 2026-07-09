@@ -40,6 +40,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useTranslations } from 'next-intl';
 
 export const schema = z.object({
 	id: z.string(),
@@ -50,97 +51,6 @@ export const schema = z.object({
 	updatedAt: z.string(),
 });
 
-const columns: ColumnDef<z.infer<typeof schema>>[] = [
-	{
-		id: 'select',
-		header: ({ table }) => (
-			<div className="flex items-center justify-center">
-				<Checkbox
-					checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-					onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-					aria-label="Select all"
-				/>
-			</div>
-		),
-		cell: ({ row }) => (
-			<div className="flex items-center justify-center">
-				<Checkbox
-					checked={row.getIsSelected()}
-					onCheckedChange={(value) => row.toggleSelected(!!value)}
-					aria-label="Select row"
-				/>
-			</div>
-		),
-		enableSorting: false,
-		enableHiding: false,
-	},
-	{
-		accessorKey: 'header',
-		header: 'Index',
-		cell: ({ row }) => {
-			return row.original.index;
-		},
-		enableHiding: false,
-	},
-	{
-		accessorKey: 'email',
-		header: 'Email',
-		cell: ({ row }) => {
-			return row.original.mail;
-		},
-	},
-	{
-		accessorKey: 'role',
-		header: 'Role',
-		cell: ({ row }) => (
-			<Select defaultValue={row.original.role} onValueChange={() => changeUserRole(row.original.id)}>
-				<SelectTrigger className="w-28 h-7">
-					<SelectValue />
-				</SelectTrigger>
-				<SelectContent>
-					<SelectItem value="admin">Admin</SelectItem>
-					<SelectItem value="user">User</SelectItem>
-				</SelectContent>
-			</Select>
-		),
-	},
-	{
-		accessorKey: 'created At',
-		header: 'Created At',
-		cell: ({ row }) => {
-			return row.original.createdAt;
-		},
-	},
-	{
-		accessorKey: 'updated At',
-		header: 'Updated At',
-		cell: ({ row }) => {
-			return row.original.updatedAt;
-		},
-	},
-	{
-		id: 'actions',
-		cell: ({ row }) => (
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button variant="ghost" className="data-[state=open]:bg-muted text-muted-foreground flex size-8" size="icon">
-						<MoreVertical />
-						<span className="sr-only">Open menu</span>
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent align="end" className="w-32">
-					<DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
-						<DeleteUsersForm
-							user={{
-								id: row.original.id,
-							}}
-						/>
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
-		),
-	},
-];
 interface UsersDataTableProps {
 	data: z.infer<typeof schema>[];
 	page: number;
@@ -167,6 +77,104 @@ export function UsersDataTable({
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [inputValue, setInputValue] = React.useState(search || '');
+	const t = useTranslations();
+	
+	const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
+
+	const columns: ColumnDef<z.infer<typeof schema>>[] = React.useMemo(
+		() => [
+			{
+				id: 'select',
+				header: ({ table }) => (
+					<div className="flex items-center justify-center">
+						<Checkbox
+							checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+							onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+							aria-label={t('Table.select_all')}
+						/>
+					</div>
+				),
+				cell: ({ row }) => (
+					<div className="flex items-center justify-center">
+						<Checkbox
+							checked={row.getIsSelected()}
+							onCheckedChange={(value) => row.toggleSelected(!!value)}
+							aria-label={t('Table.select_row')}
+						/>
+					</div>
+				),
+				enableSorting: false,
+				enableHiding: false,
+			},
+			{
+				accessorKey: 'header',
+				header: () => t('UsersDataTable.index'),
+				cell: ({ row }) => {
+					return row.original.index;
+				},
+				enableHiding: false,
+			},
+			{
+				accessorKey: 'email',
+				header: () => t('UsersDataTable.email'),
+				cell: ({ row }) => {
+					return row.original.mail;
+				},
+			},
+			{
+				accessorKey: 'role',
+				header: () => t('UsersDataTable.role'),
+				cell: ({ row }) => (
+					<Select defaultValue={row.original.role} onValueChange={() => changeUserRole(row.original.id)}>
+						<SelectTrigger className="w-28 h-7">
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="admin">{t('UsersDataTable.Admin')}</SelectItem>
+							<SelectItem value="user">{t('UsersDataTable.User')}</SelectItem>
+						</SelectContent>
+					</Select>
+				),
+			},
+			{
+				accessorKey: 'created At',
+				header: () => t('UsersDataTable.created_at'),
+				cell: ({ row }) => {
+					return row.original.createdAt;
+				},
+			},
+			{
+				accessorKey: 'updated At',
+				header: () => t('UsersDataTable.updated_at'),
+				cell: ({ row }) => {
+					return row.original.updatedAt;
+				},
+			},
+			{
+				id: 'actions',
+				cell: ({ row }) => (
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant="ghost" className="data-[state=open]:bg-muted text-muted-foreground flex size-8" size="icon">
+								<IconDotsVertical />
+								<span className="sr-only">{t('Table.open_menu')}</span>
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="end" className="w-32">
+							<DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
+								<DeleteUsersForm
+									user={{
+										id: row.original.id,
+									}}
+								/>
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				),
+			},
+		],
+		[],
+	);
 
 	const table = useReactTable({
 		data,
@@ -198,7 +206,7 @@ export function UsersDataTable({
 				<div className="flex items-center gap-2">
 					<Input
 						type="text"
-						placeholder="Search..."
+						placeholder={`${t("Table.search")}...`}
 						value={inputValue}
 						onChange={(e) => setInputValue(e.target.value)}
 						onKeyDown={(e) => {
@@ -223,10 +231,10 @@ export function UsersDataTable({
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="outline" size="sm">
-								<LayoutGrid />
-								<span className="hidden lg:inline">Customize Columns</span>
-								<span className="lg:hidden">Columns</span>
-								<ChevronDown />
+								<IconLayoutColumns />
+								<span className="hidden lg:inline">{t("Table.customize_columns")}</span>
+								<span className="lg:hidden">{t("Table.columns")}</span>
+								<IconChevronDown />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end" className="w-56">
@@ -277,7 +285,7 @@ export function UsersDataTable({
 							) : (
 								<TableRow>
 									<TableCell colSpan={columns.length} className="h-24 text-center">
-										No results.
+										{t("Table.no_results")}
 									</TableCell>
 								</TableRow>
 							)}
@@ -286,12 +294,12 @@ export function UsersDataTable({
 				</div>
 				<div className="flex items-center justify-between px-4">
 					<div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-						{table.getFilteredSelectedRowModel().rows.length} of {total} row(s) selected.
+						{table.getFilteredSelectedRowModel().rows.length} {t("Table.of")} {total} {t("Table.rows_selected")}
 					</div>
 					<div className="flex w-full items-center gap-8 lg:w-fit">
 						<div className="hidden items-center gap-2 lg:flex">
 							<Label htmlFor="rows-per-page" className="text-sm font-medium">
-								Rows per page
+								{t("Table.rows_per_page")}
 							</Label>
 							<Select
 								value={rowsPerPage.toString()}
@@ -314,7 +322,7 @@ export function UsersDataTable({
 						</div>
 
 						<div className="flex w-fit items-center justify-center text-sm font-medium">
-							Page {page} of {Math.ceil(total / rowsPerPage)}
+							{t("Table.page")} {page} {t("Table.of")} {Math.ceil(total / rowsPerPage)}
 						</div>
 
 						<div className="ml-auto flex items-center gap-2 lg:ml-0">
@@ -324,8 +332,8 @@ export function UsersDataTable({
 								onClick={() => setPage(1)}
 								disabled={page === 1}
 							>
-								<span className="sr-only">Go to first page</span>
-								<ChevronsLeft />
+								<span className="sr-only">{t("Table.go_to_first_page")}</span>
+								<IconChevronsLeft />
 							</Button>
 							<Button
 								variant="outline"
@@ -334,8 +342,8 @@ export function UsersDataTable({
 								onClick={() => setPage(page - 1)}
 								disabled={page === 1}
 							>
-								<span className="sr-only">Go to previous page</span>
-								<ChevronLeft />
+								<span className="sr-only">{t("Table.go_to_previous_page")}</span>
+								<IconChevronLeft />
 							</Button>
 							<Button
 								variant="outline"
@@ -344,8 +352,8 @@ export function UsersDataTable({
 								onClick={() => setPage(page + 1)}
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
-								<span className="sr-only">Go to next page</span>
-								<ChevronRight />
+								<span className="sr-only">{t("Table.go_to_next_page")}</span>
+								<IconChevronRight />
 							</Button>
 							<Button
 								variant="outline"
@@ -354,8 +362,8 @@ export function UsersDataTable({
 								onClick={() => setPage(Math.ceil(total / rowsPerPage))}
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
-								<span className="sr-only">Go to last page</span>
-								<ChevronsRight />
+								<span className="sr-only">{t("Table.go_to_last_page")}</span>
+								<IconChevronsRight />
 							</Button>
 						</div>
 					</div>

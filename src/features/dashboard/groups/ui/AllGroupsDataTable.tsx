@@ -46,6 +46,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { GetUserSuccessResponse } from '@/features/auth/Login';
 import { slugify } from '@/utils/slugify';
+import { useTranslations } from 'next-intl';
 
 export const schema = z.object({
 	id: z.string(),
@@ -85,6 +86,9 @@ export function AllGroupsDataTable({
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [inputValue, setInputValue] = React.useState(search || '');
+	const t = useTranslations();
+	
+	const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
 
 	const queryClient = useQueryClient();
 
@@ -111,7 +115,7 @@ export function AllGroupsDataTable({
 						<Checkbox
 							checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
 							onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-							aria-label="Select all"
+							aria-label={t('Table.select_all')}
 						/>
 					</div>
 				),
@@ -120,7 +124,7 @@ export function AllGroupsDataTable({
 						<Checkbox
 							checked={row.getIsSelected()}
 							onCheckedChange={(value) => row.toggleSelected(!!value)}
-							aria-label="Select row"
+							aria-label={t('Table.select_row')}	
 						/>
 					</div>
 				),
@@ -129,7 +133,7 @@ export function AllGroupsDataTable({
 			},
 			{
 				accessorKey: 'name',
-				header: 'Name',
+				header: () => t('AllGroupsDataTable.name'),
 				cell: ({ row }) => {
 					const groupName = row.original.header;
 					const groupId = row.original.id;
@@ -147,7 +151,7 @@ export function AllGroupsDataTable({
 			},
 			{
 				accessorKey: 'description',
-				header: 'Description',
+				header: () => t('AllGroupsDataTable.description'),
 				cell: ({ row }) => {
 					return (
 						<div className="truncate max-w-xs" title={row.original.description}>
@@ -158,21 +162,21 @@ export function AllGroupsDataTable({
 			},
 			{
 				accessorKey: 'members',
-				header: 'Members',
+				header: () => t('AllGroupsDataTable.members'),
 				cell: ({ row }) => {
 					return row.original.membersCount;
 				},
 			},
 			{
 				accessorKey: 'created At',
-				header: 'Created At',
+				header: () => t('AllGroupsDataTable.created_at'),
 				cell: ({ row }) => {
 					return row.original.createdAt;
 				},
 			},
 			{
 				accessorKey: 'updated At',
-				header: 'Updated At',
+				header: () => t('AllGroupsDataTable.updated_at'),
 				cell: ({ row }) => {
 					return row.original.updatedAt;
 				},
@@ -187,8 +191,8 @@ export function AllGroupsDataTable({
 								className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
 								size="icon"
 							>
-								<MoreVertical />
-								<span className="sr-only">Open menu</span>
+								<IconDotsVertical />
+								<span className="sr-only">{t('Table.open_menu')}</span>
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end" className="w-32">
@@ -213,7 +217,9 @@ export function AllGroupsDataTable({
 									}
 								}}
 							>
-								{row.original.isMember ? 'Leave' : 'Join'}
+								{row.original.isMember
+									? t("AllGroupsDataTable.leave_group")
+									: t("AllGroupsDataTable.join_group")}
 							</DropdownMenuItem>
 							{userData.data.user.role === 'admin' && (
 								<>
@@ -267,7 +273,7 @@ export function AllGroupsDataTable({
 				<div className="flex items-center gap-2">
 					<Input
 						type="text"
-						placeholder="Search..."
+						placeholder={`${t("Table.search")}...`}
 						value={inputValue}
 						onChange={(e) => setInputValue(e.target.value)}
 						onKeyDown={(e) => {
@@ -292,10 +298,10 @@ export function AllGroupsDataTable({
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="outline" size="sm">
-								<LayoutGrid />
-								<span className="hidden lg:inline">Customize Columns</span>
-								<span className="lg:hidden">Columns</span>
-								<ChevronDown />
+								<IconLayoutColumns />
+								<span className="hidden lg:inline">{t("Table.customize_columns")}</span>
+								<span className="lg:hidden">{t("Table.columns")}</span>
+								<IconChevronDown />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end" className="w-56">
@@ -346,7 +352,7 @@ export function AllGroupsDataTable({
 							) : (
 								<TableRow>
 									<TableCell colSpan={columns.length} className="h-24 text-center">
-										No results.
+										{t("Table.no_results")}
 									</TableCell>
 								</TableRow>
 							)}
@@ -355,12 +361,12 @@ export function AllGroupsDataTable({
 				</div>
 				<div className="flex items-center justify-between px-4">
 					<div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-						{table.getFilteredSelectedRowModel().rows.length} of {total} row(s) selected.
+						{table.getFilteredSelectedRowModel().rows.length} {t("Table.of")} {total} {t("Table.rows_selected")}
 					</div>
 					<div className="flex w-full items-center gap-8 lg:w-fit">
 						<div className="hidden items-center gap-2 lg:flex">
 							<Label htmlFor="rows-per-page" className="text-sm font-medium">
-								Rows per page
+								{t("Table.rows_per_page")}
 							</Label>
 							<Select
 								value={rowsPerPage.toString()}
@@ -383,7 +389,7 @@ export function AllGroupsDataTable({
 						</div>
 
 						<div className="flex w-fit items-center justify-center text-sm font-medium">
-							Page {page} of {Math.ceil(total / rowsPerPage)}
+							{t("Table.page")} {page} {t("Table.of")} {Math.ceil(total / rowsPerPage)}
 						</div>
 
 						<div className="ml-auto flex items-center gap-2 lg:ml-0">
@@ -393,8 +399,8 @@ export function AllGroupsDataTable({
 								onClick={() => setPage(1)}
 								disabled={page === 1}
 							>
-								<span className="sr-only">Go to first page</span>
-								<ChevronsLeft />
+								<span className="sr-only">{t("Table.go_to_first_page")}</span>
+								<IconChevronsLeft />
 							</Button>
 							<Button
 								variant="outline"
@@ -403,8 +409,8 @@ export function AllGroupsDataTable({
 								onClick={() => setPage(page - 1)}
 								disabled={page === 1}
 							>
-								<span className="sr-only">Go to previous page</span>
-								<ChevronLeft />
+								<span className="sr-only">{t("Table.go_to_previous_page")}</span>
+								<IconChevronLeft />
 							</Button>
 							<Button
 								variant="outline"
@@ -413,8 +419,8 @@ export function AllGroupsDataTable({
 								onClick={() => setPage(page + 1)}
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
-								<span className="sr-only">Go to next page</span>
-								<ChevronRight />
+								<span className="sr-only">{t("Table.go_to_next_page")}</span>
+								<IconChevronRight />
 							</Button>
 							<Button
 								variant="outline"
@@ -423,8 +429,8 @@ export function AllGroupsDataTable({
 								onClick={() => setPage(Math.ceil(total / rowsPerPage))}
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
-								<span className="sr-only">Go to last page</span>
-								<ChevronsRight />
+								<span className="sr-only">{t("Table.go_to_last_page")}</span>
+								<IconChevronsRight />
 							</Button>
 						</div>
 					</div>

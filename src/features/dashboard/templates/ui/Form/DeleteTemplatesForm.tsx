@@ -17,27 +17,29 @@ import {
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 interface DeleteTemplatesProps {
 	template: EditTemplatesFormProps['template'];
 }
 
-export default function DeleteGroupForm({ template }: DeleteTemplatesProps) {
+export default function DeleteTemplatesForm({ template }: DeleteTemplatesProps) {
 	const [open, setOpen] = useState(false);
 	const queryClient = useQueryClient();
-
+	const t = useTranslations();
+	
 	const deleteMutation = useMutation({
 		mutationFn: () => deleteTemplates(template.id),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['templates'] });
-			toast.success('Szablon usunięty 🗑️', {
-				description: 'Szablon został pomyślnie usunięty.',
+			toast.success(t("DeleteTemplatesForm.toast_title"), {
+				description: t("DeleteTemplatesForm.toast_description"),
 			});
 			setOpen(false);
 		},
 		onError: (error) => {
-			console.error('Błąd podczas usuwania szablonu:', error);
-			toast.error('Nie udało się usunąć szablonu');
+			console.error('t("DeleteTemplatesForm.error_deleting_template")', error);
+			toast.error(t("DeleteTemplatesForm.error_deleting_template_description"));
 		},
 	});
 
@@ -48,22 +50,22 @@ export default function DeleteGroupForm({ template }: DeleteTemplatesProps) {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
-				<span>Usuń szablon</span>
+				<span>{t('DeleteTemplatesForm.delete_template')}</span>
 			</AlertDialogTrigger>
 
 			<AlertDialogContent className="max-w-md">
 				<AlertDialogHeader>
-					<AlertDialogTitle>Potwierdź usunięcie</AlertDialogTitle>
+					<AlertDialogTitle>{t('DeleteTemplatesForm.delete_template')}</AlertDialogTitle>
 					<AlertDialogDescription>
-						Czy na pewno chcesz usunąć szablon "{template.name}"? Operacji nie da się cofnąć.
+						{t('DeleteTemplatesForm.delete_template_description1')} "{template.name}"? {t('DeleteTemplatesForm.delete_template_description2')}
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 
 				<AlertDialogFooter>
 					<Button variant="destructive" onClick={handleConfirm} disabled={deleteMutation.isPending}>
-						{deleteMutation.isPending ? 'Usuwanie...' : 'Potwierdzam'}
+						{deleteMutation.isPending ? t('DeleteTemplatesForm.deleting') : t('DeleteTemplatesForm.confirm')}
 					</Button>
-					<AlertDialogCancel>Anuluj</AlertDialogCancel>
+					<AlertDialogCancel>{t('DeleteTemplatesForm.cancel')}</AlertDialogCancel>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>
