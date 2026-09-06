@@ -31,7 +31,7 @@ export default function AddTemplatesForm() {
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<Button variant="outline" size="sm">
-					<IconPlus />
+					<Plus />
 					<span className="hidden lg:inline">{t("AddTemplatesForm.create_template")}</span>
 				</Button>
 			</AlertDialogTrigger>

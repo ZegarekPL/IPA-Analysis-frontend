@@ -12,7 +12,7 @@ import {
 	useReactTable,
 	VisibilityState,
 } from '@tanstack/react-table';
-import { Check, LucideSearch, X } from 'lucide-react';
+import { Check, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, LayoutGrid, MoreVertical, Search, X } from 'lucide-react';
 import Link from 'next/link';
 
 import { TestsTableRow } from '../db/api';
@@ -173,7 +173,7 @@ export function TestsDataTable({
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button variant="ghost" className="data-[state=open]:bg-muted text-muted-foreground flex size-8" size="icon">
-							<IconDotsVertical />
+							<MoreVertical />
 							<span className="sr-only">{t('Table.open_menu')}</span>
 						</Button>
 					</DropdownMenuTrigger>
@@ -251,10 +251,10 @@ export function TestsDataTable({
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="outline" size="sm">
-								<IconLayoutColumns />
+								<LayoutGrid />
 								<span className="hidden lg:inline">{t("Table.customize_columns")}</span>
 								<span className="lg:hidden">{t("Table.columns")}</span>
-								<IconChevronDown />
+								<ChevronDown />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end" className="w-56">
@@ -353,7 +353,7 @@ export function TestsDataTable({
 								disabled={page === 1}
 							>
 								<span className="sr-only">{t("Table.go_to_first_page")}</span>
-								<IconChevronsLeft />
+								<ChevronsLeft />
 							</Button>
 							<Button
 								variant="outline"
@@ -363,7 +363,7 @@ export function TestsDataTable({
 								disabled={page === 1}
 							>
 								<span className="sr-only">{t("Table.go_to_previous_page")}</span>
-								<IconChevronLeft />
+								<ChevronLeft />
 							</Button>
 							<Button
 								variant="outline"
@@ -373,7 +373,7 @@ export function TestsDataTable({
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
 								<span className="sr-only">{t("Table.go_to_next_page")}</span>
-								<IconChevronRight />
+								<ChevronRight />
 							</Button>
 							<Button
 								variant="outline"
@@ -383,7 +383,7 @@ export function TestsDataTable({
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
 								<span className="sr-only">{t("Table.go_to_last_page")}</span>
-								<IconChevronsRight />
+								<ChevronsRight />
 							</Button>
 						</div>
 					</div>

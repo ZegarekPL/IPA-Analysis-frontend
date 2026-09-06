@@ -32,7 +32,7 @@ export default function AddGroupForm() {
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<Button variant="outline" size="sm">
-					<IconPlus />
+					<Plus />
 					<span className="hidden lg:inline">{t("AddGroupForm.create_group")}</span>
 				</Button>
 			</AlertDialogTrigger>
