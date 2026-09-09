@@ -42,7 +42,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 		<Sidebar collapsible="icon" {...props}>
 			<SidebarHeader>
 				<Link href={`/`} className="w-full flex items-center justify-center py-2">
-					<Image src="/next.svg" alt="Logo" width={100} height={24} className="dark:invert" />
+					<Image src="/logo_prz.png" alt="Logo" width={150} height={32} className="dark:invert" />
 				</Link>
 			</SidebarHeader>
 			<SidebarContent>

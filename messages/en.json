@@ -34,16 +34,20 @@
 	},
 	"Sidebar": {
 		"main": "Main",
+		"dashboard": "Dashboard",
 		"groups": "Groups",
 		"admin": "Admin Panel",
 		"users": "Users",
 		"templates": "Templates",
 		"tests": "Tests",
 		"account": "Account",
+		"user": "Profile",
 		"login": "Sign in",
+		"register": "Sign Up",
+		"password_reset": "Password Reset",
 		"logout": "Log out"
 	},
-	"Table":{
+	"Table": {
 		"select_all": "Select all",
 		"select_row": "Select row",
 		"search": "Search",
@@ -242,7 +246,7 @@
 		"save": "Save",
 		"cancel": "Cancel"
 	},
-	"TemplatesDataTable":{
+	"TemplatesDataTable": {
 		"name": "Name",
 		"description": "Description",
 		"closed_questions": "Closed Questions",

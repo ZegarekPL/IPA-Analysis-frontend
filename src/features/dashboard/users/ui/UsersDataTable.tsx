@@ -78,8 +78,6 @@ export function UsersDataTable({
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [inputValue, setInputValue] = React.useState(search || '');
 	const t = useTranslations();
-	
-	const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
 
 	const columns: ColumnDef<z.infer<typeof schema>>[] = React.useMemo(
 		() => [
@@ -155,7 +153,11 @@ export function UsersDataTable({
 				cell: ({ row }) => (
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" className="data-[state=open]:bg-muted text-muted-foreground flex size-8" size="icon">
+							<Button
+								variant="ghost"
+								className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+								size="icon"
+							>
 								<MoreVertical />
 								<span className="sr-only">{t('Table.open_menu')}</span>
 							</Button>
@@ -206,7 +208,7 @@ export function UsersDataTable({
 				<div className="flex items-center gap-2">
 					<Input
 						type="text"
-						placeholder={`${t("Table.search")}...`}
+						placeholder={`${t('Table.search')}...`}
 						value={inputValue}
 						onChange={(e) => setInputValue(e.target.value)}
 						onKeyDown={(e) => {
@@ -232,8 +234,8 @@ export function UsersDataTable({
 						<DropdownMenuTrigger asChild>
 							<Button variant="outline" size="sm">
 								<LayoutGrid />
-								<span className="hidden lg:inline">{t("Table.customize_columns")}</span>
-								<span className="lg:hidden">{t("Table.columns")}</span>
+								<span className="hidden lg:inline">{t('Table.customize_columns')}</span>
+								<span className="lg:hidden">{t('Table.columns')}</span>
 								<ChevronDown />
 							</Button>
 						</DropdownMenuTrigger>
@@ -285,7 +287,7 @@ export function UsersDataTable({
 							) : (
 								<TableRow>
 									<TableCell colSpan={columns.length} className="h-24 text-center">
-										{t("Table.no_results")}
+										{t('Table.no_results')}
 									</TableCell>
 								</TableRow>
 							)}
@@ -294,12 +296,12 @@ export function UsersDataTable({
 				</div>
 				<div className="flex items-center justify-between px-4">
 					<div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-						{table.getFilteredSelectedRowModel().rows.length} {t("Table.of")} {total} {t("Table.rows_selected")}
+						{table.getFilteredSelectedRowModel().rows.length} {t('Table.of')} {total} {t('Table.rows_selected')}
 					</div>
 					<div className="flex w-full items-center gap-8 lg:w-fit">
 						<div className="hidden items-center gap-2 lg:flex">
 							<Label htmlFor="rows-per-page" className="text-sm font-medium">
-								{t("Table.rows_per_page")}
+								{t('Table.rows_per_page')}
 							</Label>
 							<Select
 								value={rowsPerPage.toString()}
@@ -322,7 +324,7 @@ export function UsersDataTable({
 						</div>
 
 						<div className="flex w-fit items-center justify-center text-sm font-medium">
-							{t("Table.page")} {page} {t("Table.of")} {Math.ceil(total / rowsPerPage)}
+							{t('Table.page')} {page} {t('Table.of')} {Math.ceil(total / rowsPerPage)}
 						</div>
 
 						<div className="ml-auto flex items-center gap-2 lg:ml-0">
@@ -332,7 +334,7 @@ export function UsersDataTable({
 								onClick={() => setPage(1)}
 								disabled={page === 1}
 							>
-								<span className="sr-only">{t("Table.go_to_first_page")}</span>
+								<span className="sr-only">{t('Table.go_to_first_page')}</span>
 								<ChevronsLeft />
 							</Button>
 							<Button
@@ -342,7 +344,7 @@ export function UsersDataTable({
 								onClick={() => setPage(page - 1)}
 								disabled={page === 1}
 							>
-								<span className="sr-only">{t("Table.go_to_previous_page")}</span>
+								<span className="sr-only">{t('Table.go_to_previous_page')}</span>
 								<ChevronLeft />
 							</Button>
 							<Button
@@ -352,7 +354,7 @@ export function UsersDataTable({
 								onClick={() => setPage(page + 1)}
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
-								<span className="sr-only">{t("Table.go_to_next_page")}</span>
+								<span className="sr-only">{t('Table.go_to_next_page')}</span>
 								<ChevronRight />
 							</Button>
 							<Button
@@ -362,7 +364,7 @@ export function UsersDataTable({
 								onClick={() => setPage(Math.ceil(total / rowsPerPage))}
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
-								<span className="sr-only">{t("Table.go_to_last_page")}</span>
+								<span className="sr-only">{t('Table.go_to_last_page')}</span>
 								<ChevronsRight />
 							</Button>
 						</div>
@@ -372,4 +374,3 @@ export function UsersDataTable({
 		</>
 	);
 }
-

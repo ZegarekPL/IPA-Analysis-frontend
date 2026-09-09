@@ -60,7 +60,7 @@ export default async function RootLayout({
 												<Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
 												<DynamicBreadcrumb />
 											</div>
-											<div className="z-90 absolute top-4 right-4 flex items-center gap-4">
+											<div className="absolute top-4 right-4 flex items-center gap-4">
 												<LocaleSelector />
 												<ModeToggle />
 											</div>

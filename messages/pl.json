@@ -34,16 +34,20 @@
 	},
 	"Sidebar": {
 		"main": "Główne",
+		"dashboard": "Panel główny",
 		"groups": "Grupy",
 		"admin": "Panel admina",
 		"users": "Użytkownicy",
 		"templates": "Szablony",
 		"tests": "Testy",
 		"account": "Konto",
+		"user": "Profil",
 		"login": "Zaloguj się",
+		"register": "Rejestracja",
+		"password_reset": "Reset hasła",
 		"logout": "Wyloguj się"
 	},
-	"Table":{
+	"Table": {
 		"select_all": "Zaznacz wszystkie",
 		"select_row": "Zaznacz wiersz",
 		"search": "Wyszukaj",
@@ -211,7 +215,7 @@
 		"save": "Zapisz",
 		"cancel": "Anuluj"
 	},
-	"DeleteUsersForm":{
+	"DeleteUsersForm": {
 		"toast_title": "Użytkownik usunięty",
 		"toast_description": "Użytkownik został pomyślnie usunięty.'",
 		"error_deleting_form": "Błąd podczas usuwania użytkownika:",
@@ -243,7 +247,7 @@
 		"save": "Zapisz",
 		"cancel": "Anuluj"
 	},
-	"TemplatesDataTable":{
+	"TemplatesDataTable": {
 		"name": "Nazwa",
 		"description": "Opis",
 		"closed_questions": "Pytania zamknięte",

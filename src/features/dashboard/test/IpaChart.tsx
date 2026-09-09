@@ -104,7 +104,7 @@ export function IpaChart({ points }: IpaChartProps) {
 							/>
 
 							<Scatter
-								name="Średnia"
+								name="average"
 								data={points as IpaPoint[]}
 								shape={(props: any) => {
 									const { cx, cy, payload } = props;

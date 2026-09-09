@@ -87,8 +87,6 @@ export function AllGroupsDataTable({
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [inputValue, setInputValue] = React.useState(search || '');
 	const t = useTranslations();
-	
-	const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
 
 	const queryClient = useQueryClient();
 
@@ -124,7 +122,7 @@ export function AllGroupsDataTable({
 						<Checkbox
 							checked={row.getIsSelected()}
 							onCheckedChange={(value) => row.toggleSelected(!!value)}
-							aria-label={t('Table.select_row')}	
+							aria-label={t('Table.select_row')}
 						/>
 					</div>
 				),
@@ -217,9 +215,7 @@ export function AllGroupsDataTable({
 									}
 								}}
 							>
-								{row.original.isMember
-									? t("AllGroupsDataTable.leave_group")
-									: t("AllGroupsDataTable.join_group")}
+								{row.original.isMember ? t('AllGroupsDataTable.leave_group') : t('AllGroupsDataTable.join_group')}
 							</DropdownMenuItem>
 							{userData.data.user.role === 'admin' && (
 								<>
@@ -273,7 +269,7 @@ export function AllGroupsDataTable({
 				<div className="flex items-center gap-2">
 					<Input
 						type="text"
-						placeholder={`${t("Table.search")}...`}
+						placeholder={`${t('Table.search')}...`}
 						value={inputValue}
 						onChange={(e) => setInputValue(e.target.value)}
 						onKeyDown={(e) => {
@@ -299,8 +295,8 @@ export function AllGroupsDataTable({
 						<DropdownMenuTrigger asChild>
 							<Button variant="outline" size="sm">
 								<LayoutGrid />
-								<span className="hidden lg:inline">{t("Table.customize_columns")}</span>
-								<span className="lg:hidden">{t("Table.columns")}</span>
+								<span className="hidden lg:inline">{t('Table.customize_columns')}</span>
+								<span className="lg:hidden">{t('Table.columns')}</span>
 								<ChevronDown />
 							</Button>
 						</DropdownMenuTrigger>
@@ -352,7 +348,7 @@ export function AllGroupsDataTable({
 							) : (
 								<TableRow>
 									<TableCell colSpan={columns.length} className="h-24 text-center">
-										{t("Table.no_results")}
+										{t('Table.no_results')}
 									</TableCell>
 								</TableRow>
 							)}
@@ -361,12 +357,12 @@ export function AllGroupsDataTable({
 				</div>
 				<div className="flex items-center justify-between px-4">
 					<div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-						{table.getFilteredSelectedRowModel().rows.length} {t("Table.of")} {total} {t("Table.rows_selected")}
+						{table.getFilteredSelectedRowModel().rows.length} {t('Table.of')} {total} {t('Table.rows_selected')}
 					</div>
 					<div className="flex w-full items-center gap-8 lg:w-fit">
 						<div className="hidden items-center gap-2 lg:flex">
 							<Label htmlFor="rows-per-page" className="text-sm font-medium">
-								{t("Table.rows_per_page")}
+								{t('Table.rows_per_page')}
 							</Label>
 							<Select
 								value={rowsPerPage.toString()}
@@ -389,7 +385,7 @@ export function AllGroupsDataTable({
 						</div>
 
 						<div className="flex w-fit items-center justify-center text-sm font-medium">
-							{t("Table.page")} {page} {t("Table.of")} {Math.ceil(total / rowsPerPage)}
+							{t('Table.page')} {page} {t('Table.of')} {Math.ceil(total / rowsPerPage)}
 						</div>
 
 						<div className="ml-auto flex items-center gap-2 lg:ml-0">
@@ -399,7 +395,7 @@ export function AllGroupsDataTable({
 								onClick={() => setPage(1)}
 								disabled={page === 1}
 							>
-								<span className="sr-only">{t("Table.go_to_first_page")}</span>
+								<span className="sr-only">{t('Table.go_to_first_page')}</span>
 								<ChevronsLeft />
 							</Button>
 							<Button
@@ -409,7 +405,7 @@ export function AllGroupsDataTable({
 								onClick={() => setPage(page - 1)}
 								disabled={page === 1}
 							>
-								<span className="sr-only">{t("Table.go_to_previous_page")}</span>
+								<span className="sr-only">{t('Table.go_to_previous_page')}</span>
 								<ChevronLeft />
 							</Button>
 							<Button
@@ -419,7 +415,7 @@ export function AllGroupsDataTable({
 								onClick={() => setPage(page + 1)}
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
-								<span className="sr-only">{t("Table.go_to_next_page")}</span>
+								<span className="sr-only">{t('Table.go_to_next_page')}</span>
 								<ChevronRight />
 							</Button>
 							<Button
@@ -429,7 +425,7 @@ export function AllGroupsDataTable({
 								onClick={() => setPage(Math.ceil(total / rowsPerPage))}
 								disabled={page === Math.ceil(total / rowsPerPage)}
 							>
-								<span className="sr-only">{t("Table.go_to_last_page")}</span>
+								<span className="sr-only">{t('Table.go_to_last_page')}</span>
 								<ChevronsRight />
 							</Button>
 						</div>
@@ -439,4 +435,3 @@ export function AllGroupsDataTable({
 		</>
 	);
 }
-

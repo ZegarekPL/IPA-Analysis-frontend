@@ -35,7 +35,7 @@ export default function TestPageClient({ test }: Props) {
 		);
 	}
 
-	const points = [{ label: 'Średnia', importance: data!.avgImportance, performance: data!.avgPerformance }];
+	const points = [{ label: 'Average', importance: data!.avgImportance, performance: data!.avgPerformance }];
 
 	return (
 		<div className="p-6">

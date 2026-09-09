@@ -2,6 +2,7 @@
 
 import { Fragment } from 'react/jsx-runtime';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import {
 	Breadcrumb,
@@ -14,6 +15,7 @@ import {
 
 export default function DynamicBreadcrumb() {
 	const pathname = usePathname();
+	const t = useTranslations('Sidebar');
 
 	const segments = pathname.split('/').filter(Boolean).slice(1);
 
@@ -23,8 +25,8 @@ export default function DynamicBreadcrumb() {
 
 	const formatLabel = (str: string) => {
 		const withoutId = str.replace(/-[a-f0-9]{24}$/i, '');
-
-		return withoutId.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+		const key = withoutId.replace(/-/g, '_');
+		return t.has(key) ? t(key) : withoutId.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 	};
 
 	return (
